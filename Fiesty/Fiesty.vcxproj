@@ -146,7 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="bitmap.cpp" />
+    <ClCompile Include="bitboard.cpp" />
     <ClCompile Include="fiesty.cpp" />
     <ClCompile Include="move.cpp" />
     <ClCompile Include="piece.cpp" />
@@ -155,7 +155,7 @@
     <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="bitmap.h" />
+    <ClInclude Include="bitboard.h" />
     <ClInclude Include="fiesty.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="move.h" />

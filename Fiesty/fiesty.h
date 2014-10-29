@@ -107,13 +107,13 @@ typedef std::uint8_t          YPositionRights;
 typedef std::uint64_t       YHashKey;
 
 //
-//  A bitmap.  Bit 0 (LSB) is a1, Bit 2 is a2, etc.
+//  A BitBoard.  Bit 0 (LSB) is a1, Bit 2 is a2, etc.
 //
-typedef std::uint64_t   YBitmap;
-class UBitmap
+typedef std::uint64_t   YBitBoard;
+class UBitBoard
 {
 private:
-    static YSqix iterate( YBitmap &b )
+    static YSqix iterate( YBitBoard &b )
     {
         unsigned long index;
         assert( b != 0 );

@@ -9,7 +9,7 @@
 #define Fiesty_position_h
 
 #include "fiesty.h"
-#include "bitmap.h"
+#include "bitboard.h"
 #include "piece.h"
 #include "move.h"
 
@@ -145,7 +145,7 @@ private:
     EColor          mWhoseMove;
     CPosRights      mPositionRights;
     CPiece          mBoard[U8( ERank::kNum ) * U8( EFile::kNum )];
-    CBitmap         mBitmapPieces[EPiece::kNum];
+    CBitBoard         mBitBoardPieces[EPiece::kNum];
 };
 
 #endif      // position.h

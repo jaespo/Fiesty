@@ -33,15 +33,15 @@ void CTester::endSuite()
 
 
 ///
-/// Test bitmap.h
+/// Test bitboard.h
 ///
-void CTester::testBitmap()
+void CTester::testBitBoard()
 {
-    beginSuite( "testBitmap" );
+    beginSuite( "testBitBoard" );
     CSqix g7( ERank::kRank7, EFile::kFileG );
     CSqix c3( ERank::kRank3, EFile::kFileC );
 
-    CBitmap bm( 0ULL );
+    CBitBoard bm( 0ULL );
     bm.setSquare( c3.get() );
 
 /*
@@ -282,5 +282,5 @@ void CTester::testAll()
     testPiece();
     testPosition();
     testMove();
-    testBitmap();
+    testBitBoard();
 }

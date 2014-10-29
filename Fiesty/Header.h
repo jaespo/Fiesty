@@ -1,15 +1,15 @@
-/// file bitmap.h
+/// file bitboard.h
 ///
 /// Fiesty (C) 2014 by Jeffery A Esposito
 ///
-/// headers having to do with bitmaps
+/// headers having to do with BitBoards
 ///
 ///
-#ifndef Fiesty_bitmap_h
-#define Fiesty_bitmap_h
+#ifndef Fiesty_BitBoard_h
+#define Fiesty_BitBoard_h
 #include "fiesty.h"
 
 
 
 
-#endif      // bitmap.h
+#endif      // bitboard.h

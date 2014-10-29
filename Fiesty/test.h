@@ -24,7 +24,7 @@ private:
     static void testPiece();
     static void testPosition();
     static void testMove();
-    static void testBitmap();
+    static void testBitBoard();
 
     static int          mgOkCount;
     static char*        mgCurSuiteName;

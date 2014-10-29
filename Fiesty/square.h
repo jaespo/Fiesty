@@ -67,7 +67,7 @@ public:
     YSqix get() const { return mSqix; }
     CRank getRank() const { return ERank( mSqix >> 3 ); }
     CFile getFile() const { return EFile( mSqix & 0x07 ); }
-    YBitmap asBitmap() const { return 0x1ULL << mSqix; }
+    YBitBoard asBitBoard() const { return 0x1ULL << mSqix; }
     std::string asStr() const;
     std::string asAbbr() const;
 
