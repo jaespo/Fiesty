@@ -69,7 +69,7 @@ void CTester::testBitmap()
     0 0 0 0 0 0 0 0
     0 0 0 0 0 0 0 0
 
-    0x0002000000000000ULL
+    0x004000000000000ULL
 */
 
     TESTEQ( "c3bmAsStr", bm.asStr(),
@@ -93,7 +93,7 @@ void CTester::testBitmap()
             "00100000/"
             "00000000/"
             "00000000" );
-    TESTEQ( "c3bmAsAbbr", bm.asAbbr(), "0x2000000040000" );
+    TESTEQ( "c3bmAsAbbr", bm.asAbbr(), "0x40000000040000" );
 
     endSuite();
 }

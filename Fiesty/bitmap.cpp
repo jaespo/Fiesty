@@ -22,7 +22,7 @@ std::string CBitmap::asStr() const
     {
         for ( U8 f = U8( EFile::kFileA ); f <= U8( EFile::kFileH ); f++ )
         {
-            CSqix sqix( ERank::kRank4, EFile::kFileC );
+            CSqix sqix = CSqix( ERank( r ), EFile( f ) );
             s.append( ( sqix.asBitmap() & mBitmap ) ? "1" : "0" );
         }
         if ( r ) 
