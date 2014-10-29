@@ -262,8 +262,8 @@ void CTester::testMove()
         CSqix( ERank::kRank3, EFile::kFileD ),
         CSqix( ERank::kRank4, EFile::kFileD ) );
     CMove e7e8Q( 
-        CSqix( ERank::kRank7, EFile::kFileD ),
-        CSqix( ERank::kRank8, EFile::kFileD ), 
+        CSqix( ERank::kRank7, EFile::kFileE ),
+        CSqix( ERank::kRank8, EFile::kFileE ), 
         EPieceType::kQueen );
 
     //

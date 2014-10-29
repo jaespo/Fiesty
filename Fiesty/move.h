@@ -14,6 +14,8 @@
 ///
 /// Class that represents a chess move, containg the from and 
 /// to squares and the promotion piece if any.  
+//
+/// mFrom and mTo each take 6 bits. Promo takes 3 bits.
 ///
 /// The promotion piece type is stored in the 3 most significan bits
 /// of mTo.  A non-promotion is stored as a piece-type of kPawn
@@ -23,36 +25,34 @@ class CMove
 public:
     CMove() {}
 
-    CMove( CSqix f, CSqix t, CPieceType pt ) 
+    CMove( CSqix f, CSqix t, CPieceType p ) 
     {
         mFrom = f.get(); 
-        mTo = t.get() | ( U8( pt.get() ) << kPromoShift );
+        mTo = t.get();
+        mPromo = U8( p.get() );
     }
 
     CMove( CSqix f, CSqix t ) 
     {
         mFrom = f.get(); 
         mTo = t.get(); 
+        mPromo = U8( EPieceType::kPawn );
     }
 
     CSqix getFrom() const { return mFrom; }
-    CSqix getTo() const { return mTo.get() & kToMask; }
-    CPieceType getPromo() const 
-    { 
-        return CPieceType( EPieceType( mTo.get() >> kPromoShift ) );
-    }
+    CSqix getTo() const { return mTo; }
+    CPieceType getPromo() const { return EPieceType( mPromo ); }
     void setFrom( CSqix s ) { mFrom = s.get(); }
     void setTo( CSqix s ) { mTo = s.get(); }
-    void setPromo( CPieceType pt ) { mTo = getTo().get() | ( U8( pt.get() ) << 5 ); }
+    void setPromo( CPieceType pt ) { mPromo = U8( pt.get() ); }
 
     std::string asAbbr() const;
     std::string asStr() const { return asAbbr(); }
 
 private:
-    static const U8     kToMask = 0x7;
-    static const U8     kPromoShift = 5;
-    CSqix               mFrom;
-    CSqix               mTo;
+    std::uint16_t       mFrom   : 6;
+    std::uint16_t       mTo     : 6;
+    std::uint16_t       mPromo  : 3;
 };
 
 //
