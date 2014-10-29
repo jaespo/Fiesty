@@ -95,6 +95,12 @@ void CTester::testBitBoard()
             "00000000" );
     TESTEQ( "c3bmAsAbbr", bm.asAbbr(), "0x40000000040000" );
 
+    CSqix sqix = bm.popLsb();
+    TESTEQ( "popC3", sqix.asAbbr(), "c3" );
+
+    sqix = bm.popLsb();
+    TESTEQ( "popG7", sqix.asAbbr(), "g7" );
+    TESTEQ( "emptyBitBoard", bm.get(), 0 );
     endSuite();
 }
 

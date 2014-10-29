@@ -5,8 +5,8 @@
 /// headers having to do with BitBoards
 ///
 ///
-#ifndef Fiesty_BitBoard_h
-#define Fiesty_BitBoard_h
+#ifndef Fiesty_bitboard_h
+#define Fiesty_bitboard_h
 #include "fiesty.h"
 #include "square.h"
 
@@ -27,6 +27,7 @@ public:
         assert( mBitBoard != 0 );
         _BitScanForward64( &index, mBitBoard );
         mBitBoard &= mBitBoard - 1;
+        return CSqix( YSqix( index ) );
     }
     
     std::string asStr() const;
