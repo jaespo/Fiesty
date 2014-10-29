@@ -191,6 +191,54 @@ void CTester::testPiece( void )
 void CTester::testPosition( void )
 {
     beginSuite( "testPosition" );
+    CPosRights      rights;
+
+    //
+    //  test castling flags
+    //
+    TESTEQ( "castleAll", rights.castlingAsStr(), "KQkq" );
+    rights.clearWhiteOOO();
+    TESTEQ( "castleNoWQ", rights.castlingAsStr(), "Kkq" );
+    rights.clearWhiteOO();
+    TESTEQ( "castleNoW", rights.castlingAsStr(), "kq" );
+    rights.clearBlackOO();
+    TESTEQ( "castleNoWBk", rights.castlingAsStr(), "q" );
+    rights.clearBlackOOO();
+    TESTEQ( "castleNone", rights.castlingAsStr(), "-" );
+    rights.setWhiteOO();
+    TESTEQ( "castleK", rights.castlingAsStr(), "K" );
+    rights.setWhiteOOO();
+    TESTEQ( "castleW", rights.castlingAsStr(), "KQ" );
+    rights.setBlackOO();
+    TESTEQ( "castleKQk", rights.castlingAsStr(), "KQk" );
+    rights.setBlackOOO();
+    TESTEQ( "castleAll2", rights.castlingAsStr(), "KQkq" );
+    
+    //
+    //  test moving some rooks
+    //
+    rights.onWqrMove();
+    TESTEQ( "castleMoveNoWQ", rights.castlingAsStr(), "Kkq" );
+    rights.onWkrMove();
+    TESTEQ( "castleMoveNoW", rights.castlingAsStr(), "kq" );
+    rights.onBkrMove();
+    TESTEQ( "castleMoveNoWBk", rights.castlingAsStr(), "q" );
+    rights.onBqrMove();
+    TESTEQ( "castleMoveNone", rights.castlingAsStr(), "-" );
+
+    //
+    //  test moving the kings
+    //
+
+    endSuite();
+}
+
+///
+/// tests the square.h module
+///
+void CTester::testSquare( void )
+{
+    beginSuite( "testPosition" );
 
     //
     //  Rank as String
@@ -305,7 +353,8 @@ void CTester::testMove()
 void CTester::testAll()
 {
     testPiece();
-    testPosition();
+    testSquare();
     testMove();
     testBitBoard();
+    testPosition();
 }

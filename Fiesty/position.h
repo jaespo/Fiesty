@@ -54,11 +54,13 @@ public:
     void setBlackOOO()   { mRights |= kBlackOOOMask; }
     void clearBlackOOO() { mRights &= ~kBlackOOOMask; }
 
-    std::string asStr() const;                  // ...
-    std::string asAbbr() const { return ""; }   // ...
-    std::string castlingAsStr() const;  // ...
+    std::string asStr() const;                  //TODO: code me
+    std::string asAbbr() const { return ""; }   //TODO: code me: code me
+    std::string castlingAsStr() const;
 
 private:
+    friend class CTester;
+
     static const std::uint8_t   kEnPassantMask   = 0x03;
     static const std::uint8_t   kWhiteOOMask     = 0x04;
     static const std::uint8_t   kWhiteOOOMask    = 0x08;
@@ -68,7 +70,9 @@ private:
     static const std::uint8_t   kAll             = 0x3F;
     static const std::uint8_t   kDupPosShift     = 6;
 
-    //  test this object ...    
+    U8          mRights;
+
+    //TODO: code me:  test this object ...    
     void onWqrMove() { clearWhiteOOO(); }
     void onWkrMove() { clearWhiteOO(); }
     void onBqrMove() { clearBlackOOO(); }
@@ -81,8 +85,6 @@ private:
             mRights &= ~( kBlackOOMask | kBlackOOOMask );
     };
 
-private:
-    U8                          mRights;
 };
 
 ///
@@ -115,37 +117,38 @@ private:
 class CPos
 {
 public:
-    void parseFen( std::string sFen );              // ...
-    EColor getWhoseMove() { return mWhoseMove; }
-    EPiece getPiece( YSqix sqix );                  // ...
+    void parseFen( std::string sFen );              //TODO: code me
+    CColor getWhoseMove() { return mWhoseMove; }
+    CPiece getPiece( YSqix sqix );                  //TODO: code me
 
-    void getPawnNonCaptures( CMoves& rMoves );      // ...
-    void getPawnCaptures( CMoves& rMoves );         // ...
-    void getKnightNonCaptures( CMoves& rMoves );    // ...
-    void getKnightCaptures( CMoves& rMoves );       // ...
-    void getBishopNonCaptures( CMoves& rMoves );    // ...
-    void getBishopCaptures( CMoves& rMoves );       // ...
-    void getRookNonCaptures( CMoves& rMoves );      // ...
-    void getRookCaptures( CMoves& rMoves );         // ...
-    void getQueenNonCaptures( CMoves& rMoves );     // ...
-    void getQueenCaptures( CMoves& rMoves );        // ...
-    void getKingNonCaptures( CMoves& rMoves );      // ...    
-    void getKingCaptures( CMoves& rMoves );         // ...
+    void getPawnNonCaptures( CMoves& rMoves );      //TODO: code me
+    void getPawnCaptures( CMoves& rMoves );         //TODO: code me
+    void getKnightNonCaptures( CMoves& rMoves );    //TODO: code me
+    void getKnightCaptures( CMoves& rMoves );       //TODO: code me
+    void getBishopNonCaptures( CMoves& rMoves );    //TODO: code me
+    void getBishopCaptures( CMoves& rMoves );       //TODO: code me
+    void getRookNonCaptures( CMoves& rMoves );      //TODO: code me
+    void getRookCaptures( CMoves& rMoves );         //TODO: code me
+    void getQueenNonCaptures( CMoves& rMoves );     //TODO: code me
+    void getQueenCaptures( CMoves& rMoves );        //TODO: code me
+    void getKingNonCaptures( CMoves& rMoves );      //TODO: code me    
+    void getKingCaptures( CMoves& rMoves );         //TODO: code me
 
-    void getMoves( CMoves& rMoves );                // ...
+    void getMoves( CMoves& rMoves );                //TODO: code me
 
-    void makeMove( CMove m );                       // ...
-    void unmakeMove( CMove m );                     // ...
+    void makeMove( CMove m );                       //TODO: code me
+    void unmakeMove( CMove m );                     //TODO: code me
 
-    static std::string asStr();                     // ...
-    static std::string asAbbr();                    // ...
-    static std::string asFen( EFile f );            // ...
+    static std::string asStr();                     //TODO: code me
+    static std::string asAbbr();                    //TODO: code me
+    static std::string asFen( EFile f );            //TODO: code me
 
 private:
-    EColor          mWhoseMove;
+    CColor          mWhoseMove;
     CPosRights      mPositionRights;
     CPiece          mBoard[U8( ERank::kNum ) * U8( EFile::kNum )];
-    CBitBoard       mBitBoardPieces[EPiece::kNum];
+    CBitBoard       mBbPieceType[EPieceType::kNum];
+    CBitBoard       mBbColor[EColor::kNum];
 };
 
 #endif      // position.h

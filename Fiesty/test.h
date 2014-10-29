@@ -25,6 +25,7 @@ private:
     static void testPosition();
     static void testMove();
     static void testBitBoard();
+    static void testSquare();
 
     static int          mgOkCount;
     static char*        mgCurSuiteName;
@@ -51,4 +52,3 @@ private:
             << "    x1 = " << ( expr1 ) << std::endl                        \
             << "    x2 = " << ( expr2 ) << std::endl << std::flush;         \
     }
-
