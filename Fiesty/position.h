@@ -26,7 +26,6 @@ public:
     //  Getters
     //
     EFile getEnPassantFile() const { return EFile( mRights & kEnPassantMask ); }
-    U8 getDupCount() const      { return mRights >> 6; }
     U8 canWhiteOO() const       { return mRights & kWhiteOOMask; }
     U8 canWhiteOOO() const      { return mRights & kWhiteOOOMask; }
     U8 canBlackOO() const       { return mRights & kBlackOOMask; }
@@ -41,8 +40,6 @@ public:
         mRights = ( mRights & ~kEnPassantMask ) 
             | ( c == EColor::kWhite ) ? 4 : 5; 
     }
-    void incrDupCount()  { if ( mRights < kDupPosMask ) mRights += 0x040; }
-    void clearDupCount() { mRights &= ~kDupPosMask; }
 
     void setWhiteOO()    { mRights |= kWhiteOOMask; }
     void clearWhiteOO()  { mRights &= ~kWhiteOOMask; }
@@ -55,7 +52,7 @@ public:
     void clearBlackOOO() { mRights &= ~kBlackOOOMask; }
 
     std::string asStr() const;                  //TODO: code me
-    std::string asAbbr() const { return ""; }   //TODO: code me: code me
+    std::string asAbbr() const { return ""; }   //TODO: no, code me: code me
     std::string castlingAsStr() const;
 
 private:
@@ -68,7 +65,6 @@ private:
     static const std::uint8_t   kBlackOOOMask    = 0x20;
     static const std::uint8_t   kDupPosMask      = 0xC0;
     static const std::uint8_t   kAll             = 0x3F;
-    static const std::uint8_t   kDupPosShift     = 6;
 
     U8          mRights;
 
@@ -76,7 +72,7 @@ private:
     void onWqrMove() { clearWhiteOOO(); }
     void onWkrMove() { clearWhiteOO(); }
     void onBqrMove() { clearBlackOOO(); }
-    void onBkrMove() { clearBlackOOO(); }
+    void onBkrMove() { clearBlackOO(); }
     void onKMove( CColor c ) 
     { 
         if ( c.isWhite() )
@@ -139,16 +135,20 @@ public:
     void makeMove( CMove m );                       //TODO: code me
     void unmakeMove( CMove m );                     //TODO: code me
 
-    static std::string asStr();                     //TODO: code me
-    static std::string asAbbr();                    //TODO: code me
-    static std::string asFen( EFile f );            //TODO: code me
+    std::string asStr() const;                     //TODO: code me
+    std::string asAbbr() const;                    //TODO: code me
+    std::string asFen() const;                      //TODO: code me
+    std::string asDiagram();                        //TODO: code me
 
 private:
     CColor          mWhoseMove;
+    U8              mHalfMoveClock;                 // for 50 move rule
+    U8              mDups;                          // for 3 time repetions
     CPosRights      mPositionRights;
     CPiece          mBoard[U8( ERank::kNum ) * U8( EFile::kNum )];
-    CBitBoard       mBbPieceType[EPieceType::kNum];
-    CBitBoard       mBbColor[EColor::kNum];
+    CBitBoard       mbbPieceType[EPieceType::kNum];
+    CBitBoard       mbbColor[EColor::kNum];
+    U8              mMoveNum;
 };
 
 #endif      // position.h

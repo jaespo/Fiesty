@@ -229,6 +229,11 @@ void CTester::testPosition( void )
     //
     //  test moving the kings
     //
+    rights.init();
+    rights.onKMove( EColor::kWhite );
+    TESTEQ( "castleMoveWk", rights.castlingAsStr(), "kq" );
+    rights.onKMove( EColor::kBlack );
+    TESTEQ( "castleMoveWk", rights.castlingAsStr(), "-" );
 
     endSuite();
 }
