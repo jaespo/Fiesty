@@ -13,7 +13,11 @@
 ///
 std::string CMove::asAbbr() const
 {
-    return getFrom().asAbbr() + getTo().asAbbr();
+    std::string s( getFrom().asAbbr() + getTo().asAbbr() );
+
+    if ( getPromo().get() != EPieceType::kPawn )
+        s.append( "=" + getPromo().asAbbr() );
+    return s;
 }
 
 ///

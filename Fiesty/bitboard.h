@@ -35,8 +35,6 @@ public:
 
 private:
     YBitBoard             mBitBoard;
-
-// ... test this
 };
 
 #endif  // bitboard.h

@@ -145,7 +145,7 @@ private:
     EColor          mWhoseMove;
     CPosRights      mPositionRights;
     CPiece          mBoard[U8( ERank::kNum ) * U8( EFile::kNum )];
-    CBitBoard         mBitBoardPieces[EPiece::kNum];
+    CBitBoard       mBitBoardPieces[EPiece::kNum];
 };
 
 #endif      // position.h

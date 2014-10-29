@@ -261,9 +261,28 @@ void CTester::testMove()
     CMove d3d4( 
         CSqix( ERank::kRank3, EFile::kFileD ),
         CSqix( ERank::kRank4, EFile::kFileD ) );
+    CMove e7e8Q( 
+        CSqix( ERank::kRank7, EFile::kFileD ),
+        CSqix( ERank::kRank8, EFile::kFileD ), 
+        EPieceType::kQueen );
 
-    TESTEQ( "c3c4AsStr", c3c4.asStr(), "c3c4" );
-    TESTEQ( "d3d4AsStr", d3d4.asStr(), "d3d4" );
+    //
+    //  Make sure the compiler is packing the size correctly
+    //
+    TESTEQ( "moveSize", sizeof( c3c4 ), 2 );
+
+    TESTEQ( "c3c4AsStr",    c3c4.asStr(), "c3c4" );
+    TESTEQ( "c3c4From",     c3c4.getFrom().asAbbr(), "c3" );
+    TESTEQ( "c3c4To",       c3c4.getTo().asAbbr(), "c4" );
+
+    TESTEQ( "d3d4AsStr",    d3d4.asStr(), "d3d4" );
+    TESTEQ( "d3d4From",     d3d4.getFrom().asAbbr(), "d3" );
+    TESTEQ( "d3d4To",       d3d4.getTo().asAbbr(), "d4" );
+
+    TESTEQ( "e7e8QAsStr",   e7e8Q.asStr(), "e7e8=Q" );
+    TESTEQ( "e7e8QFrom",    e7e8Q.getFrom().asAbbr(), "e7" );
+    TESTEQ( "e7e8QTo",      e7e8Q.getTo().asAbbr(), "e8" );
+    TESTEQ( "e7e8QPromo",   e7e8Q.getPromo().asAbbr(), "Q" );
 
     CMoves      moves;
     moves.addMove( c3c4 );

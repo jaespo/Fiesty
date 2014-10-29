@@ -93,37 +93,22 @@ enum class EFile : std::uint8_t
 /// file is the three least significant bits
 /// rank is the three most significant bits
 ///
-typedef std::uint8_t         YSqix;
+typedef std::uint8_t    YSqix;
 
 ///
 /// Flags that indictes the rights to castle and en-passant, and the repeated
 /// position count.
 ///
-typedef std::uint8_t          YPositionRights;
+typedef std::uint8_t    YPositionRights;
 
 ///
 /// 64 bit hash key
 ///
-typedef std::uint64_t       YHashKey;
+typedef std::uint64_t    YHashKey;
 
-//
-//  A BitBoard.  Bit 0 (LSB) is a1, Bit 2 is a2, etc.
-//
-typedef std::uint64_t   YBitBoard;
-class UBitBoard
-{
-private:
-    static YSqix iterate( YBitBoard &b )
-    {
-        unsigned long index;
-        assert( b != 0 );
-        _BitScanForward64( &index, b );
-        b &= b - 1;
-    }
-    
-    std::string asStr();     // ...
-    std::string asAbbr();    // ...
-
-};
+///
+/// 64 bit board
+///
+typedef std::uint64_t    YBitBoard;
 
 #endif  // fiesty.h
