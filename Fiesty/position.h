@@ -20,12 +20,16 @@
 class CPosRights
 {
 public:
-    CPosRights() { mRights = kAll; }
+    CPosRights() { mRights = kAllCastle; }
 
     //
     //  Getters
     //
-    EFile getEnPassantFile() const { return EFile( mRights & kEnPassantMask ); }
+    CFile getEnPassantFile() const { return EFile( mRights & kEnPassantFileMask ); }
+    U8 isEnPassantLegal() const 
+    { 
+        return mRights & kEnPassantLegalMask; 
+    }
     U8 canWhiteOO() const       { return mRights & kWhiteOOMask; }
     U8 canWhiteOOO() const      { return mRights & kWhiteOOOMask; }
     U8 canBlackOO() const       { return mRights & kBlackOOMask; }
@@ -34,13 +38,11 @@ public:
     //
     //  Setters
     //
-    void init() { mRights = kAll; }
-    void setEnPassantFile( EColor c, EFile f ) 
+    void init() { mRights = kAllCastle; }
+    void setEnPassantFile( CFile f ) 
     { 
-        mRights = ( mRights & ~kEnPassantMask ) 
-            | ( c == EColor::kWhite ) ? 4 : 5; 
+        mRights |= U8( f.get() ) | kEnPassantLegalMask; 
     }
-
     void setWhiteOO()    { mRights |= kWhiteOOMask; }
     void clearWhiteOO()  { mRights &= ~kWhiteOOMask; }
     void setWhiteOOO()   { mRights |= kWhiteOOOMask; }
@@ -51,20 +53,20 @@ public:
     void setBlackOOO()   { mRights |= kBlackOOOMask; }
     void clearBlackOOO() { mRights &= ~kBlackOOOMask; }
 
-    std::string asStr() const;                  //TODO: code me
-    std::string asAbbr() const { return ""; }   //TODO: no, code me: code me
+    std::string asStr() const;
+    std::string asAbbr() const { return asStr(); }
     std::string castlingAsStr() const;
 
 private:
     friend class CTester;
 
-    static const std::uint8_t   kEnPassantMask   = 0x03;
-    static const std::uint8_t   kWhiteOOMask     = 0x04;
-    static const std::uint8_t   kWhiteOOOMask    = 0x08;
-    static const std::uint8_t   kBlackOOMask     = 0x10;
-    static const std::uint8_t   kBlackOOOMask    = 0x20;
-    static const std::uint8_t   kDupPosMask      = 0xC0;
-    static const std::uint8_t   kAll             = 0x3F;
+    static const U8 kEnPassantFileMask  = 0x07;
+    static const U8 kEnPassantLegalMask = 0x08;
+    static const U8 kWhiteOOMask        = 0x10;
+    static const U8 kWhiteOOOMask       = 0x20;
+    static const U8 kBlackOOMask        = 0x40;
+    static const U8 kBlackOOOMask       = 0x80;
+    static const U8 kAllCastle          = 0xF0;
 
     U8          mRights;
 

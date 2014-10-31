@@ -29,6 +29,20 @@ std::string CPosRights::castlingAsStr() const
 }
 
 ///
+/// format rights 
+///
+std::string CPosRights::asStr() const
+{
+    std::string     s = castlingAsStr() + " ";
+
+    if ( isEnPassantLegal() ) 
+        s.append( getEnPassantFile().asAbbr() );
+    else
+        s.append( "-" );
+    return s;
+}
+
+///
 /// convert an UndoContext into a string abbr
 ///
 std::string CUndoContext::asAbbr() const

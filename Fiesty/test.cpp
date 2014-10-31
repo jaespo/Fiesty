@@ -235,6 +235,10 @@ void CTester::testPosition( void )
     rights.onKMove( EColor::kBlack );
     TESTEQ( "castleMoveWk", rights.castlingAsStr(), "-" );
 
+    rights.init();
+    TESTEQ( "illegalEp", rights.asStr(), "KQkq -" );
+    rights.setEnPassantFile( EFile::kFileE );
+    TESTEQ( "whiteEp", rights.asStr(), "KQkq e" );
     endSuite();
 }
 
