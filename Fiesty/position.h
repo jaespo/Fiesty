@@ -70,7 +70,6 @@ private:
 
     U8          mRights;
 
-    //TODO: code me:  test this object ...    
     void onWqrMove() { clearWhiteOOO(); }
     void onWkrMove() { clearWhiteOO(); }
     void onBqrMove() { clearBlackOOO(); }

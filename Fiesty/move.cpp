@@ -15,7 +15,7 @@ std::string CMove::asAbbr() const
 {
     std::string s( getFrom().asAbbr() + getTo().asAbbr() );
 
-    if ( getPromo().get() != EPieceType::kPawn )
+    if ( isPromo() )
         s.append( "=" + getPromo().asAbbr() );
     return s;
 }

@@ -17,9 +17,6 @@
 //
 /// mFrom and mTo each take 6 bits. Promo takes 3 bits.
 ///
-/// The promotion piece type is stored in the 3 most significan bits
-/// of mTo.  A non-promotion is stored as a piece-type of kPawn
-///
 class CMove
 {
 public:
@@ -29,30 +26,37 @@ public:
     {
         mFrom = f.get(); 
         mTo = t.get();
-        mPromo = U8( p.get() );
+        setPromo( p );
     }
 
     CMove( CSqix f, CSqix t ) 
     {
         mFrom = f.get(); 
         mTo = t.get(); 
-        mPromo = U8( EPieceType::kPawn );
+        mbIsPromo = false;
     }
 
     CSqix getFrom() const { return mFrom; }
     CSqix getTo() const { return mTo; }
-    CPieceType getPromo() const { return EPieceType( mPromo ); }
+    CPieceType getPromo() const { return EPieceType( mPromoMinus1 + 1 ); }
+    bool isPromo() const { return mbIsPromo; }
     void setFrom( CSqix s ) { mFrom = s.get(); }
     void setTo( CSqix s ) { mTo = s.get(); }
-    void setPromo( CPieceType pt ) { mPromo = U8( pt.get() ); }
+    void setPromo( CPieceType pt ) 
+    { 
+        mPromoMinus1 = U8( pt.get() ) - 1; 
+        mbIsPromo = 1;
+    }
 
     std::string asAbbr() const;
     std::string asStr() const { return asAbbr(); }
 
 private:
-    std::uint16_t       mFrom   : 6;
-    std::uint16_t       mTo     : 6;
-    std::uint16_t       mPromo  : 3;
+    std::uint16_t       mPromoMinus1    : 2;
+    std::uint16_t       mFrom           : 6;
+    std::uint16_t       mbIsPromo       : 1;
+    std::uint16_t       mFiller         : 1;
+    std::uint16_t       mTo             : 6;
 };
 
 //
