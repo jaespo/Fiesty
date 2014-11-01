@@ -102,6 +102,8 @@ public:
     std::string asStr() const;       
     std::string asAbbr() const;
 
+    static CPiece parsePiece( char ch );       // ... 
+
 private:
     EPiece                      mPiece;
     static const char*          kAbbrs[EPiece::kNum];

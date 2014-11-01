@@ -47,11 +47,11 @@ public:
     void clearWhiteOO()  { mRights &= ~kWhiteOOMask; }
     void setWhiteOOO()   { mRights |= kWhiteOOOMask; }
     void clearWhiteOOO() { mRights &= ~kWhiteOOOMask; }
-
     void setBlackOO()    { mRights |= kBlackOOMask; }
     void clearBlackOO()  { mRights &= ~kBlackOOMask; }
     void setBlackOOO()   { mRights |= kBlackOOOMask; }
     void clearBlackOOO() { mRights &= ~kBlackOOOMask; }
+    void clearCastling() { mRights &= ~kAllCastle; }
 
     std::string asStr() const;
     std::string asAbbr() const { return asStr(); }
@@ -114,7 +114,11 @@ private:
 class CPos
 {
 public:
-    void parseFen( std::string sFen );              //TODO: code me
+    bool clearBoard();                              //TODO: code me
+    void addPiece( CPiece p, CSqix sq );            //...
+    bool parseFen( 
+        const std::string&          sFen,
+        std::string&                rsErrorText );  //TODO: code me
     CColor getWhoseMove() { return mWhoseMove; }
     CPiece getPiece( YSqix sqix );                  //TODO: code me
 
@@ -136,8 +140,8 @@ public:
     void makeMove( CMove m );                       //TODO: code me
     void unmakeMove( CMove m );                     //TODO: code me
 
-    std::string asStr() const;                     //TODO: code me
-    std::string asAbbr() const;                    //TODO: code me
+    std::string asAbbr() const;                     //TODO: code me
+    std::string asStr() const;                      //TODO: code me
     std::string asFen() const;                      //TODO: code me
     std::string asDiagram();                        //TODO: code me
 
@@ -145,11 +149,14 @@ private:
     CColor          mWhoseMove;
     U8              mHalfMoveClock;                 // for 50 move rule
     U8              mDups;                          // for 3 time repetions
-    CPosRights      mPositionRights;
+    CPosRights      mPosRights;
     CPiece          mBoard[U8( ERank::kNum ) * U8( EFile::kNum )];
     CBitBoard       mbbPieceType[EPieceType::kNum];
     CBitBoard       mbbColor[EColor::kNum];
-    U8              mMoveNum;
+    std::uint16_t   mMoveNum;
+
+    std::string nextFenTok( 
+        const std::string &sFen, size_t &rPos );
 };
 
 #endif      // position.h
