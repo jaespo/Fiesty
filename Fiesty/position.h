@@ -114,7 +114,7 @@ private:
 class CPos
 {
 public:
-    bool clearBoard();                              //TODO: code me
+    void clearBoard();
     void addPiece( CPiece p, CSqix sq );            //...
     bool parseFen( 
         const std::string&          sFen,
@@ -134,7 +134,6 @@ public:
     void getQueenCaptures( CMoves& rMoves );        //TODO: code me
     void getKingNonCaptures( CMoves& rMoves );      //TODO: code me    
     void getKingCaptures( CMoves& rMoves );         //TODO: code me
-
     void getMoves( CMoves& rMoves );                //TODO: code me
 
     void makeMove( CMove m );                       //TODO: code me

@@ -26,6 +26,7 @@ public:
     bool isWhite() const { return mColor == EColor::kWhite; }
     bool isBlack() const { return mColor == EColor::kBlack; }
     CColor getOpponent() const { return EColor( 1 - U8( mColor ) ); }
+    static CColor parseColor( std::string s );
 
     std::string asStr() const;
     std::string asAbbr() const;
@@ -102,7 +103,7 @@ public:
     std::string asStr() const;       
     std::string asAbbr() const;
 
-    static CPiece parsePiece( char ch );       // ... 
+    static CPiece parsePiece( const std::string& s );
 
 private:
     EPiece                      mPiece;

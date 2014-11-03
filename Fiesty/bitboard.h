@@ -20,6 +20,7 @@ public:
     CBitBoard( YBitBoard bm ) { mBitBoard = bm; }
     YBitBoard get() const { return mBitBoard; }
 
+    void operator |=( CBitBoard bb ) { mBitBoard |= bb.get(); }
     void setSquare( YSqix sqix ) { mBitBoard |= 1ULL << sqix; }
     CSqix popLsb()
     {

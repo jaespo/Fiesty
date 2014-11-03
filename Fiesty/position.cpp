@@ -7,7 +7,29 @@
 ///
 ///
 #include <cctype>
+#include <algorithm>
 #include "position.h"
+
+///
+/// Add a piece to the board.
+///
+void CPos::addPiece( CPiece p, CSqix sq )
+{
+    mBoard[sq.get()] = p;
+    mbbPieceType[U8( p.getPieceType().get() )] |= sq.asBitBoard();
+    mbbColor[U8( p.getColor().get() )] |= sq.asBitBoard();
+}
+
+///
+/// Clear the board of pieces
+///
+void CPos::clearBoard()
+{
+    CPiece* pPiece = mBoard;
+    std::fill_n( mBoard, U8( ERank::kNum ) * U8( EFile::kNum ), EPiece::kNone );
+    std::fill_n( mbbPieceType, U8( EPieceType::kNum ), 0ULL );
+    std::fill_n( mbbColor, U8( EColor::kNum ), 0ULL );
+}
 
 ///
 ///  get the next token in the fen string.  
@@ -112,7 +134,7 @@ bool CPos::parseFen(
                 }
                 file += numBlankSquares;
             }
-            CPiece piece = CPiece::parsePiece( tok[tokIx] );
+            CPiece piece = CPiece::parsePiece( tok.substr( tokIx, 1 ) );
             if ( piece.get() == EPiece::kNone )
             {
                 rsErrorText = "Bad piece: " + tok[tokIx];
@@ -203,7 +225,7 @@ bool CPos::parseFen(
         rsErrorText = "Invalid half move clock: " + tok;
         return false;
     }
-    mHalfMoveClock = num;
+    mHalfMoveClock = U8( num );
 
     //
     //  Set the move number
@@ -216,7 +238,8 @@ bool CPos::parseFen(
         rsErrorText = "Invalid half move number: " + tok;
         return false;
     }
-    mMoveNum = num;
+    mMoveNum = std::uint16_t( num );
+    return true;
 }
 
 ///

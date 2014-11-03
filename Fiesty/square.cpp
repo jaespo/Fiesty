@@ -4,6 +4,8 @@
 /// code having to do with squares
 ///
 ///
+#include <cctype>
+#include <cstring>
 #include "square.h"
 
 //
@@ -56,6 +58,19 @@ std::string CRank::asStr() const
 }
 
 ///
+/// parses the string as a color
+///
+CRank CRank::parseRank( const std::string& s )
+{
+    if ( s.length() != 1 ) 
+        return ERank::kNone;
+    for ( size_t ix = 0; ix < U8( EColor::kNum ); ix++ )
+        if ( std::toupper( s[0] ) == kAbbrs[0][0] )
+            return ERank( ix );
+    return ERank::kNone;
+}
+
+///
 /// Abbreviation string representation for a File
 ///
 std::string CFile::asAbbr() const
@@ -72,8 +87,21 @@ std::string CFile::asStr() const
 }
 
 ///
-/// String representation for a square as a two character abbreviation
+/// parses the string as a color
 ///
+CFile CFile::parseFile( const std::string& s )
+{
+    if ( s.length() != 1 ) 
+        return EFile::kNone;
+    for ( size_t ix = 0; ix < U8( EColor::kNum ); ix++ )
+        if ( std::toupper( s[0] ) == kAbbrs[0][0] )
+            return EFile( ix );
+    return EFile::kNone;
+}
+
+///
+/// String representation for a square as a two character abbreviation
+/// 
 std::string CSqix::asAbbr() const
 {
     return getFile().asAbbr() + getRank().asAbbr();
@@ -88,4 +116,22 @@ std::string CSqix::asStr() const
     return getFile().asAbbr() + getRank().asAbbr()
         + "(" + std::to_string( mSqix ) + ")";
 }
+
+///
+/// String representation for a square as a two character abbreviation
+/// and numeric
+///
+CSqix CSqix::parseSqix( const std::string& s )
+{
+    if ( s.length() != 2 ) 
+        return CSqix( ERank::kNone, EFile::kNone );
+    CFile f = CFile::parseFile( s.substr( 0, 1 ) );
+    if ( f.get() == EFile::kNone )
+        return CSqix( ERank::kNone, EFile::kNone );
+    CRank r = CRank::parseRank( s.substr( 1, 1 ) );
+    if ( r.get() == ERank::kNone )
+        return CSqix( ERank::kNone, EFile::kNone );
+    return CSqix( r, f );
+}
+
 

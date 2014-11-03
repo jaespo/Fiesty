@@ -25,6 +25,7 @@ public:
     bool isValid() const { return mRank < ERank::kNum; }
     std::string asStr() const;
     std::string asAbbr() const;
+    static CRank parseRank( const std::string& s );
 
 private:
     ERank                       mRank;
@@ -48,6 +49,7 @@ public:
     bool isValid() const { return mFile < EFile::kNum; }
     std::string asStr() const;
     std::string asAbbr() const;
+    static CFile parseFile( const std::string& s );
 
 private:
     EFile                       mFile;
@@ -67,9 +69,15 @@ public:
     YSqix get() const { return mSqix; }
     CRank getRank() const { return ERank( mSqix >> 3 ); }
     CFile getFile() const { return EFile( mSqix & 0x07 ); }
+    bool isNone() const 
+    { 
+        return getRank().get() == ERank::kNone 
+            && getFile().get() == EFile::kNone; 
+    }  
     YBitBoard asBitBoard() const { return 0x1ULL << mSqix; }
     std::string asStr() const;
     std::string asAbbr() const;
+    static CSqix parseSqix( const std::string& s );
 
 private:
     YSqix                   mSqix;
