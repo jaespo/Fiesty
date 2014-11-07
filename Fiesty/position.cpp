@@ -10,6 +10,9 @@
 #include <algorithm>
 #include "position.h"
 
+const char* CPos::kStartFen 
+    = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+
 ///
 /// Add a piece to the board.
 ///
@@ -21,14 +24,49 @@ void CPos::addPiece( CPiece p, CSqix sq )
 }
 
 ///
+/// String reprentation of a position as a pretty-printable diagram
+///
+std::string CPos::asDiagram() const
+{
+    std::string         s;
+
+    for ( I8 r = I8( ERank::kRank8 ); r >= I8( ERank::kRank1 ); r-- )
+    {
+        for ( U8 f = U8( EFile::kFileA ); f <= U8( EFile::kFileG ); f++ )
+        {
+            CPiece piece =  mBoard[CSqix( ERank( r ), EFile( f ) ).get()];
+            if ( piece.get() == EPiece::kNone )
+            {
+                s.append( "." );
+            }
+            else
+            {
+                s.append( 
+                    mBoard[CSqix( ERank( r ), EFile( f ) ).get()].asAbbr() );
+            }
+            if ( EFile( f ) != EFile::kFileG )
+                s.append( " " );
+        }
+        s.append( "\n" );
+    }
+    s.append( mWhoseMove.asAbbr() + " " + mPosRights.asAbbr() 
+        + " move " + std::to_string( mMoveNum ) 
+        + " 50-move " + std::to_string( mHalfMoveClock ) 
+        + " dups " + std::to_string( mDups ) + "\n" );
+    return s;
+}
+
+///
 /// Clear the board of pieces
 ///
 void CPos::clearBoard()
 {
     CPiece* pPiece = mBoard;
-    std::fill_n( mBoard, U8( ERank::kNum ) * U8( EFile::kNum ), EPiece::kNone );
-    std::fill_n( mbbPieceType, U8( EPieceType::kNum ), 0ULL );
-    std::fill_n( mbbColor, U8( EColor::kNum ), 0ULL );
+
+    std::memset( 
+        mBoard, U8( EPiece::kNone ), U8( ERank::kNum ) * U8( EFile::kNum ) );
+    std::memset( mbbPieceType, U8( EPieceType::kNum ), sizeof( mbbPieceType ) );
+    std::memset( mbbColor, U8( EColor::kNum ), sizeof( mbbColor ) );
 }
 
 ///
@@ -106,8 +144,7 @@ bool CPos::parseFen(
     U8              file;
 
     clearBoard();
-    for ( std::int8_t rank = U8( ERank::kRank8 ); 
-        rank < U8( ERank::kRank1 ); rank++ )
+    for ( I8 rank = I8( ERank::kRank8 ); rank >= I8( ERank::kRank1 ); rank-- )
     {
         //
         //  Get the pieces in the rank
@@ -120,33 +157,37 @@ bool CPos::parseFen(
         //
         for ( size_t tokIx = 0; tokIx < tok.length(); tokIx++ )
         {
+            if ( file > U8( EFile::kFileH ) )
+            {
+                rsErrorText = CRank( ERank( rank ) ).asStr()
+                    +  " has more than 8 squares";
+                return false;
+            }
             //
             //  Digits define the number or blank squares
             //
             if ( std::isdigit( tok[tokIx] ) )
             {
                 U8 numBlankSquares = tok[tokIx] - '0';
-                if ( numBlankSquares + file > U8( EFile::kFileH ) )
-                {
-                    rsErrorText = CRank( ERank( rank ) ).asStr()
-                        +  " has more than 8 squares";
-                    return false;
-                }
                 file += numBlankSquares;
             }
-            CPiece piece = CPiece::parsePiece( tok.substr( tokIx, 1 ) );
-            if ( piece.get() == EPiece::kNone )
+            else
             {
-                rsErrorText = "Bad piece: " + tok[tokIx];
-                return false;
+                EPiece piece = CPiece::parsePiece( tok.substr( tokIx, 1 ) );
+                if ( piece == EPiece::kNone )
+                {
+                    rsErrorText = "Bad piece: " + tok[tokIx];
+                    return false;
+                }
+                addPiece( piece, CSqix( ERank( rank ), EFile( file ) ) );
+                file++;
             }
-            addPiece( piece, CSqix( ERank( rank ), EFile( file ) ) );
         }
 
         //
-        //  Get the next slash (unless we just got the first rank)
+        //  Get the next slash (unless we just got the first rank )
         //
-        if ( rank != U8( ERank::kRank1 ) )
+        if ( rank != I8( ERank::kRank1 ) )
         {
             tok = nextFenTok( sFen, fenIx );
             if ( tok != "/" )
@@ -161,12 +202,13 @@ bool CPos::parseFen(
     //  Set whoseMove
     //
     tok = nextFenTok( sFen, fenIx );
-    mWhoseMove = CColor::parseColor( tok );
-    if ( mWhoseMove == EColor::kNone )
+    EColor whoseMove = CColor::parseColor( tok );
+    if ( whoseMove == EColor::kNone )
     {
         rsErrorText = "Expected a color: " + tok;
         return false;
     }
+    mWhoseMove = whoseMove;
 
     //
     //  Set the casteling rights

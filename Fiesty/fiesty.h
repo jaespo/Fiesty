@@ -18,8 +18,8 @@
 #include <string>
 #include <iostream>
 
-typedef std::uint8_t U8;
-
+typedef std::uint8_t    U8;
+typedef std::int8_t     I8;
 
 ///
 /// Enum that represents a side's color, white or black

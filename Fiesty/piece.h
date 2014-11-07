@@ -15,6 +15,7 @@
 class CColor
 {
 public:
+    CColor() {}
     CColor( EColor c ) 
     { 
         mColor = c; 
@@ -26,7 +27,7 @@ public:
     bool isWhite() const { return mColor == EColor::kWhite; }
     bool isBlack() const { return mColor == EColor::kBlack; }
     CColor getOpponent() const { return EColor( 1 - U8( mColor ) ); }
-    static CColor parseColor( std::string s );
+    static EColor parseColor( std::string s );
 
     std::string asStr() const;
     std::string asAbbr() const;
@@ -49,6 +50,7 @@ inline std::ostream& operator<<( std::ostream& os, CColor c )
 class CPieceType
 {
 public:
+    CPieceType(){}
     CPieceType( EPieceType pt ) 
     { 
         mPieceType = pt; 
@@ -80,6 +82,7 @@ inline std::ostream& operator<<( std::ostream& os, CPieceType pt )
 class CPiece
 {
 public:
+    CPiece(){}
     CPiece( EPiece p ) 
     { 
         mPiece = p; 
@@ -103,7 +106,7 @@ public:
     std::string asStr() const;       
     std::string asAbbr() const;
 
-    static CPiece parsePiece( const std::string& s );
+    static EPiece parsePiece( const std::string& s );
 
 private:
     EPiece                      mPiece;

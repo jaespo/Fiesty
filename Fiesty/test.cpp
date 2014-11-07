@@ -240,6 +240,17 @@ void CTester::testPosition( void )
     rights.setEnPassantFile( EFile::kFileE );
     TESTEQ( "whiteEp", rights.asStr(), "KQkq e" );
     endSuite();
+
+    //
+    //  Test fen parsing
+    CPos                pos;
+    std::string         errorText;
+
+    bool ok = pos.parseFen( CPos::kStartFen, errorText );
+    if ( !ok )
+        std::cout << "*** Error: " << errorText << std::endl << std::flush;
+    TESTEQ( "pfen", ok, true );
+    std::cout << pos.asDiagram() << std::flush;
 }
 
 ///
@@ -247,7 +258,7 @@ void CTester::testPosition( void )
 ///
 void CTester::testSquare( void )
 {
-    beginSuite( "testPosition" );
+    beginSuite( "testSquare" );
 
     //
     //  Rank as String

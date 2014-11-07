@@ -40,12 +40,12 @@ std::string CColor::asStr() const
 ///
 /// parses the string as a color
 ///
-CColor CColor::parseColor( std::string s )
+EColor CColor::parseColor( std::string s )
 {
     if ( s.length() != 1 ) 
         return EColor::kNone;
     for ( size_t ix = 0; ix < U8( EColor::kNum ); ix++ )
-        if ( std::toupper( s[0] ) == kAbbrs[0][0] )
+        if ( std::toupper( s[0] ) == kAbbrs[ix][0] )
             return EColor( ix );
     return EColor::kNone;
 }
@@ -69,12 +69,12 @@ std::string CPiece::asStr() const
 ///
 /// Parse a piece from a string, upper case for white, lower case for black
 ///
-CPiece CPiece::parsePiece( const std::string& s )
+EPiece CPiece::parsePiece( const std::string& s )
 {
     if ( s.length() != 1 ) 
         return EPiece::kNone;
-    for ( size_t ix = 0; ix < U8( EColor::kNum ); ix++ )
-        if ( s[0] == kAbbrs[0][0] )
+    for ( size_t ix = 0; ix < U8( EPiece::kNum ); ix++ )
+        if ( s[0] == kAbbrs[ix][0] )
             return EPiece( ix );
     return EPiece::kNone;
 }

@@ -114,13 +114,16 @@ private:
 class CPos
 {
 public:
+    static const char* kStartFen;
+
+    CPos() { clearBoard(); }
     void clearBoard();
-    void addPiece( CPiece p, CSqix sq );            //...
+    void addPiece( CPiece p, CSqix sq );
     bool parseFen( 
         const std::string&          sFen,
-        std::string&                rsErrorText );  //TODO: code me
+        std::string&                rsErrorText );
     CColor getWhoseMove() { return mWhoseMove; }
-    CPiece getPiece( YSqix sqix );                  //TODO: code me
+    CPiece getPiece( YSqix sqix ) { return mBoard[sqix]; }
 
     void getPawnNonCaptures( CMoves& rMoves );      //TODO: code me
     void getPawnCaptures( CMoves& rMoves );         //TODO: code me
@@ -142,17 +145,17 @@ public:
     std::string asAbbr() const;                     //TODO: code me
     std::string asStr() const;                      //TODO: code me
     std::string asFen() const;                      //TODO: code me
-    std::string asDiagram();                        //TODO: code me
+    std::string asDiagram() const;                  //TODO: code me
 
 private:
     CColor          mWhoseMove;
     U8              mHalfMoveClock;                 // for 50 move rule
     U8              mDups;                          // for 3 time repetions
     CPosRights      mPosRights;
+    std::uint16_t   mMoveNum;
     CPiece          mBoard[U8( ERank::kNum ) * U8( EFile::kNum )];
     CBitBoard       mbbPieceType[EPieceType::kNum];
     CBitBoard       mbbColor[EColor::kNum];
-    std::uint16_t   mMoveNum;
 
     std::string nextFenTok( 
         const std::string &sFen, size_t &rPos );
