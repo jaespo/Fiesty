@@ -32,7 +32,7 @@ std::string CPos::asDiagram() const
 
     for ( I8 r = I8( ERank::kRank8 ); r >= I8( ERank::kRank1 ); r-- )
     {
-        for ( U8 f = U8( EFile::kFileA ); f <= U8( EFile::kFileG ); f++ )
+        for ( U8 f = U8( EFile::kFileA ); f <= U8( EFile::kFileH ); f++ )
         {
             CPiece piece =  mBoard[CSqix( ERank( r ), EFile( f ) ).get()];
             if ( piece.get() == EPiece::kNone )
@@ -44,15 +44,17 @@ std::string CPos::asDiagram() const
                 s.append( 
                     mBoard[CSqix( ERank( r ), EFile( f ) ).get()].asAbbr() );
             }
-            if ( EFile( f ) != EFile::kFileG )
+            if ( EFile( f ) != EFile::kFileH )
                 s.append( " " );
         }
         s.append( "\n" );
     }
-    s.append( mWhoseMove.asAbbr() + " " + mPosRights.asAbbr() 
-        + " move " + std::to_string( mMoveNum ) 
-        + " 50-move " + std::to_string( mHalfMoveClock ) 
-        + " dups " + std::to_string( mDups ) + "\n" );
+    s.append( 
+          "whoseMove = " + mWhoseMove.asAbbr()
+        + "\nrights    = " + mPosRights.asAbbr() 
+        + "\nmove      = " + std::to_string( mMoveNum ) 
+        + "\n50-move   = " + std::to_string( mHalfMoveClock ) 
+        + "\ndups      = " + std::to_string( mDups ) + "\n" );
     return s;
 }
 
@@ -262,7 +264,7 @@ bool CPos::parseFen(
     char* pzEnd;
     const char* pzNum = tok.c_str();
     long num = std::strtol( tok.c_str(), &pzEnd, 10 );
-    if ( pzEnd == pzNum || pzEnd != pzEnd + std::strlen( pzNum ) )
+    if ( pzEnd == pzNum || pzEnd != pzNum + std::strlen( pzNum ) )
     {
         rsErrorText = "Invalid half move clock: " + tok;
         return false;
@@ -275,7 +277,7 @@ bool CPos::parseFen(
     tok = nextFenTok( sFen, fenIx );
     pzNum = tok.c_str();
     num = std::strtol( tok.c_str(), &pzEnd, 10 );
-    if ( pzEnd == pzNum || pzEnd != pzEnd + std::strlen( pzNum ) )
+    if ( pzEnd == pzNum || pzEnd != pzNum + std::strlen( pzNum ) )
     {
         rsErrorText = "Invalid half move number: " + tok;
         return false;
