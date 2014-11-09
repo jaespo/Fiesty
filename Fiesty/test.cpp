@@ -239,7 +239,6 @@ void CTester::testPosition( void )
     TESTEQ( "illegalEp", rights.asStr(), "KQkq -" );
     rights.setEnPassantFile( EFile::kFileE );
     TESTEQ( "whiteEp", rights.asStr(), "KQkq e" );
-    endSuite();
 
     //
     //  Test fen parsing
@@ -250,7 +249,23 @@ void CTester::testPosition( void )
     if ( !ok )
         std::cout << "*** Error: " << errorText << std::endl << std::flush;
     TESTEQ( "pfen", ok, true );
-    std::cout << pos.asDiagram() << std::flush;
+    TESTEQ( "asDiagram", pos.asDiagram(), 
+        "r n b q k b n r\n"
+        "p p p p p p p p\n"
+        ". . . . . . . .\n"
+        ". . . . . . . .\n"
+        ". . . . . . . .\n"
+        ". . . . . . . .\n"
+        "P P P P P P P P\n"
+        "R N B Q K B N R\n"
+        "whoseMove = W\n"
+        "rights    = KQkq -\n"
+        "move      = 1\n"
+        "50-move   = 0\n"
+        "dups      = 0\n" );
+    std::string fen = pos.asFen(); 
+    TESTEQ( "asFen", fen, CPos::kStartFen );
+    endSuite();
 }
 
 ///

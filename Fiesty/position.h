@@ -125,6 +125,11 @@ public:
     CColor getWhoseMove() { return mWhoseMove; }
     CPiece getPiece( YSqix sqix ) { return mBoard[sqix]; }
 
+    std::string asAbbr() const { return asFen(); }
+    std::string asStr() const;                      //TODO: code me
+    std::string asFen() const;                      //TODO: code me
+    std::string asDiagram() const;
+
     void getPawnNonCaptures( CMoves& rMoves );      //TODO: code me
     void getPawnCaptures( CMoves& rMoves );         //TODO: code me
     void getKnightNonCaptures( CMoves& rMoves );    //TODO: code me
@@ -141,11 +146,6 @@ public:
 
     void makeMove( CMove m );                       //TODO: code me
     void unmakeMove( CMove m );                     //TODO: code me
-
-    std::string asAbbr() const;                     //TODO: code me
-    std::string asStr() const;                      //TODO: code me
-    std::string asFen() const;                      //TODO: code me
-    std::string asDiagram() const;                  //TODO: code me
 
 private:
     CColor          mWhoseMove;

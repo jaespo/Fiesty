@@ -52,3 +52,8 @@ private:
             << "    x1 = " << ( expr1 ) << std::endl                        \
             << "    x2 = " << ( expr2 ) << std::endl << std::flush;         \
     }
+
+//
+//  Simple trace facility for debugging, can use insertion operators with x
+//
+#define TR( x ) std::cout << x << std::endl << std::flush;

@@ -59,6 +59,46 @@ std::string CPos::asDiagram() const
 }
 
 ///
+/// Convert a position to a fen string, for example
+///
+///     rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+///
+std::string CPos::asFen() const
+{
+    std::string             s;
+
+    for ( I8 r = I8( ERank::kRank8 ); r >= I8( ERank::kRank1 ); r-- )
+    {
+        int spaceCount = 0;
+        for ( U8 f = U8( EFile::kFileA ); f <= U8( EFile::kFileH ); f++ )
+        {
+            CPiece piece =  mBoard[CSqix( ERank( r ), EFile( f ) ).get()];
+            if ( piece.get() == EPiece::kNone )
+            {
+                spaceCount++;
+            }
+            else
+            {
+                if ( spaceCount > 0 )
+                    s.push_back( '0' + spaceCount );
+                s.append( 
+                    mBoard[CSqix( ERank( r ), EFile( f ) ).get()].asAbbr() );
+            }
+        }
+        if ( spaceCount > 0 )
+            s.push_back( '0' + spaceCount );
+        if ( r != I8( ERank::kRank1 ) )
+            s.append( "/" );
+    }
+    s.append( " " );
+    s.push_back( std::tolower( mWhoseMove.asAbbr()[0] ) );
+    s.append( " " + mPosRights.asAbbr() 
+        + " " + std::to_string( mHalfMoveClock ) 
+        + " " + std::to_string( mMoveNum ) );
+    return s;
+}
+
+///
 /// Clear the board of pieces
 ///
 void CPos::clearBoard()
