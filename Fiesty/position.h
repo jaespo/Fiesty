@@ -127,7 +127,7 @@ public:
 
     std::string asAbbr() const { return asFen(); }
     std::string asStr() const;                      //TODO: code me
-    std::string asFen() const;                      //TODO: code me
+    std::string asFen() const;
     std::string asDiagram() const;
 
     void getPawnNonCaptures( CMoves& rMoves );      //TODO: code me

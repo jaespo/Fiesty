@@ -265,6 +265,8 @@ void CTester::testPosition( void )
         "dups      = 0\n" );
     std::string fen = pos.asFen(); 
     TESTEQ( "asFen", fen, CPos::kStartFen );
+    std::string s = pos.asStr();
+    std::cout << s << std::flush;
     endSuite();
 }
 

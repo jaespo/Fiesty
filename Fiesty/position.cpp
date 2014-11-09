@@ -99,6 +99,25 @@ std::string CPos::asFen() const
 }
 
 ///
+/// Position as a fen, including the bitmaps
+///
+std::string CPos::asStr() const
+{
+    std::string s = asFen();
+    for ( U8 pt = U8( EPieceType::kPawn ); pt < U8( EPieceType::kNum ); pt++ )
+    {
+        s.append( CPieceType( EPieceType( pt ) ).asAbbr() + ": " );
+        s.append( mbbPieceType[pt].asStr() + "\n" );
+    }
+    for ( U8 c = U8( EColor::kWhite ); c < U8( EColor::kBlack ); c++ )
+    {
+        s.append( CColor( EColor( c ) ).asAbbr() + ": " );
+        s.append( mbbColor[c].asStr() + "\n" );
+    }
+    return s;
+}
+
+///
 /// Clear the board of pieces
 ///
 void CPos::clearBoard()
