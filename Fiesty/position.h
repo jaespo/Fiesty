@@ -126,7 +126,7 @@ public:
     CPiece getPiece( YSqix sqix ) { return mBoard[sqix]; }
 
     std::string asAbbr() const { return asFen(); }
-    std::string asStr() const;                      //TODO: code me
+    std::string asStr() const;
     std::string asFen() const;
     std::string asDiagram() const;
 

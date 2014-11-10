@@ -103,13 +103,13 @@ std::string CPos::asFen() const
 ///
 std::string CPos::asStr() const
 {
-    std::string s = asFen();
+    std::string s = asFen() + "\n";
     for ( U8 pt = U8( EPieceType::kPawn ); pt < U8( EPieceType::kNum ); pt++ )
     {
         s.append( CPieceType( EPieceType( pt ) ).asAbbr() + ": " );
         s.append( mbbPieceType[pt].asStr() + "\n" );
     }
-    for ( U8 c = U8( EColor::kWhite ); c < U8( EColor::kBlack ); c++ )
+    for ( U8 c = U8( EColor::kWhite ); c <= U8( EColor::kBlack ); c++ )
     {
         s.append( CColor( EColor( c ) ).asAbbr() + ": " );
         s.append( mbbColor[c].asStr() + "\n" );
@@ -126,8 +126,8 @@ void CPos::clearBoard()
 
     std::memset( 
         mBoard, U8( EPiece::kNone ), U8( ERank::kNum ) * U8( EFile::kNum ) );
-    std::memset( mbbPieceType, U8( EPieceType::kNum ), sizeof( mbbPieceType ) );
-    std::memset( mbbColor, U8( EColor::kNum ), sizeof( mbbColor ) );
+    std::memset( mbbPieceType, 0, sizeof( mbbPieceType ) );
+    std::memset( mbbColor, 0, sizeof( mbbColor ) );
 }
 
 ///
