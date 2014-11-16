@@ -66,6 +66,9 @@ class CMoves
 {
 public:
     static const std::uint8_t    kMaxMoves = 255;
+    
+    CMoves() { mNumMoves = 0; }
+    void reset() { mNumMoves = 0; }
 
     void addMove( CMove m ) { mMoves[mNumMoves++] = m; }
     std::uint8_t getNumMoves() const { return mNumMoves; }

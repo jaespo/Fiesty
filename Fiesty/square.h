@@ -75,6 +75,14 @@ public:
             && getFile().get() == EFile::kNone; 
     }  
     YBitBoard asBitBoard() const { return 0x1ULL << mSqix; }
+    
+    CSqix& minusRank( U8 numRanks )
+    {
+        assert( U8( getRank().get() ) > U8( ERank::kRank1 ) );
+        mSqix -= 8 * numRanks;
+        return *this;
+    }
+
     std::string asStr() const;
     std::string asAbbr() const;
     static CSqix parseSqix( const std::string& s );

@@ -130,19 +130,33 @@ public:
     std::string asFen() const;
     std::string asDiagram() const;
 
-    void getPawnNonCaptures( CMoves& rMoves );      //TODO: code me
-    void getPawnCaptures( CMoves& rMoves );         //TODO: code me
-    void getKnightNonCaptures( CMoves& rMoves );    //TODO: code me
-    void getKnightCaptures( CMoves& rMoves );       //TODO: code me
-    void getBishopNonCaptures( CMoves& rMoves );    //TODO: code me
-    void getBishopCaptures( CMoves& rMoves );       //TODO: code me
-    void getRookNonCaptures( CMoves& rMoves );      //TODO: code me
-    void getRookCaptures( CMoves& rMoves );         //TODO: code me
-    void getQueenNonCaptures( CMoves& rMoves );     //TODO: code me
-    void getQueenCaptures( CMoves& rMoves );        //TODO: code me
-    void getKingNonCaptures( CMoves& rMoves );      //TODO: code me    
-    void getKingCaptures( CMoves& rMoves );         //TODO: code me
-    void getMoves( CMoves& rMoves );                //TODO: code me
+    void genWhitePawnQuiets( CMoves& rMoves );      //TODO: code me
+    void genWhitePawnCaptures( CMoves& rMoves );         //TODO: code me
+    void genWhiteKnightQuiets( CMoves& rMoves );    //TODO: code me
+    void genWhiteKnightCaptures( CMoves& rMoves );       //TODO: code me
+    void genWhiteBishopQuiets( CMoves& rMoves );    //TODO: code me
+    void genWhiteBishopCaptures( CMoves& rMoves );       //TODO: code me
+    void genWhiteRookQuiets( CMoves& rMoves );      //TODO: code me
+    void genWhiteRookCaptures( CMoves& rMoves );         //TODO: code me
+    void genWhiteQueenQuiets( CMoves& rMoves );     //TODO: code me
+    void genWhiteQueenCaptures( CMoves& rMoves );        //TODO: code me
+    void genWhiteKingQuiets( CMoves& rMoves );      //TODO: code me    
+    void genWhiteKingCaptures( CMoves& rMoves );         //TODO: code me
+
+    void genBlackPawnQuiets( CMoves& rMoves );      //TODO: code me
+    void genBlackPawnCaptures( CMoves& rMoves );         //TODO: code me
+    void genBlackKnightQuiets( CMoves& rMoves );    //TODO: code me
+    void genBlackKnightCaptures( CMoves& rMoves );       //TODO: code me
+    void genBlackBishopQuiets( CMoves& rMoves );    //TODO: code me
+    void genBlackBishopCaptures( CMoves& rMoves );       //TODO: code me
+    void genBlackRookQuiets( CMoves& rMoves );      //TODO: code me
+    void genBlackRookCaptures( CMoves& rMoves );         //TODO: code me
+    void genBlackQueenQuiets( CMoves& rMoves );     //TODO: code me
+    void genBlackQueenCaptures( CMoves& rMoves );        //TODO: code me
+    void genBlackKingQuiets( CMoves& rMoves );      //TODO: code me    
+    void genBlackKingCaptures( CMoves& rMoves );         //TODO: code me
+
+    void genMoves( CMoves& rMoves );                //TODO: code me
 
     void makeMove( CMove m );                       //TODO: code me
     void unmakeMove( CMove m );                     //TODO: code me
@@ -157,8 +171,15 @@ private:
     CBitBoard       mbbPieceType[EPieceType::kNum];
     CBitBoard       mbbColor[EColor::kNum];
 
-    std::string nextFenTok( 
+    static std::string nextFenTok( 
         const std::string &sFen, size_t &rPos );
+
+    CBitBoard& notOccupied( CBitBoard& bb ) const 
+    {
+        bb = bb.get() & ~( mbbColor[U8( EColor::kWhite )].get() 
+            | mbbColor[U8( EColor::kBlack )].get() );
+        return bb;
+    }
 };
 
 #endif      // position.h

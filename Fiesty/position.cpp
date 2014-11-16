@@ -9,6 +9,7 @@
 #include <cctype>
 #include <algorithm>
 #include "position.h"
+#include "test.h"
 
 const char* CPos::kStartFen 
     = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -128,6 +129,63 @@ void CPos::clearBoard()
         mBoard, U8( EPiece::kNone ), U8( ERank::kNum ) * U8( EFile::kNum ) );
     std::memset( mbbPieceType, 0, sizeof( mbbPieceType ) );
     std::memset( mbbColor, 0, sizeof( mbbColor ) );
+}
+
+///
+/// generates pawn pushes
+///
+/// @param rMoves
+///     the pawn moves will be added to rMoves
+///
+void CPos::genWhitePawnQuiets( CMoves& rMoves )
+{
+    CSqix           toSqix;
+    CSqix           fromSqix;
+    CBitBoard       bbTo;
+   
+    //
+    //  Start with the single pushes
+    //
+    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kPawn )].get() 
+        & mbbColor[U8( EColor::kWhite )].get();
+    CBitBoard bbPop = bbTo = notOccupied( bbFrom.advanceFiles( 1 ) );
+    while ( bbPop.get() )
+    {
+        CSqix fromSqix = toSqix = bbPop.popLsb();
+        fromSqix.minusRank( 1 );
+        if ( toSqix.getRank().get() != ERank::kRank8 )
+        {
+            rMoves.addMove( CMove( fromSqix, toSqix ) );
+        }
+        else
+        {
+            rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kQueen ) );
+            rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kRook ) );
+            rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kBishop ) );
+            rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kKnight ) );
+        }
+    }
+
+    //
+    //  Push forward a second level if we are on the third rand.
+    //
+    bbPop = notOccupied( bbTo.onRank( ERank::kRank3 ).advanceFiles( 1 ) );
+    while ( bbPop.get() )
+    {
+        fromSqix = toSqix = bbPop.popLsb();
+        fromSqix.minusRank( 1 );
+        if ( toSqix.getRank().get() != ERank::kRank8 )
+        {
+            rMoves.addMove( CMove( fromSqix, toSqix ) );
+        }
+        else
+        {
+            rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kQueen ) );
+            rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kRook ) );
+            rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kBishop ) );
+            rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kKnight ) );
+        }
+    }
 }
 
 ///

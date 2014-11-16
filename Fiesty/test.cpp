@@ -31,7 +31,6 @@ void CTester::endSuite()
     mgbInSuite = false;
 }
 
-
 ///
 /// Test bitboard.h
 ///
@@ -105,9 +104,91 @@ void CTester::testBitBoard()
 }
 
 ///
+/// Test the moves.h
+///
+void CTester::testMove()
+{
+    beginSuite( "testMove" );
+    CMove c3c4( 
+        CSqix( ERank::kRank3, EFile::kFileC ),
+        CSqix( ERank::kRank4, EFile::kFileC ) );
+    CMove d3d4( 
+        CSqix( ERank::kRank3, EFile::kFileD ),
+        CSqix( ERank::kRank4, EFile::kFileD ) );
+    CMove e7e8Q( 
+        CSqix( ERank::kRank7, EFile::kFileE ),
+        CSqix( ERank::kRank8, EFile::kFileE ), 
+        EPieceType::kQueen );
+
+    //
+    //  Make sure the compiler is packing the size correctly
+    //
+    TESTEQ( "moveSize", sizeof( c3c4 ), 2 );
+
+    TESTEQ( "c3c4AsStr",    c3c4.asStr(), "c3c4" );
+    TESTEQ( "c3c4From",     c3c4.getFrom().asAbbr(), "c3" );
+    TESTEQ( "c3c4To",       c3c4.getTo().asAbbr(), "c4" );
+
+    TESTEQ( "d3d4AsStr",    d3d4.asStr(), "d3d4" );
+    TESTEQ( "d3d4From",     d3d4.getFrom().asAbbr(), "d3" );
+    TESTEQ( "d3d4To",       d3d4.getTo().asAbbr(), "d4" );
+
+    TESTEQ( "e7e8QAsStr",   e7e8Q.asStr(), "e7e8=Q" );
+    TESTEQ( "e7e8QFrom",    e7e8Q.getFrom().asAbbr(), "e7" );
+    TESTEQ( "e7e8QTo",      e7e8Q.getTo().asAbbr(), "e8" );
+    TESTEQ( "e7e8QPromo",   e7e8Q.getPromo().asAbbr(), "Q" );
+
+    CMoves      moves;
+    moves.addMove( c3c4 );
+    moves.addMove( d3d4 );
+
+    TESTEQ( "movesAsStr", moves.asStr(), "2:c3c4 d3d4" );
+    
+    CLine       line;
+    line.addMove( c3c4, 0 );
+    line.addMove( d3d4, 0 );
+
+    TESTEQ( "lineAsAbbr", line.asAbbr(), "2:c3c4 d3d4" );
+    TESTEQ( "lineAsStr", line.asStr(), "2 of 1024:c3c4 d3d4" );
+    endSuite();
+}
+
+///
+/// tests move generation
+///
+void CTester::testMoveGen()
+{
+    beginSuite( "testMoveGen" );
+
+    CMoves          moves;
+    CPos            pos;
+    std::string     errorText;
+
+    //
+    //  Test pawn pushes from the starting position
+    //
+    TESTEQ( "mgFen", pos.parseFen( CPos::kStartFen, errorText ), true );
+    pos.genWhitePawnQuiets( moves );
+    TESTEQ( "spMv", moves.asStr(), 
+        "16:a2a3 b2b3 c2c3 d2d3 e2e3 f2f3 g2g3 h2h3 a3a4 b3b4 c3c4 d3d4 "
+        "e3e4 f3f4 g3g4 h3h4" );
+
+    //
+    //  Test promotions, single pushes from the non-second rank, and blocked
+    //  pawns.
+    //
+    TESTEQ( "mgFen", pos.parseFen( 
+        "8/4k2P/8/8/3p2P1/1K3p2/1P1P1P2/8 w - - 0 1", errorText ), true );
+    moves.reset();
+    pos.genWhitePawnQuiets( moves );
+    TESTEQ( "spMv", moves.asStr(), "6:d2d3 g4g5 h7h8=Q h7h8=R h7h8=B h7h8=N" );
+    endSuite();
+}
+
+///
 /// tests the piece.h module
 ///
-void CTester::testPiece( void )
+void CTester::testPiece()
 {
     beginSuite( "testPiece" );
 
@@ -343,55 +424,6 @@ void CTester::testSquare( void )
     endSuite();
 }
 
-///
-/// Test the moves.h
-///
-void CTester::testMove()
-{
-    beginSuite( "testMove" );
-    CMove c3c4( 
-        CSqix( ERank::kRank3, EFile::kFileC ),
-        CSqix( ERank::kRank4, EFile::kFileC ) );
-    CMove d3d4( 
-        CSqix( ERank::kRank3, EFile::kFileD ),
-        CSqix( ERank::kRank4, EFile::kFileD ) );
-    CMove e7e8Q( 
-        CSqix( ERank::kRank7, EFile::kFileE ),
-        CSqix( ERank::kRank8, EFile::kFileE ), 
-        EPieceType::kQueen );
-
-    //
-    //  Make sure the compiler is packing the size correctly
-    //
-    TESTEQ( "moveSize", sizeof( c3c4 ), 2 );
-
-    TESTEQ( "c3c4AsStr",    c3c4.asStr(), "c3c4" );
-    TESTEQ( "c3c4From",     c3c4.getFrom().asAbbr(), "c3" );
-    TESTEQ( "c3c4To",       c3c4.getTo().asAbbr(), "c4" );
-
-    TESTEQ( "d3d4AsStr",    d3d4.asStr(), "d3d4" );
-    TESTEQ( "d3d4From",     d3d4.getFrom().asAbbr(), "d3" );
-    TESTEQ( "d3d4To",       d3d4.getTo().asAbbr(), "d4" );
-
-    TESTEQ( "e7e8QAsStr",   e7e8Q.asStr(), "e7e8=Q" );
-    TESTEQ( "e7e8QFrom",    e7e8Q.getFrom().asAbbr(), "e7" );
-    TESTEQ( "e7e8QTo",      e7e8Q.getTo().asAbbr(), "e8" );
-    TESTEQ( "e7e8QPromo",   e7e8Q.getPromo().asAbbr(), "Q" );
-
-    CMoves      moves;
-    moves.addMove( c3c4 );
-    moves.addMove( d3d4 );
-
-    TESTEQ( "movesAsStr", moves.asStr(), "2:c3c4 d3d4" );
-    
-    CLine       line;
-    line.addMove( c3c4, 0 );
-    line.addMove( d3d4, 0 );
-
-    TESTEQ( "lineAsAbbr", line.asAbbr(), "2:c3c4 d3d4" );
-    TESTEQ( "lineAsStr", line.asStr(), "2 of 1024:c3c4 d3d4" );
-    endSuite();
-}
 
 ///
 /// Run all the tests
@@ -403,4 +435,5 @@ void CTester::testAll()
     testMove();
     testBitBoard();
     testPosition();
+    testMoveGen();
 }
