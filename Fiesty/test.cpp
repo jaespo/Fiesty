@@ -182,7 +182,6 @@ void CTester::testMoveGen()
     moves.reset();
     pos.genWhitePawnQuiets( moves );
     TESTEQ( "wspMv", moves.asStr(), "6:d2d3 g4g5 h7h8=Q h7h8=R h7h8=B h7h8=N" );
-    endSuite();
 
     //
     //  Test black pawn pushes from the starting position

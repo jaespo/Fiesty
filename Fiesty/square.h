@@ -63,6 +63,8 @@ private:
 class CSqix
 {
 public:
+    static const U8 kNumSquares = 64;
+
     CSqix() {}
     CSqix( YSqix s ) { mSqix = s; }
     CSqix( CRank r, CFile f ) { mSqix = ( U8( r.get() ) << 3 ) + U8( f.get() ); }

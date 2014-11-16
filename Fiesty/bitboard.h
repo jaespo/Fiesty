@@ -38,8 +38,13 @@ public:
     CBitBoard retreatFiles( int numFiles ) { return ( mBitBoard >> ( numFiles << 3 ) ); };
     CBitBoard onRank( CRank r ) { return ( mBitBoard & ( 0xFFULL << ( U8( r.get() ) << 3 ) ) ); }
 
+    static void generate();
+
 private:
     YBitBoard             mBitBoard;
+
+    static void genKnightMoveMaps();
+    void setIfValid( I8 rank, I8 file );
 };
 
 #endif  // bitboard.h

@@ -117,6 +117,7 @@ public:
     static const char* kStartFen;
 
     CPos() { clearBoard(); }
+
     void clearBoard();
     void addPiece( CPiece p, CSqix sq );
     bool parseFen( 
