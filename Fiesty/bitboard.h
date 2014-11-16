@@ -34,17 +34,9 @@ public:
     std::string asStr() const;
     std::string asAbbr() const;
 
-    CBitBoard& advanceFiles( int numFiles )
-    {
-        mBitBoard <<= ( numFiles << 3 );
-        return *this;
-    }
-
-    CBitBoard& onRank( CRank r )
-    {
-        mBitBoard &= ( 0xFF << ( U8( r.get() ) << 3 ) );
-        return *this;
-    }
+    CBitBoard advanceFiles( int numFiles ) { return ( mBitBoard << ( numFiles << 3 ) ); };
+    CBitBoard retreatFiles( int numFiles ) { return ( mBitBoard >> ( numFiles << 3 ) ); };
+    CBitBoard onRank( CRank r ) { return ( mBitBoard & ( 0xFFULL << ( U8( r.get() ) << 3 ) ) ); }
 
 private:
     YBitBoard             mBitBoard;

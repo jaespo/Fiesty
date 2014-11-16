@@ -132,7 +132,54 @@ void CPos::clearBoard()
 }
 
 ///
-/// generates pawn pushes
+/// generates pawn pushes for black
+///
+/// @param rMoves
+///     the pawn moves will be added to rMoves
+///
+void CPos::genBlackPawnQuiets( CMoves& rMoves )
+{
+    CSqix           toSqix;
+    CSqix           fromSqix;
+    CBitBoard       bbTo;
+   
+    //
+    //  Start with the single pushes
+    //
+    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kPawn )].get() 
+        & mbbColor[U8( EColor::kBlack )].get();
+    CBitBoard bbPop = bbTo = notOccupied( bbFrom.retreatFiles( 1 ) );
+    while ( bbPop.get() )
+    {
+        toSqix = bbPop.popLsb();
+        fromSqix = toSqix.plusRank( 1 );
+        if ( toSqix.getRank().get() == ERank::kRank1 )
+        {
+            rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kQueen ) );
+            rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kRook ) );
+            rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kBishop ) );
+            rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kKnight ) );
+        }
+        else
+        {
+            rMoves.addMove( CMove( fromSqix, toSqix ) );
+        }
+    }
+
+    //
+    //  Push forward a second level if we are on the third rand.
+    //
+    bbPop = notOccupied( bbTo.onRank( ERank::kRank6 ).retreatFiles( 1 ) );
+    while ( bbPop.get() )
+    {
+        toSqix = bbPop.popLsb();
+        fromSqix = toSqix.plusRank( 2 );
+        rMoves.addMove( CMove( fromSqix, toSqix ) );
+    }
+}
+
+///
+/// generates pawn pushes for white
 ///
 /// @param rMoves
 ///     the pawn moves will be added to rMoves
@@ -151,18 +198,18 @@ void CPos::genWhitePawnQuiets( CMoves& rMoves )
     CBitBoard bbPop = bbTo = notOccupied( bbFrom.advanceFiles( 1 ) );
     while ( bbPop.get() )
     {
-        CSqix fromSqix = toSqix = bbPop.popLsb();
-        fromSqix.minusRank( 1 );
-        if ( toSqix.getRank().get() != ERank::kRank8 )
-        {
-            rMoves.addMove( CMove( fromSqix, toSqix ) );
-        }
-        else
+        toSqix = bbPop.popLsb();
+        fromSqix = toSqix.minusRank( 1 );
+        if ( toSqix.getRank().get() == ERank::kRank8 )
         {
             rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kQueen ) );
             rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kRook ) );
             rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kBishop ) );
             rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kKnight ) );
+        }
+        else
+        {
+            rMoves.addMove( CMove( fromSqix, toSqix ) );
         }
     }
 
@@ -172,19 +219,9 @@ void CPos::genWhitePawnQuiets( CMoves& rMoves )
     bbPop = notOccupied( bbTo.onRank( ERank::kRank3 ).advanceFiles( 1 ) );
     while ( bbPop.get() )
     {
-        fromSqix = toSqix = bbPop.popLsb();
-        fromSqix.minusRank( 1 );
-        if ( toSqix.getRank().get() != ERank::kRank8 )
-        {
-            rMoves.addMove( CMove( fromSqix, toSqix ) );
-        }
-        else
-        {
-            rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kQueen ) );
-            rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kRook ) );
-            rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kBishop ) );
-            rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kKnight ) );
-        }
+        toSqix = bbPop.popLsb();
+        fromSqix = toSqix.minusRank( 2 );
+        rMoves.addMove( CMove( fromSqix, toSqix ) );
     }
 }
 

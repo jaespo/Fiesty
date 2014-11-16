@@ -76,12 +76,8 @@ public:
     }  
     YBitBoard asBitBoard() const { return 0x1ULL << mSqix; }
     
-    CSqix& minusRank( U8 numRanks )
-    {
-        assert( U8( getRank().get() ) > U8( ERank::kRank1 ) );
-        mSqix -= 8 * numRanks;
-        return *this;
-    }
+    CSqix minusRank( U8 numRanks ) { return mSqix - ( numRanks << 3 ); }
+    CSqix plusRank( U8 numRanks ) { return mSqix + ( numRanks << 3 ); }
 
     std::string asStr() const;
     std::string asAbbr() const;

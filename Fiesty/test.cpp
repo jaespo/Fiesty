@@ -165,23 +165,44 @@ void CTester::testMoveGen()
     std::string     errorText;
 
     //
-    //  Test pawn pushes from the starting position
+    //  Test white pawn pushes from the starting position
     //
-    TESTEQ( "mgFen", pos.parseFen( CPos::kStartFen, errorText ), true );
+    TESTEQ( "wmgFen", pos.parseFen( CPos::kStartFen, errorText ), true );
     pos.genWhitePawnQuiets( moves );
-    TESTEQ( "spMv", moves.asStr(), 
-        "16:a2a3 b2b3 c2c3 d2d3 e2e3 f2f3 g2g3 h2h3 a3a4 b3b4 c3c4 d3d4 "
-        "e3e4 f3f4 g3g4 h3h4" );
+    TESTEQ( "wspMv", moves.asStr(), 
+        "16:a2a3 b2b3 c2c3 d2d3 e2e3 f2f3 g2g3 h2h3 a2a4 b2b4 c2c4 d2d4 "
+        "e2e4 f2f4 g2g4 h2h4" );
 
     //
-    //  Test promotions, single pushes from the non-second rank, and blocked
+    //  Test white promotions, single pushes from the non-second rank, and blocked
     //  pawns.
     //
-    TESTEQ( "mgFen", pos.parseFen( 
+    TESTEQ( "wmgFen", pos.parseFen( 
         "8/4k2P/8/8/3p2P1/1K3p2/1P1P1P2/8 w - - 0 1", errorText ), true );
     moves.reset();
     pos.genWhitePawnQuiets( moves );
-    TESTEQ( "spMv", moves.asStr(), "6:d2d3 g4g5 h7h8=Q h7h8=R h7h8=B h7h8=N" );
+    TESTEQ( "wspMv", moves.asStr(), "6:d2d3 g4g5 h7h8=Q h7h8=R h7h8=B h7h8=N" );
+    endSuite();
+
+    //
+    //  Test black pawn pushes from the starting position
+    //
+    TESTEQ( "bmgFen", pos.parseFen( CPos::kStartFen, errorText ), true );
+    moves.reset();
+    pos.genBlackPawnQuiets( moves );
+    TESTEQ( "bspMv", moves.asStr(), 
+        "16:a7a6 b7b6 c7c6 d7d6 e7e6 f7f6 g7g6 h7h6 a7a5 b7b5 c7c5 d7d5 "
+        "e7e5 f7f5 g7g5 h7h5" );
+
+    //
+    //  Test black promotions, single pushes from the non-second rank, and blocked
+    //  pawns.
+    //
+    TESTEQ( "bmgFen", pos.parseFen( 
+        "4k3/p7/8/K2p1p2/3P4/8/7p/8 w - - 0 1", errorText ), true );
+    moves.reset();
+    pos.genBlackPawnQuiets( moves );
+    TESTEQ( "bspMv", moves.asStr(), "6:h2h1=Q h2h1=R h2h1=B h2h1=N f5f4 a7a6" );
     endSuite();
 }
 

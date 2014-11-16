@@ -21,6 +21,11 @@
 typedef std::uint8_t    U8;
 typedef std::int8_t     I8;
 
+//
+//  Simple acility for debugging, can use insertion operators with x
+//
+#define TR( x ) std::cout << x << std::endl << std::flush;
+
 ///
 /// Enum that represents a side's color, white or black
 ///

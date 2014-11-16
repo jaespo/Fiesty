@@ -130,7 +130,7 @@ public:
     std::string asFen() const;
     std::string asDiagram() const;
 
-    void genWhitePawnQuiets( CMoves& rMoves );      //TODO: code me
+    void genWhitePawnQuiets( CMoves& rMoves );
     void genWhitePawnCaptures( CMoves& rMoves );         //TODO: code me
     void genWhiteKnightQuiets( CMoves& rMoves );    //TODO: code me
     void genWhiteKnightCaptures( CMoves& rMoves );       //TODO: code me
@@ -143,7 +143,7 @@ public:
     void genWhiteKingQuiets( CMoves& rMoves );      //TODO: code me    
     void genWhiteKingCaptures( CMoves& rMoves );         //TODO: code me
 
-    void genBlackPawnQuiets( CMoves& rMoves );      //TODO: code me
+    void genBlackPawnQuiets( CMoves& rMoves );
     void genBlackPawnCaptures( CMoves& rMoves );         //TODO: code me
     void genBlackKnightQuiets( CMoves& rMoves );    //TODO: code me
     void genBlackKnightCaptures( CMoves& rMoves );       //TODO: code me
@@ -174,11 +174,10 @@ private:
     static std::string nextFenTok( 
         const std::string &sFen, size_t &rPos );
 
-    CBitBoard& notOccupied( CBitBoard& bb ) const 
+    CBitBoard notOccupied( CBitBoard& bb ) const 
     {
-        bb = bb.get() & ~( mbbColor[U8( EColor::kWhite )].get() 
-            | mbbColor[U8( EColor::kBlack )].get() );
-        return bb;
+        return ( bb.get() & ~( mbbColor[U8( EColor::kWhite )].get() 
+            | mbbColor[U8( EColor::kBlack )].get() ) );
     }
 };
 
