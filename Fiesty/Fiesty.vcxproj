@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClCompile Include="bitboard.cpp" />
     <ClCompile Include="fiesty.cpp" />
+    <ClCompile Include="gen.cpp" />
     <ClCompile Include="move.cpp" />
     <ClCompile Include="piece.cpp" />
     <ClCompile Include="position.cpp" />
@@ -157,12 +158,16 @@
   <ItemGroup>
     <ClInclude Include="bitboard.h" />
     <ClInclude Include="fiesty.h" />
+    <ClInclude Include="gen.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="move.h" />
     <ClInclude Include="position.h" />
     <ClInclude Include="square.h" />
     <ClInclude Include="test.h" />
     <ClInclude Include="piece.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="gen.out" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

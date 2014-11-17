@@ -36,6 +36,9 @@
     <ClCompile Include="bitboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="gen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fiesty.h">
@@ -62,5 +65,13 @@
     <ClInclude Include="bitboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="gen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="gen.out">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

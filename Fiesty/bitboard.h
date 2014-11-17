@@ -43,7 +43,7 @@ public:
 private:
     YBitBoard             mBitBoard;
 
-    static void genKnightMoveMaps();
+    static void genKnightMoveSet();
     void setIfValid( I8 rank, I8 file );
 };
 

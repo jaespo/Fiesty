@@ -44,43 +44,6 @@ std::string CBitBoard::asAbbr() const
 }
 
 ///
-/// Generates source code for various bitboards, such as move maps and 
-/// magics.
-///
-void CBitBoard::generate()
-{
-    genKnightMoveMaps();
-}
-
-///
-/// Generates source code for the knight move map
-///
-void CBitBoard::genKnightMoveMaps()
-{
-    std::cout << "    bbKnightMoveMap[CSqix::kNumSquares] = {";
-    for ( U8 sq =  0; sq < CSqix::kNumSquares; sq++ )
-    {
-        CSqix sqix( sq );
-        I8 r = I8( sqix.getRank().get() );
-        I8 f = I8( sqix.getFile().get() );
-        std::cout << "\n        /* " << sqix.asAbbr() << " */ ";
-        CBitBoard bb( 0ULL );
-        bb.setIfValid( r + 2, f + 1 );
-        bb.setIfValid( r + 2, f - 1 );
-        bb.setIfValid( r - 2, f + 1 );
-        bb.setIfValid( r - 2, f - 1 );
-        bb.setIfValid( r + 1, f + 2 );
-        bb.setIfValid( r + 1, f - 2 );
-        bb.setIfValid( r - 1, f + 2 );
-        bb.setIfValid( r - 1, f - 2 );
-        std::cout << bb.asAbbr();
-        if( sq != CSqix::kNumSquares - 1 ) 
-            std::cout << ",";
-    }
-    std::cout << " };\n" << std::flush;
-}
-
-///
 /// helper function that sets a bit if its a valid location
 ///
 void CBitBoard::setIfValid( I8 rank, I8 file )

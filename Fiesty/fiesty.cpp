@@ -5,10 +5,11 @@
 #include "fiesty.h"
 #include "bitboard.h"
 #include "test.h"
+#include "gen.h"
 
 int main( int argc, const char* argv[] )
 {
-    std::cout << "Fiesty (C) 2014 by Jeffery A Esposito" << std::endl;
+    std::cout << "// Fiesty (C) 2014 by Jeffery A Esposito" << std::endl;
     if ( argc > 1 && strcmp( argv[1], "test" ) == 0 )
     {        
         CTester::testAll();
