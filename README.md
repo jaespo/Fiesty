@@ -1,7 +1,7 @@
 Fiesty
 ======
 
-Fiesty is a modern chess engine that I have started writing in order to investigate the following:
+Fiesty is a modern chess engine that I have started in order to investigate the following:
 
 1) To understand the kinds of mistakes that amateur players make.  The idea is to analyze chess game databases and try to determine the depth, character, and frequency of the tactical errors relative to the player ratings.  Eventually the goal would be to come up with a chess engine that can realistically simulate a weak human.
 
@@ -14,6 +14,9 @@ Fiesty is a modern chess engine that I have started writing in order to investig
 Currently, development has just started, with the following plan to get a simple engine up and running
 
 [X] basic framework
+
 [/] move generation
+
 [ ] static eval
+
 [ ] search
