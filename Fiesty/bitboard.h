@@ -35,11 +35,14 @@ public:
     std::string asStr() const;
     std::string asAbbr() const;
 
-    CBitBoard advanceRanks( int numRanks ) { return ( mBitBoard << ( numRanks << 3 ) ); };
-    CBitBoard retreatRanks( int numRanks ) { return ( mBitBoard >> ( numRanks << 3 ) ); };
+	static CBitBoard fileBits( CFile f ) { return CBitBoard( 0x8080808080808080ULL >> U8( f.get() 
+
+    CBitBoard advanceRanks( int numRanks ) const { return ( mBitBoard << ( numRanks << 3 ) ); };
+    CBitBoard retreatRanks( int numRanks ) const { return ( mBitBoard >> ( numRanks << 3 ) ); };
     CBitBoard leftFiles( int numFiles ) { ... }
     CBitBoard rightFiles( int numFiles ) { ... }
     CBitBoard onRank( CRank r ) { return ( mBitBoard & ( 0xFFULL << ( U8( r.get() ) << 3 ) ) ); }
+    CBitBoard onFile( CFile r ) { return ( mBitBoard & ( 0xFFULL << ( U8( r.get() ) << 3 ) ) ); }
 
 private:
     YBitBoard             mBitBoard;
