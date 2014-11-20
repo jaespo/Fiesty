@@ -17,7 +17,7 @@ int main( int argc, const char* argv[] )
     }
     else if ( argc > 1 && strcmp( argv[1], "gen" ) == 0 )
     {        
-        CBitBoard::generate();
+        CGen::generate();
         return 0;
     }
     return 0;

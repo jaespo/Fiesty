@@ -16,7 +16,13 @@
 ///
 class CGen
 {
-    static const YBitBoard bbKnightMoveMap[CSqix::kNumSquares];
+public:
+    static void generate();
+
+    static const YBitBoard bbKnightMoveSet[CSqix::kNumSquares];
+
+private: 
+    static void genKnightMoveSet();
 };
 
 #endif

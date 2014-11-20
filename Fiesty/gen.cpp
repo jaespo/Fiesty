@@ -6,13 +6,20 @@
 ///
 #include "fiesty.h"
 #include "bitboard.h"
-#include "gen.out"
+#include "gen.h"
+
+//
+//  Note:  If you are working on adding new "generate" code, you might want 
+//  to comment the include below out until you get it working correctly
+//
+//  #include "gen.out"
+//
 
 ///
 /// Generates source code for various bitboards, such as move sets and 
 /// magics.
 ///
-void CBitBoard::generate()
+void CGen::generate()
 {
     genKnightMoveSet();
 }
@@ -20,9 +27,9 @@ void CBitBoard::generate()
 ///
 /// Generates source code for the knight moves
 ///
-void CBitBoard::genKnightMoveSet()
+void CGen::genKnightMoveSet()
 {
-    std::cout << "static const YBitBoard bbKnightMoves[CSqix::kNumSquares] = {";
+    std::cout << "static const YBitBoard CGen::bbKnightMoves[CSqix::kNumSquares] = {";
     for ( U8 sq =  0; sq < CSqix::kNumSquares; sq++ )
     {
         CSqix sqix( sq );
