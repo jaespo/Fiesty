@@ -242,8 +242,8 @@ void CPos::genWhitePawnCaptures( CMoves& rMoves )
     CBitBoard bbTo = bbFrom.advanceRanks( 1 ) ;
 
     //
-    //  We can capture squares that have a black piece or that have just been
-    //  passed by for an en-passant.
+    //  We can capture on squares that have a black piece or that have just
+    //  passed by (for an en-passant).
     //
     CBitBoard bbTargets = mbbColor[U8( EColor::kBlack )];
     if ( mPosRights.isEnPassantLegal() )
