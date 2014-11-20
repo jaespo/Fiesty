@@ -54,7 +54,7 @@ public:
     ///
     /// @return the bb with the pieces advanced a number of ranks
     ///
-    CBitBoard advanceRanks( int numRanks ) const 
+    CBitBoard advanceRanks( U8 numRanks ) const 
     { 
         return ( mBitBoard << ( 8 * numRanks ) ); 
     };
@@ -62,12 +62,26 @@ public:
     ///
     /// @return the bb with the pieces retreated a number of ranks
     ///
-    CBitBoard retreatRanks( int numRanks ) const 
+    CBitBoard retreatRanks( U8 numRanks ) const 
     { 
         return ( mBitBoard >> ( 8 * numRanks ) ); 
     };
-    CBitBoard leftFiles( int numFiles ) {} // ...
-    CBitBoard rightFiles( int numFiles ) {} // ...
+
+    ///
+    /// @return the bb with the pieces shifted left the number of files
+    ///
+    CBitBoard leftFiles( U8 numFiles ) const
+    {
+        return ( mBitBoard << numFiles ) & fileBits( EFile::kFileH ).get();
+    }
+
+    ///
+    /// @return the bb with the pieces shifted right the number of files
+    ///
+    CBitBoard rightFiles( U8 numFiles ) 
+    {
+        return ( mBitBoard >> numFiles ) & fileBits( EFile::kFileA ).get();
+    }
     
     ///
     /// @return the bb with only the pieces on a specified rank
@@ -80,7 +94,18 @@ public:
     ///
     /// @return the bb with only the pieces on a specified file
     ///
-    CBitBoard onFile( CFile r ) { return ( mBitBoard & ( 0xFFULL << ( U8( r.get() ) << 3 ) ) ); }
+    CBitBoard onFile( CFile f ) const
+    { 
+        return ( mBitBoard & ( fileBits( f ) ).get() );
+    }
+
+    ///
+    /// @return the bb with everything but the specified square masked off
+    ///
+    CBitBoard atSquare( CSqix sqix ) const
+    {
+        return mBitBoard & sqix.asBitBoard();
+    }
 
 private:
     YBitBoard             mBitBoard;

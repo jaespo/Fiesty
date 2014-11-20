@@ -67,9 +67,9 @@ public:
 
     CSqix() {}
     CSqix( YSqix s ) { mSqix = s; }
-    CSqix( CRank r, CFile f ) { mSqix = ( U8( r.get() ) << 3 ) + U8( f.get() ); }
+    CSqix( CRank r, CFile f ) { mSqix = 8 * U8( r.get() )  + U8( f.get() ); }
     YSqix get() const { return mSqix; }
-    CRank getRank() const { return ERank( mSqix >> 3 ); }
+    CRank getRank() const { return ERank( mSqix / 8 ); }
     CFile getFile() const { return EFile( mSqix & 0x07 ); }
     bool isNone() const 
     { 
@@ -78,8 +78,10 @@ public:
     }  
     YBitBoard asBitBoard() const { return 0x1ULL << mSqix; }
     
-    CSqix minusRank( U8 numRanks ) { return mSqix - ( numRanks << 3 ); }
-    CSqix plusRank( U8 numRanks ) { return mSqix + ( numRanks << 3 ); }
+    CSqix minusRanks( U8 numRanks ) const { return mSqix - 8 * numRanks; }
+    CSqix plusRanks( U8 numRanks ) const { return mSqix + 8 * numRanks; }
+    CSqix minusFiles( U8 numFiles ) const { return mSqix - numFiles; }
+    CSqix plusFiles( U8 numFiles ) const { return mSqix + numFiles; }
 
     std::string asStr() const;
     std::string asAbbr() const;

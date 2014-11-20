@@ -152,7 +152,7 @@ void CPos::genBlackPawnQuiets( CMoves& rMoves )
     while ( bbPop.get() )
     {
         toSqix = bbPop.popLsb();
-        fromSqix = toSqix.plusRank( 1 );
+        fromSqix = toSqix.plusRanks( 1 );
         if ( toSqix.getRank().get() == ERank::kRank1 )
         {
             rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kQueen ) );
@@ -173,7 +173,7 @@ void CPos::genBlackPawnQuiets( CMoves& rMoves )
     while ( bbPop.get() )
     {
         toSqix = bbPop.popLsb();
-        fromSqix = toSqix.plusRank( 2 );
+        fromSqix = toSqix.plusRanks( 2 );
         rMoves.addMove( CMove( fromSqix, toSqix ) );
     }
 }
@@ -199,7 +199,7 @@ void CPos::genWhitePawnQuiets( CMoves& rMoves )
     while ( bbPop.get() )
     {
         toSqix = bbPop.popLsb();
-        fromSqix = toSqix.minusRank( 1 );
+        fromSqix = toSqix.minusRanks( 1 );
         if ( toSqix.getRank().get() == ERank::kRank8 )
         {
             rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kQueen ) );
@@ -220,7 +220,7 @@ void CPos::genWhitePawnQuiets( CMoves& rMoves )
     while ( bbPop.get() )
     {
         toSqix = bbPop.popLsb();
-        fromSqix = toSqix.minusRank( 2 );
+        fromSqix = toSqix.minusRanks( 2 );
         rMoves.addMove( CMove( fromSqix, toSqix ) );
     }
 }
@@ -235,7 +235,6 @@ void CPos::genWhitePawnCaptures( CMoves& rMoves )
 {
     CSqix           toSqix;
     CSqix           fromSqix;
-    CBitBoard       bbTo;
    
     CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kPawn )].get() 
         & mbbColor[U8( EColor::kWhite )].get();
@@ -259,7 +258,7 @@ void CPos::genWhitePawnCaptures( CMoves& rMoves )
         //
         if ( toSqix.getFile().get() != EFile::kFileA )
         {
-            fromSqix = toSqix.minusRank( 1 ).minusFile( 1 );
+            fromSqix = toSqix.minusRanks( 1 ).minusFiles( 1 );
             if ( bbTargets.atSquare( fromSqix ).get() )
             {
                 if ( toSqix.getRank().get() == ERank::kRank8 )
@@ -281,7 +280,7 @@ void CPos::genWhitePawnCaptures( CMoves& rMoves )
         //
         if ( toSqix.getFile().get() != EFile::kFileH )
         {
-            fromSqix = toSqix.minusRank( 1 ).plusFile( 1 );
+            fromSqix = toSqix.minusRanks( 1 ).plusFiles( 1 );
             if ( bbTargets.atSquare( fromSqix ).get() )
             {
                 if ( toSqix.getRank().get() == ERank::kRank8 )
