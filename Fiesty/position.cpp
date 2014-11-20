@@ -148,7 +148,7 @@ void CPos::genBlackPawnQuiets( CMoves& rMoves )
     //
     CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kPawn )].get() 
         & mbbColor[U8( EColor::kBlack )].get();
-    CBitBoard bbPop = bbTo = notOccupied( bbFrom.retreatFiles( 1 ) );
+    CBitBoard bbPop = bbTo = notOccupied( bbFrom.retreatRanks( 1 ) );
     while ( bbPop.get() )
     {
         toSqix = bbPop.popLsb();
@@ -169,7 +169,7 @@ void CPos::genBlackPawnQuiets( CMoves& rMoves )
     //
     //  Push forward a second level if we are on the third rand.
     //
-    bbPop = notOccupied( bbTo.onRank( ERank::kRank6 ).retreatFiles( 1 ) );
+    bbPop = notOccupied( bbTo.onRank( ERank::kRank6 ).retreatRanks( 1 ) );
     while ( bbPop.get() )
     {
         toSqix = bbPop.popLsb();
@@ -195,7 +195,7 @@ void CPos::genWhitePawnQuiets( CMoves& rMoves )
     //
     CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kPawn )].get() 
         & mbbColor[U8( EColor::kWhite )].get();
-    CBitBoard bbPop = bbTo = notOccupied( bbFrom.advanceFiles( 1 ) );
+    CBitBoard bbPop = bbTo = notOccupied( bbFrom.advanceRanks( 1 ) );
     while ( bbPop.get() )
     {
         toSqix = bbPop.popLsb();
@@ -216,12 +216,87 @@ void CPos::genWhitePawnQuiets( CMoves& rMoves )
     //
     //  Push forward a second level if we are on the third rand.
     //
-    bbPop = notOccupied( bbTo.onRank( ERank::kRank3 ).advanceFiles( 1 ) );
+    bbPop = notOccupied( bbTo.onRank( ERank::kRank3 ).advanceRanks( 1 ) );
     while ( bbPop.get() )
     {
         toSqix = bbPop.popLsb();
         fromSqix = toSqix.minusRank( 2 );
         rMoves.addMove( CMove( fromSqix, toSqix ) );
+    }
+}
+
+///
+/// generates pawn captures for white
+///
+/// @param rMoves
+///     the pawn captures will be added to rMoves
+///
+void CPos::genWhitePawnCaptures( CMoves& rMoves )
+{
+    CSqix           toSqix;
+    CSqix           fromSqix;
+    CBitBoard       bbTo;
+   
+    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kPawn )].get() 
+        & mbbColor[U8( EColor::kWhite )].get();
+    CBitBoard bbTo = bbFrom.advanceRanks( 1 ) ;
+
+    //
+    //  We can capture squares that have a black piece or that have just been
+    //  passed by for an en-passant.
+    //
+    CBitBoard bbTargets = mbbColor[U8( EColor::kBlack )];
+    if ( mPosRights.isEnPassantLegal() )
+        bbTargets.setSquare( 
+            CSqix( ERank::kRank6, mPosRights.getEnPassantFile() ).get() );
+    bbTo = bbTargets.get() 
+        & ( bbTo.leftFiles( 1 ).get() | bbTo.rightFiles( 1 ).get() );
+    while ( bbTo.get() )
+    {
+        toSqix = bbTo.popLsb();
+        //
+        //  Is there a capturing pawn to the left of the target?
+        //
+        if ( toSqix.getFile().get() != EFile::kFileA )
+        {
+            fromSqix = toSqix.minusRank( 1 ).minusFile( 1 );
+            if ( bbTargets.atSquare( fromSqix ).get() )
+            {
+                if ( toSqix.getRank().get() == ERank::kRank8 )
+                {
+                    rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kQueen ) );
+                    rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kRook ) );
+                    rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kBishop ) );
+                    rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kKnight ) );
+                }
+                else
+                {
+                    rMoves.addMove( CMove( fromSqix, toSqix ) );
+                }
+            }
+        }
+
+        //
+        //  Is there a capturing pawn to the right of the target?
+        //
+        if ( toSqix.getFile().get() != EFile::kFileH )
+        {
+            fromSqix = toSqix.minusRank( 1 ).plusFile( 1 );
+            if ( bbTargets.atSquare( fromSqix ).get() )
+            {
+                if ( toSqix.getRank().get() == ERank::kRank8 )
+                {
+                    rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kQueen ) );
+                    rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kRook ) );
+                    rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kBishop ) );
+                    rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kKnight ) );
+                }
+                else
+                {
+                    rMoves.addMove( CMove( fromSqix, toSqix ) );
+                }
+            }
+        }
     }
 }
 
