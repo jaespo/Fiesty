@@ -48,7 +48,7 @@ public:
     ///
 	static CBitBoard rankBits( CRank r ) 
     { 
-        return CBitBoard( 0xFFULL >> ( 8 * U8( r.get() ) ) );
+        return CBitBoard( 0xFFULL << ( 8 * U8( r.get() ) ) );
     }
 
     ///
