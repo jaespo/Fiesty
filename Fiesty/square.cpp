@@ -58,14 +58,14 @@ std::string CRank::asStr() const
 }
 
 ///
-/// parses the string as a color
+/// parses the string as a color.  Returns ERank::kNone on an error
 ///
-CRank CRank::parseRank( const std::string& s )
+ERank CRank::parseRank( const std::string& s )
 {
     if ( s.length() != 1 ) 
         return ERank::kNone;
     for ( size_t ix = 0; ix < U8( EColor::kNum ); ix++ )
-        if ( std::toupper( s[0] ) == kAbbrs[0][0] )
+        if ( std::toupper( s[0] ) == kAbbrs[ix][0] )
             return ERank( ix );
     return ERank::kNone;
 }
@@ -87,14 +87,14 @@ std::string CFile::asStr() const
 }
 
 ///
-/// parses the string as a color
+/// parses the string as a color.  Returns EFile::kNone on an error.
 ///
-CFile CFile::parseFile( const std::string& s )
+EFile CFile::parseFile( const std::string& s )
 {
     if ( s.length() != 1 ) 
         return EFile::kNone;
     for ( size_t ix = 0; ix < U8( EColor::kNum ); ix++ )
-        if ( std::toupper( s[0] ) == kAbbrs[0][0] )
+        if ( std::toupper( s[0] ) == kAbbrs[ix][0] )
             return EFile( ix );
     return EFile::kNone;
 }
@@ -125,11 +125,11 @@ CSqix CSqix::parseSqix( const std::string& s )
 {
     if ( s.length() != 2 ) 
         return CSqix( ERank::kNone, EFile::kNone );
-    CFile f = CFile::parseFile( s.substr( 0, 1 ) );
-    if ( f.get() == EFile::kNone )
+    EFile f = CFile::parseFile( s.substr( 0, 1 ) );
+    if ( f == EFile::kNone )
         return CSqix( ERank::kNone, EFile::kNone );
-    CRank r = CRank::parseRank( s.substr( 1, 1 ) );
-    if ( r.get() == ERank::kNone )
+    ERank r = CRank::parseRank( s.substr( 1, 1 ) );
+    if ( r == ERank::kNone )
         return CSqix( ERank::kNone, EFile::kNone );
     return CSqix( r, f );
 }

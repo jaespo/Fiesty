@@ -347,7 +347,7 @@ std::string CPos::nextFenTok( const std::string &sFen, size_t &rIx )
     //
     size_t nextIx = sFen.find_first_of( "/ ", rIx );
     std::string sRetval = sFen.substr( rIx, 
-        ( nextIx == std::string::npos ) ? nextIx : nextIx- rIx );
+        ( nextIx == std::string::npos ) ? nextIx : ( nextIx - rIx ) );
     rIx = nextIx;
     return sRetval;
 }
