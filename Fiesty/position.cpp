@@ -9,7 +9,7 @@
 #include <cctype>
 #include <algorithm>
 #include "position.h"
-#include "test.h"
+#include "gen.h"
 
 const char* CPos::kStartFen 
     = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -229,7 +229,7 @@ void CPos::genBlackPawnQuiets( CMoves& rMoves )
     //
     CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kPawn )].get() 
         & mbbColor[U8( EColor::kBlack )].get();
-    CBitBoard bbPop = bbTo = notOccupied( bbFrom.retreatRanks( 1 ) );
+    CBitBoard bbPop = bbTo = unoccupied( bbFrom.retreatRanks( 1 ) );
     while ( bbPop.get() )
     {
         toSqix = bbPop.popLsb();
@@ -250,12 +250,37 @@ void CPos::genBlackPawnQuiets( CMoves& rMoves )
     //
     //  Push forward a second level if we are on the third rand.
     //
-    bbPop = notOccupied( bbTo.onRank( ERank::kRank6 ).retreatRanks( 1 ) );
+    bbPop = unoccupied( bbTo.onRank( ERank::kRank6 ).retreatRanks( 1 ) );
     while ( bbPop.get() )
     {
         toSqix = bbPop.popLsb();
         fromSqix = toSqix.plusRanks( 2 );
         rMoves.addMove( CMove( fromSqix, toSqix ) );
+    }
+}
+
+///
+/// generates knight non-captures for white
+///
+/// @param rMoves
+///     the knight moves will be added to rMoves
+///
+void CPos::genWhiteKnightQuiets( CMoves& rMoves )
+{
+    CSqix           toSqix;
+    CSqix           fromSqix;
+   
+    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kPawn )].get() 
+        & mbbColor[U8( EColor::kWhite )].get();
+    while ( bbFrom.get() )
+    {
+        fromSqix = bbFrom.popLsb(); 
+        CBitBoard bbTo = unoccupied( CGen::bbKnightMoveSet[fromSqix.get()] );
+        while ( bbTo.get() )
+        {
+            toSqix = bbFrom.popLsb(); 
+            rMoves.addMove( CMove( fromSqix, toSqix ) );
+        }
     }
 }
 
@@ -351,7 +376,7 @@ void CPos::genWhitePawnQuiets( CMoves& rMoves )
     //
     CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kPawn )].get() 
         & mbbColor[U8( EColor::kWhite )].get();
-    CBitBoard bbPop = bbTo = notOccupied( bbFrom.advanceRanks( 1 ) );
+    CBitBoard bbPop = bbTo = unoccupied( bbFrom.advanceRanks( 1 ) );
     while ( bbPop.get() )
     {
         toSqix = bbPop.popLsb();
@@ -372,7 +397,7 @@ void CPos::genWhitePawnQuiets( CMoves& rMoves )
     //
     //  Push forward a second level if we are on the third rand.
     //
-    bbPop = notOccupied( bbTo.onRank( ERank::kRank3 ).advanceRanks( 1 ) );
+    bbPop = unoccupied( bbTo.onRank( ERank::kRank3 ).advanceRanks( 1 ) );
     while ( bbPop.get() )
     {
         toSqix = bbPop.popLsb();

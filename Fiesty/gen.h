@@ -6,8 +6,8 @@
 /// paste the results in here.
 ///
 ///
-#ifndef Fiesty_position_h
-#define Fiesty_position_h
+#ifndef Fiesty_gen_h
+#define Fiesty_gen_h
 #include "fiesty.h"
 #include "square.h"
 
@@ -19,7 +19,9 @@ class CGen
 public:
     static void generate();
 
+#if !defined( FIESTYGEN )
     static const YBitBoard bbKnightMoveSet[CSqix::kNumSquares];
+#endif
 
 private: 
     static void genKnightMoveSet();

@@ -138,29 +138,29 @@ public:
 
     void genWhitePawnQuiets( CMoves& rMoves );
     void genWhitePawnCaptures( CMoves& rMoves );
-    void genWhiteKnightQuiets( CMoves& rMoves );    //TODO: code me
-    void genWhiteKnightCaptures( CMoves& rMoves );       //TODO: code me
-    void genWhiteBishopQuiets( CMoves& rMoves );    //TODO: code me
-    void genWhiteBishopCaptures( CMoves& rMoves );       //TODO: code me
-    void genWhiteRookQuiets( CMoves& rMoves );      //TODO: code me
-    void genWhiteRookCaptures( CMoves& rMoves );         //TODO: code me
-    void genWhiteQueenQuiets( CMoves& rMoves );     //TODO: code me
-    void genWhiteQueenCaptures( CMoves& rMoves );        //TODO: code me
-    void genWhiteKingQuiets( CMoves& rMoves );      //TODO: code me    
-    void genWhiteKingCaptures( CMoves& rMoves );         //TODO: code me
+    void genWhiteKnightQuiets( CMoves& rMoves );        //TODO: code me
+    void genWhiteKnightCaptures( CMoves& rMoves );      //TODO: code me
+    void genWhiteBishopQuiets( CMoves& rMoves );        //TODO: code me
+    void genWhiteBishopCaptures( CMoves& rMoves );      //TODO: code me
+    void genWhiteRookQuiets( CMoves& rMoves );          //TODO: code me
+    void genWhiteRookCaptures( CMoves& rMoves );        //TODO: code me
+    void genWhiteQueenQuiets( CMoves& rMoves );         //TODO: code me
+    void genWhiteQueenCaptures( CMoves& rMoves );       //TODO: code me
+    void genWhiteKingQuiets( CMoves& rMoves );          //TODO: code me    
+    void genWhiteKingCaptures( CMoves& rMoves );        //TODO: code me
 
     void genBlackPawnQuiets( CMoves& rMoves );
-    void genBlackPawnCaptures( CMoves& rMoves );         //TODO: code me
-    void genBlackKnightQuiets( CMoves& rMoves );    //TODO: code me
-    void genBlackKnightCaptures( CMoves& rMoves );       //TODO: code me
-    void genBlackBishopQuiets( CMoves& rMoves );    //TODO: code me
-    void genBlackBishopCaptures( CMoves& rMoves );       //TODO: code me
-    void genBlackRookQuiets( CMoves& rMoves );      //TODO: code me
-    void genBlackRookCaptures( CMoves& rMoves );         //TODO: code me
-    void genBlackQueenQuiets( CMoves& rMoves );     //TODO: code me
-    void genBlackQueenCaptures( CMoves& rMoves );        //TODO: code me
-    void genBlackKingQuiets( CMoves& rMoves );      //TODO: code me    
-    void genBlackKingCaptures( CMoves& rMoves );         //TODO: code me
+    void genBlackPawnCaptures( CMoves& rMoves );
+    void genBlackKnightQuiets( CMoves& rMoves );        //TODO: code me
+    void genBlackKnightCaptures( CMoves& rMoves );      //TODO: code me
+    void genBlackBishopQuiets( CMoves& rMoves );        //TODO: code me
+    void genBlackBishopCaptures( CMoves& rMoves );      //TODO: code me
+    void genBlackRookQuiets( CMoves& rMoves );          //TODO: code me
+    void genBlackRookCaptures( CMoves& rMoves );        //TODO: code me
+    void genBlackQueenQuiets( CMoves& rMoves );         //TODO: code me
+    void genBlackQueenCaptures( CMoves& rMoves );       //TODO: code me
+    void genBlackKingQuiets( CMoves& rMoves );          //TODO: code me    
+    void genBlackKingCaptures( CMoves& rMoves );        //TODO: code me
 
     void genMoves( CMoves& rMoves );                //TODO: code me
 
@@ -180,7 +180,10 @@ private:
     static std::string nextFenTok( 
         const std::string &sFen, size_t &rPos );
 
-    CBitBoard notOccupied( CBitBoard& bb ) const 
+    ///
+    /// @returns the bitmask of unoccupied squares in the specified bitboard
+    ///
+    CBitBoard unoccupied( const CBitBoard& bb ) const 
     {
         return ( bb.get() & ~( mbbColor[U8( EColor::kWhite )].get() 
             | mbbColor[U8( EColor::kBlack )].get() ) );

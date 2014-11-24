@@ -12,8 +12,10 @@
 //  Note:  If you are working on adding new "generate" code, you might want 
 //  to comment the include below out until you get it working correctly
 //
-//  #include "gen.out"
-//
+#define FIESTYGEN
+#if !defined( FIESTYGEN )
+#include "gen.out"
+#endif
 
 ///
 /// Generates source code for various bitboards, such as move sets and 
@@ -29,7 +31,7 @@ void CGen::generate()
 ///
 void CGen::genKnightMoveSet()
 {
-    std::cout << "static const YBitBoard CGen::bbKnightMoves[CSqix::kNumSquares] = {";
+    std::cout << "static const YBitBoard CGen::bbKnightMoveSet[CSqix::kNumSquares] = {";
     for ( U8 sq =  0; sq < CSqix::kNumSquares; sq++ )
     {
         CSqix sqix( sq );

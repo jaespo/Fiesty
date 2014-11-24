@@ -227,6 +227,17 @@ void CTester::testMoveGen()
         "12:f2e1=Q f2e1=R f2e1=B f2e1=N f2g1=Q f2g1=R f2g1=B f2g1=N b4a3 "
         "c6b5 c6d5 e6d5" );
 
+    //
+    //  Test white knight quiets.
+    //
+    TESTEQ( "wnqFen", pos.parseFen( 
+        "N6N/1N4N1/8/3N4/8/8/1N4N1/N6N w - - 0 1", 
+        errorText ), true );
+    moves.reset();
+    pos.genWhiteKnightQuiets( moves );
+    TESTEQ( "wnqMoves", moves.asStr(), 
+        "" );
+
     endSuite();
 }
 
