@@ -40,7 +40,7 @@ public:
     ///
 	static CBitBoard fileBits( CFile f ) 
     { 
-        return CBitBoard( 0x8080808080808080ULL >> ( 8 * U8( f.get() ) ) );
+        return CBitBoard( 0x0101010101010101ULL << U8( f.get() ) );
     }
 
     ///
@@ -72,7 +72,12 @@ public:
     ///
     CBitBoard leftFiles( U8 numFiles ) const
     {
-        return ( mBitBoard << numFiles ) & fileBits( EFile::kFileH ).get();
+        //
+        //  Shifting the position to the left is the same as decreasing the 
+        //  arithmetic value of the bitboard  -- so that means use a 
+        //  right shift!
+        //
+        return ( mBitBoard >> numFiles ) & ~fileBits( EFile::kFileH ).get();
     }
 
     ///
@@ -80,7 +85,12 @@ public:
     ///
     CBitBoard rightFiles( U8 numFiles ) 
     {
-        return ( mBitBoard >> numFiles ) & fileBits( EFile::kFileA ).get();
+        //
+        //  Shifting the position to the right is the same as decreasing the 
+        //  arithmetic value of the bitboard  -- so that means use a 
+        //  left shift!
+        //
+        return ( mBitBoard << numFiles ) & ~fileBits( EFile::kFileA ).get();
     }
     
     ///

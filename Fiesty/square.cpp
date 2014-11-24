@@ -58,16 +58,23 @@ std::string CRank::asStr() const
 }
 
 ///
-/// parses the string as a color.  Returns ERank::kNone on an error
+/// parses the string as a rank.  Returns ERank::kNone on an error
 ///
-ERank CRank::parseRank( const std::string& s )
+bool CRank::parseRank( const std::string& s, CRank& rank, std::string& errText )
 {
     if ( s.length() != 1 ) 
-        return ERank::kNone;
-    for ( size_t ix = 0; ix < U8( EColor::kNum ); ix++ )
-        if ( std::toupper( s[0] ) == kAbbrs[ix][0] )
-            return ERank( ix );
-    return ERank::kNone;
+    {
+        errText = "invalid rank: bad length";
+        return false;
+    }
+    for ( size_t ix = 0; ix < U8( ERank::kNum ); ix++ )
+        if ( s[0] == kAbbrs[ix][0] )
+        {
+            rank = ERank( ix );
+            return true;
+        }
+    errText = "invalid rank: bad character";
+    return false;
 }
 
 ///
@@ -87,16 +94,25 @@ std::string CFile::asStr() const
 }
 
 ///
-/// parses the string as a color.  Returns EFile::kNone on an error.
+/// parses the string as a file.  Returns EFile::kNone on an error.
 ///
-EFile CFile::parseFile( const std::string& s )
+bool CFile::parseFile( const std::string& s, CFile& file, std::string& errText )
 {
     if ( s.length() != 1 ) 
-        return EFile::kNone;
-    for ( size_t ix = 0; ix < U8( EColor::kNum ); ix++ )
-        if ( std::toupper( s[0] ) == kAbbrs[ix][0] )
-            return EFile( ix );
-    return EFile::kNone;
+    {
+        errText = "invalid file: bad length";
+        return false;
+    }
+    for ( size_t ix = 0; ix < U8( EFile::kNum ); ix++ )
+    {
+        if ( std::toupper( s[0] ) == std::toupper( kAbbrs[ix][0] ) )
+        {
+            file = EFile( ix );
+            return true;
+        }
+    }
+    errText = "invalid file: bad character";
+    return false;
 }
 
 ///
@@ -121,17 +137,29 @@ std::string CSqix::asStr() const
 /// String representation for a square as a two character abbreviation
 /// and numeric
 ///
-CSqix CSqix::parseSqix( const std::string& s )
+bool CSqix::parseSqix( const std::string& s, CSqix& rSqix, std::string errMsg )
 {
+    CFile           file;
+    CRank           rank;
+    std::string     err;
+
     if ( s.length() != 2 ) 
-        return CSqix( ERank::kNone, EFile::kNone );
-    EFile f = CFile::parseFile( s.substr( 0, 1 ) );
-    if ( f == EFile::kNone )
-        return CSqix( ERank::kNone, EFile::kNone );
-    ERank r = CRank::parseRank( s.substr( 1, 1 ) );
-    if ( r == ERank::kNone )
-        return CSqix( ERank::kNone, EFile::kNone );
-    return CSqix( r, f );
+    {
+        errMsg = "invalid square: bad length";
+        return false;
+    }
+    if ( !CFile::parseFile( s.substr( 0, 1 ), file, err ) )
+    {
+        errMsg = "invalid square: " + err;
+        return false;
+    }
+    if ( !CRank::parseRank( s.substr( 1, 1 ), rank, err ) )
+    {
+        errMsg = "invalid square: " + err;
+        return false;
+    }
+    rSqix = CSqix( rank, file );
+    return true;
 }
 
 

@@ -25,7 +25,10 @@ public:
     bool isValid() const { return mRank < ERank::kNum; }
     std::string asStr() const;
     std::string asAbbr() const;
-    static ERank parseRank( const std::string& s );
+    static bool CRank::parseRank( 
+        const std::string&          s, 
+        CRank&                      rank, 
+        std::string&                errText );
 
 private:
     ERank                       mRank;
@@ -50,6 +53,10 @@ public:
     std::string asStr() const;
     std::string asAbbr() const;
     static EFile parseFile( const std::string& s );
+    static bool CFile::parseFile( 
+        const std::string&          s, 
+        CFile&                      file, 
+        std::string&                errText );
 
 private:
     EFile                       mFile;
@@ -85,7 +92,7 @@ public:
 
     std::string asStr() const;
     std::string asAbbr() const;
-    static CSqix parseSqix( const std::string& s );
+    static bool parseSqix( const std::string& s, CSqix& rSqix, std::string errMsg );
 
 private:
     YSqix                   mSqix;

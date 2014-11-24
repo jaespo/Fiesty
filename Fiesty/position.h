@@ -41,6 +41,12 @@ public:
     void init() { mRights = kAllCastle; }
     void setEnPassantFile( CFile f ) 
     { 
+        mRights &= ~ kEnPassantFileMask;
+        mRights |= U8( f.get() ) | kEnPassantLegalMask; 
+    }
+    void clearEnPassantFile( CFile f ) 
+    { 
+        mRights &= ~ ( kEnPassantFileMask | kEnPassantLegalMask );
         mRights |= U8( f.get() ) | kEnPassantLegalMask; 
     }
     void setWhiteOO()    { mRights |= kWhiteOOMask; }
@@ -81,7 +87,6 @@ private:
         else
             mRights &= ~( kBlackOOMask | kBlackOOOMask );
     };
-
 };
 
 ///
@@ -132,7 +137,7 @@ public:
     std::string asDiagram() const;
 
     void genWhitePawnQuiets( CMoves& rMoves );
-    void genWhitePawnCaptures( CMoves& rMoves );         //TODO: code me
+    void genWhitePawnCaptures( CMoves& rMoves );
     void genWhiteKnightQuiets( CMoves& rMoves );    //TODO: code me
     void genWhiteKnightCaptures( CMoves& rMoves );       //TODO: code me
     void genWhiteBishopQuiets( CMoves& rMoves );    //TODO: code me

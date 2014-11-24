@@ -212,8 +212,21 @@ void CTester::testMoveGen()
     moves.reset();
     pos.genWhitePawnCaptures( moves );
     TESTEQ( "wspMv", moves.asStr(), 
-        "16:a2a3 b2b3 c2c3 d2d3 e2e3 f2f3 g2g3 h2h3 a2a4 b2b4 c2c4 d2d4 "
-        "e2e4 f2f4 g2g4 h2h4" );
+        "14:a2b3 d3e4 f3e4 g5f6 h5g6 g5h6 b7a8=Q b7a8=R b7a8=B b7a8=N "
+        "b7c8=Q b7c8=R b7c8=B b7c8=N" )
+
+    //
+    //  Test black pawn captures.
+    //
+    TESTEQ( "bpCapFen", pos.parseFen( 
+        "8/8/2p1p3/1P1P4/Pp6/8/5p2/K3R1Q1 b - a3 0 1", 
+        errorText ), true );
+    moves.reset();
+    pos.genBlackPawnCaptures( moves );
+    TESTEQ( "bpMv", moves.asStr(), 
+        "12:f2e1=Q f2e1=R f2e1=B f2e1=N f2g1=Q f2g1=R f2g1=B f2g1=N b4a3 "
+        "c6b5 c6d5 e6d5" );
+
     endSuite();
 }
 
