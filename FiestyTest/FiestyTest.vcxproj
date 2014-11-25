@@ -140,7 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Fiesty\test.cpp" />
-    <ClCompile Include="FiestyTest.cpp" />
+    <ClCompile Include="fiestytest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Fiesty\test.h" />

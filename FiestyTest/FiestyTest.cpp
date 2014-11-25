@@ -1,11 +1,11 @@
-// FiestyTest.cpp : Defines the entry point for the console application.
 //
+// fiestytest.cpp : Defines the entry point for the fiesty test program 
+//
+#include <iostream>
+#include "test.h"
 
-#include "stdafx.h"
-
-
-int _tmain(int argc, _TCHAR* argv[])
+int main( int argc, const char* argv[] )
 {
+	CTester::testAll();
 	return 0;
 }
-
