@@ -15,51 +15,46 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Fiesty\bitboard.h">
+    <ClInclude Include="bitboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Fiesty\fiesty.h">
+    <ClInclude Include="fiesty.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Fiesty\gen.h">
+    <ClInclude Include="gen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Fiesty\move.h">
+    <ClInclude Include="move.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Fiesty\piece.h">
+    <ClInclude Include="piece.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Fiesty\position.h">
+    <ClInclude Include="position.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Fiesty\square.h">
+    <ClInclude Include="square.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Fiesty\gen.cpp">
+    <ClCompile Include="bitboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Fiesty\move.cpp">
+    <ClCompile Include="gen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Fiesty\piece.cpp">
+    <ClCompile Include="move.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Fiesty\position.cpp">
+    <ClCompile Include="piece.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Fiesty\square.cpp">
+    <ClCompile Include="position.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Fiesty\bitboard.cpp">
+    <ClCompile Include="square.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\Fiesty\gen.out">
-      <Filter>Source Files</Filter>
-    </None>
   </ItemGroup>
 </Project>
