@@ -137,6 +137,57 @@ void CPos::clearBoard()
 }
 
 ///
+/// generates knight non-captures for black
+///
+/// @param rMoves
+///     the knight moves will be added to rMoves
+///
+void CPos::genBlackKnightQuiets( CMoves& rMoves )
+{
+    CSqix           toSqix;
+    CSqix           fromSqix;
+   
+    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kKnight )].get() 
+        & mbbColor[U8( EColor::kBlack )].get();
+    while ( bbFrom.get() )
+    {
+        fromSqix = bbFrom.popLsb(); 
+        CBitBoard bbTo = unoccupied( CGen::bbKnightMoveSet[fromSqix.get()] );
+        while ( bbTo.get() )
+        {
+            toSqix = bbTo.popLsb(); 
+            rMoves.addMove( CMove( fromSqix, toSqix ) );
+        }
+    }
+}
+
+///
+/// generates knight captures for black
+///
+/// @param rMoves
+///     the knight captures will be added to rMoves
+///
+void CPos::genBlackKnightCaptures( CMoves& rMoves )
+{
+    CSqix           toSqix;
+    CSqix           fromSqix;
+   
+    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kKnight )].get() 
+        & mbbColor[U8( EColor::kBlack )].get();
+    while ( bbFrom.get() )
+    {
+        fromSqix = bbFrom.popLsb(); 
+        CBitBoard bbTo = CGen::bbKnightMoveSet[fromSqix.get()] 
+            & mbbColor[U8( EColor::kWhite )].get();
+        while ( bbTo.get() )
+        {
+            toSqix = bbTo.popLsb(); 
+            rMoves.addMove( CMove( fromSqix, toSqix ) );
+        }
+    }
+}
+
+///
 /// generates pawn captures for black
 ///
 /// @param rMoves
@@ -270,7 +321,7 @@ void CPos::genWhiteKnightQuiets( CMoves& rMoves )
     CSqix           toSqix;
     CSqix           fromSqix;
    
-    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kPawn )].get() 
+    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kKnight )].get() 
         & mbbColor[U8( EColor::kWhite )].get();
     while ( bbFrom.get() )
     {
@@ -278,7 +329,33 @@ void CPos::genWhiteKnightQuiets( CMoves& rMoves )
         CBitBoard bbTo = unoccupied( CGen::bbKnightMoveSet[fromSqix.get()] );
         while ( bbTo.get() )
         {
-            toSqix = bbFrom.popLsb(); 
+            toSqix = bbTo.popLsb(); 
+            rMoves.addMove( CMove( fromSqix, toSqix ) );
+        }
+    }
+}
+
+///
+/// generates knight captures for white
+///
+/// @param rMoves
+///     the knight captures will be added to rMoves
+///
+void CPos::genWhiteKnightCaptures( CMoves& rMoves )
+{
+    CSqix           toSqix;
+    CSqix           fromSqix;
+   
+    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kKnight )].get() 
+        & mbbColor[U8( EColor::kWhite )].get();
+    while ( bbFrom.get() )
+    {
+        fromSqix = bbFrom.popLsb(); 
+        CBitBoard bbTo = CGen::bbKnightMoveSet[fromSqix.get()] 
+            & mbbColor[U8( EColor::kBlack )].get();
+        while ( bbTo.get() )
+        {
+            toSqix = bbTo.popLsb(); 
             rMoves.addMove( CMove( fromSqix, toSqix ) );
         }
     }

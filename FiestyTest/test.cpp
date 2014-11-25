@@ -236,8 +236,40 @@ void CTester::testMoveGen()
     moves.reset();
     pos.genWhiteKnightQuiets( moves );
     TESTEQ( "wnqMoves", moves.asStr(), 
-        "" );
+        "32:a1c2 a1b3 h1f2 h1g3 b2d1 b2d3 b2a4 b2c4 g2e1 g2e3 g2f4 g2h4 "
+        "d5c3 d5e3 d5b4 d5f4 d5b6 d5f6 d5c7 d5e7 b7a5 b7c5 b7d6 b7d8 g7f5 "
+        "g7h5 g7e6 g7e8 a8b6 a8c7 h8g6 h8f7" );
 
+    //
+    //  Test white knight captures
+    //
+    TESTEQ( "gwkFen", pos.parseFen( 
+        "8/8/3P1p2/8/4N3/3p4/5p2/8 w - - 0 1", errorText ), true );
+    moves.reset();
+    pos.genWhiteKnightCaptures( moves );
+    TESTEQ( "gwkc", moves.asStr(), "2:e4f2 e4f6" );
+
+    //
+    //  Test black knight quiets.
+    //
+    TESTEQ( "bnqFen", pos.parseFen( 
+        "n6n/1n4n1/8/3n4/8/8/1n4n1/n6n b - - 0 1", 
+        errorText ), true );
+    moves.reset();
+    pos.genBlackKnightQuiets( moves );
+    TESTEQ( "bnqMoves", moves.asStr(), 
+        "32:a1c2 a1b3 h1f2 h1g3 b2d1 b2d3 b2a4 b2c4 g2e1 g2e3 g2f4 g2h4 "
+        "d5c3 d5e3 d5b4 d5f4 d5b6 d5f6 d5c7 d5e7 b7a5 b7c5 b7d6 b7d8 g7f5 "
+        "g7h5 g7e6 g7e8 a8b6 a8c7 h8g6 h8f7" );
+
+    //
+    //  Test black knight captures
+    //
+    TESTEQ( "gbkFen", pos.parseFen( 
+        "8/8/3p1P2/8/4n3/3P4/5P2/8 w - - 0 1", errorText ), true );
+    moves.reset();
+    pos.genBlackKnightCaptures( moves );
+    TESTEQ( "gwbc", moves.asStr(), "2:e4f2 e4f6" );
     endSuite();
 }
 
