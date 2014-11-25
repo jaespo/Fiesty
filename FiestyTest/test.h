@@ -4,7 +4,6 @@
 ///
 /// Simple test framework defines 
 ///
-#include "fiesty.h"
 
 ///
 /// Test class for the fiesty chess engine

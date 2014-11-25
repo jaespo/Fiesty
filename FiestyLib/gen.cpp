@@ -9,11 +9,7 @@
 #include "gen.h"
 
 //
-//  Note:  If you are working on adding new "generate" code, you might want 
-//  to comment the include below out until you get it working correctly
+// To run a gen, comment out this line of code.
 //
-#define FIESTYGEN
-#if !defined( FIESTYGEN )
 #include "gen.out"
-#endif
 

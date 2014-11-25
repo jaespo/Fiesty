@@ -27,7 +27,7 @@ void CGenerator::generate()
 ///
 void CGenerator::genKnightMoveSet()
 {
-    std::cout << "static const YBitBoard CGen::bbKnightMoveSet[CSqix::kNumSquares] = {";
+    std::cout << "const YBitBoard CGen::bbKnightMoveSet[CSqix::kNumSquares] = {";
     for ( U8 sq =  0; sq < CSqix::kNumSquares; sq++ )
     {
         CSqix sqix( sq );

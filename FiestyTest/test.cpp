@@ -174,8 +174,8 @@ void CTester::testMoveGen()
         "e2e4 f2f4 g2g4 h2h4" );
 
     //
-    //  Test white promotions, single pushes from the non-second rank, and blocked
-    //  pawns.
+    //  Test white promotions, single pushes from the non-second rank, 
+    //  and blocked pawns.
     //
     TESTEQ( "wmgFen", pos.parseFen( 
         "8/4k2P/8/8/3p2P1/1K3p2/1P1P1P2/8 w - - 0 1", errorText ), true );
@@ -194,8 +194,8 @@ void CTester::testMoveGen()
         "e7e5 f7f5 g7g5 h7h5" );
 
     //
-    //  Test black promotions, single pushes from the non-second rank, and blocked
-    //  pawns.
+    //  Test black promotions, single pushes from the non-second rank, 
+    //  and blocked pawns.
     //
     TESTEQ( "bmgFen", pos.parseFen( 
         "4k3/p7/8/K2p1p2/3P4/8/7p/8 w - - 0 1", errorText ), true );
@@ -283,22 +283,34 @@ void CTester::testPiece()
     //
     //  White pieces type strings
     //
-    TESTEQ( "asStrWhitePawn", CPiece( EPiece::kWhitePawn ).asStr(), "White Pawn" );
-    TESTEQ( "asStrWhiteKnight", CPiece( EPiece::kWhiteKnight ).asStr(), "White Knight" );
-    TESTEQ( "asStrWhiteBishop", CPiece( EPiece::kWhiteBishop ).asStr(), "White Bishop" );
-    TESTEQ( "asStrWhiteRook", CPiece( EPiece::kWhiteRook ).asStr(), "White Rook" );
-    TESTEQ( "asStrWhiteQueen", CPiece( EPiece::kWhiteQueen ).asStr(), "White Queen" );
-    TESTEQ( "asStrWhiteKing", CPiece( EPiece::kWhiteKing ).asStr(), "White King" );
+    TESTEQ( "asStrWhitePawn", CPiece( EPiece::kWhitePawn ).asStr(), 
+        "White Pawn" );
+    TESTEQ( "asStrWhiteKnight", CPiece( EPiece::kWhiteKnight ).asStr(), 
+        "White Knight" );
+    TESTEQ( "asStrWhiteBishop", CPiece( EPiece::kWhiteBishop ).asStr(), 
+        "White Bishop" );
+    TESTEQ( "asStrWhiteRook", CPiece( EPiece::kWhiteRook ).asStr(), 
+        "White Rook" );
+    TESTEQ( "asStrWhiteQueen", CPiece( EPiece::kWhiteQueen ).asStr(), 
+        "White Queen" );
+    TESTEQ( "asStrWhiteKing", CPiece( EPiece::kWhiteKing ).asStr(), 
+        "White King" );
 
     //
     //  Black pieces type strings
     //
-    TESTEQ( "asStrBlackPawn", CPiece( EPiece::kBlackPawn ).asStr(), "Black Pawn" );
-    TESTEQ( "asStrBlackKnight", CPiece( EPiece::kBlackKnight ).asStr(), "Black Knight" );
-    TESTEQ( "asStrBlackBishop", CPiece( EPiece::kBlackBishop ).asStr(), "Black Bishop" );
-    TESTEQ( "asStrBlackRook", CPiece( EPiece::kBlackRook ).asStr(), "Black Rook" );
-    TESTEQ( "asStrBlackQueen", CPiece( EPiece::kBlackQueen ).asStr(), "Black Queen" );
-    TESTEQ( "asStrBlackKing", CPiece( EPiece::kBlackKing ).asStr(), "Black King" );
+    TESTEQ( "asStrBlackPawn", CPiece( EPiece::kBlackPawn ).asStr(), 
+        "Black Pawn" );
+    TESTEQ( "asStrBlackKnight", CPiece( EPiece::kBlackKnight ).asStr(), 
+        "Black Knight" );
+    TESTEQ( "asStrBlackBishop", CPiece( EPiece::kBlackBishop ).asStr(), 
+        "Black Bishop" );
+    TESTEQ( "asStrBlackRook", CPiece( EPiece::kBlackRook ).asStr(), 
+        "Black Rook" );
+    TESTEQ( "asStrBlackQueen", CPiece( EPiece::kBlackQueen ).asStr(), 
+        "Black Queen" );
+    TESTEQ( "asStrBlackKing", CPiece( EPiece::kBlackKing ).asStr(), 
+        "Black King" );
 
     //
     //  White pieces type abbreviations

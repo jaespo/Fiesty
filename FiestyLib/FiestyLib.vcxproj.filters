@@ -57,4 +57,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="gen.out">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

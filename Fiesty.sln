@@ -2,12 +2,21 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fiesty", "Fiesty\Fiesty.vcxproj", "{E82D8F21-1EC4-49D2-9341-1B094E0B570A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{87281A39-F369-496C-809C-FB80EF79C0CC} = {87281A39-F369-496C-809C-FB80EF79C0CC}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FiestyGen", "FiestyGen\FiestyGen.vcxproj", "{D44D7C0C-AE12-46BB-A290-BB65805A1611}"
+	ProjectSection(ProjectDependencies) = postProject
+		{87281A39-F369-496C-809C-FB80EF79C0CC} = {87281A39-F369-496C-809C-FB80EF79C0CC}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FiestyLib", "FiestyLib\FiestyLib.vcxproj", "{87281A39-F369-496C-809C-FB80EF79C0CC}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FiestyTest", "FiestyTest\FiestyTest.vcxproj", "{3D458C3D-8A9F-4899-80BD-2F3221F97172}"
+	ProjectSection(ProjectDependencies) = postProject
+		{87281A39-F369-496C-809C-FB80EF79C0CC} = {87281A39-F369-496C-809C-FB80EF79C0CC}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
