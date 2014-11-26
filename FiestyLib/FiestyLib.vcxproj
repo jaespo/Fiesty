@@ -22,6 +22,7 @@
     <ClInclude Include="bitboard.h" />
     <ClInclude Include="fiesty.h" />
     <ClInclude Include="gen.h" />
+    <ClInclude Include="magic.h" />
     <ClInclude Include="move.h" />
     <ClInclude Include="piece.h" />
     <ClInclude Include="position.h" />

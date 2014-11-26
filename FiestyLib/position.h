@@ -138,8 +138,8 @@ public:
 
     void genWhitePawnQuiets( CMoves& rMoves );
     void genWhitePawnCaptures( CMoves& rMoves );
-    void genWhiteKnightQuiets( CMoves& rMoves );        //TODO: code me
-    void genWhiteKnightCaptures( CMoves& rMoves );      //TODO: code me
+    void genWhiteKnightQuiets( CMoves& rMoves );
+    void genWhiteKnightCaptures( CMoves& rMoves );
     void genWhiteBishopQuiets( CMoves& rMoves );        //TODO: code me
     void genWhiteBishopCaptures( CMoves& rMoves );      //TODO: code me
     void genWhiteRookQuiets( CMoves& rMoves );          //TODO: code me
@@ -151,8 +151,8 @@ public:
 
     void genBlackPawnQuiets( CMoves& rMoves );
     void genBlackPawnCaptures( CMoves& rMoves );
-    void genBlackKnightQuiets( CMoves& rMoves );        //TODO: code me
-    void genBlackKnightCaptures( CMoves& rMoves );      //TODO: code me
+    void genBlackKnightQuiets( CMoves& rMoves );
+    void genBlackKnightCaptures( CMoves& rMoves );
     void genBlackBishopQuiets( CMoves& rMoves );        //TODO: code me
     void genBlackBishopCaptures( CMoves& rMoves );      //TODO: code me
     void genBlackRookQuiets( CMoves& rMoves );          //TODO: code me
