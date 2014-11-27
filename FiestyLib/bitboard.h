@@ -22,7 +22,7 @@ public:
 
     void operator |=( CBitBoard bb ) { mBitBoard |= bb.get(); }
     void setSquare( YSqix sqix ) { mBitBoard |= 1ULL << sqix; }
-    void setIfValid( I8 rank, I8 file );
+    void setIfValid( S8 rank, S8 file );
     
     CSqix popLsb()
     {
@@ -30,7 +30,7 @@ public:
         assert( mBitBoard != 0 );
         _BitScanForward64( &index, mBitBoard );
         mBitBoard ^= 1ULL << index;
-        return index;
+        return YSqix( index );
     }
     
     CSqix popMsb()
@@ -39,7 +39,7 @@ public:
         assert( mBitBoard != 0 );
         _BitScanReverse64( &index, mBitBoard );
         mBitBoard ^= 1ULL << index;
-        return index;
+        return YSqix( index );
     }
 
     std::string asStr() const;

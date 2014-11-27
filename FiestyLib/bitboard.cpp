@@ -46,10 +46,10 @@ std::string CBitBoard::asAbbr() const
 ///
 /// helper function that sets a bit if its a valid location
 ///
-void CBitBoard::setIfValid( I8 rank, I8 file )
+void CBitBoard::setIfValid( S8 rank, S8 file )
 {
-    if ( rank < I8( ERank::kRank1 ) || rank > I8( ERank::kRank8 ) 
-        || file < I8( EFile::kFileA ) || file > I8( EFile::kFileH ) )
+    if ( rank < S8( ERank::kRank1 ) || rank > S8( ERank::kRank8 ) 
+        || file < S8( EFile::kFileA ) || file > S8( EFile::kFileH ) )
     {
         return;
     }

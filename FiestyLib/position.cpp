@@ -31,7 +31,7 @@ std::string CPos::asDiagram() const
 {
     std::string         s;
 
-    for ( I8 r = I8( ERank::kRank8 ); r >= I8( ERank::kRank1 ); r-- )
+    for ( S8 r = S8( ERank::kRank8 ); r >= S8( ERank::kRank1 ); r-- )
     {
         for ( U8 f = U8( EFile::kFileA ); f <= U8( EFile::kFileH ); f++ )
         {
@@ -68,7 +68,7 @@ std::string CPos::asFen() const
 {
     std::string             s;
 
-    for ( I8 r = I8( ERank::kRank8 ); r >= I8( ERank::kRank1 ); r-- )
+    for ( S8 r = S8( ERank::kRank8 ); r >= S8( ERank::kRank1 ); r-- )
     {
         int spaceCount = 0;
         for ( U8 f = U8( EFile::kFileA ); f <= U8( EFile::kFileH ); f++ )
@@ -88,7 +88,7 @@ std::string CPos::asFen() const
         }
         if ( spaceCount > 0 )
             s.push_back( '0' + spaceCount );
-        if ( r != I8( ERank::kRank1 ) )
+        if ( r != S8( ERank::kRank1 ) )
             s.append( "/" );
     }
     s.append( " " );
@@ -325,11 +325,11 @@ void CPos::genWhiteKnightQuiets( CMoves& rMoves )
         & mbbColor[U8( EColor::kWhite )].get();
     while ( bbFrom.get() )
     {
-        fromSqix = bbFrom.popLsb(); 
+        fromSqix = bbFrom.popMsb(); 
         CBitBoard bbTo = unoccupied( CGen::bbKnightMoveSet[fromSqix.get()] );
         while ( bbTo.get() )
         {
-            toSqix = bbTo.popLsb(); 
+            toSqix = bbTo.popMsb(); 
             rMoves.addMove( CMove( fromSqix, toSqix ) );
         }
     }
@@ -350,12 +350,12 @@ void CPos::genWhiteKnightCaptures( CMoves& rMoves )
         & mbbColor[U8( EColor::kWhite )].get();
     while ( bbFrom.get() )
     {
-        fromSqix = bbFrom.popLsb(); 
+        fromSqix = bbFrom.popMsb(); 
         CBitBoard bbTo = CGen::bbKnightMoveSet[fromSqix.get()] 
             & mbbColor[U8( EColor::kBlack )].get();
         while ( bbTo.get() )
         {
-            toSqix = bbTo.popLsb(); 
+            toSqix = bbTo.popMsb(); 
             rMoves.addMove( CMove( fromSqix, toSqix ) );
         }
     }
@@ -389,7 +389,7 @@ void CPos::genWhitePawnCaptures( CMoves& rMoves )
         & ( bbUp1.leftFiles( 1 ).get() | bbUp1.rightFiles( 1 ).get() );
     while ( bbTo.get() )
     {
-        toSqix = bbTo.popLsb();
+        toSqix = bbTo.popMsb();
         //
         //  Is there a capturing pawn to the left of the target?
         //
@@ -456,7 +456,7 @@ void CPos::genWhitePawnQuiets( CMoves& rMoves )
     CBitBoard bbPop = bbTo = unoccupied( bbFrom.advanceRanks( 1 ) );
     while ( bbPop.get() )
     {
-        toSqix = bbPop.popLsb();
+        toSqix = bbPop.popMsb();
         fromSqix = toSqix.minusRanks( 1 );
         if ( toSqix.getRank().get() == ERank::kRank8 )
         {
@@ -477,7 +477,7 @@ void CPos::genWhitePawnQuiets( CMoves& rMoves )
     bbPop = unoccupied( bbTo.onRank( ERank::kRank3 ).advanceRanks( 1 ) );
     while ( bbPop.get() )
     {
-        toSqix = bbPop.popLsb();
+        toSqix = bbPop.popMsb();
         fromSqix = toSqix.minusRanks( 2 );
         rMoves.addMove( CMove( fromSqix, toSqix ) );
     }
@@ -559,7 +559,7 @@ bool CPos::parseFen(
     U8              file;
 
     clearBoard();
-    for ( I8 rank = I8( ERank::kRank8 ); rank >= I8( ERank::kRank1 ); rank-- )
+    for ( S8 rank = S8( ERank::kRank8 ); rank >= S8( ERank::kRank1 ); rank-- )
     {
         //
         //  Get the pieces in the rank
@@ -602,7 +602,7 @@ bool CPos::parseFen(
         //
         //  Get the next slash (unless we just got the first rank )
         //
-        if ( rank != I8( ERank::kRank1 ) )
+        if ( rank != S8( ERank::kRank1 ) )
         {
             tok = nextFenTok( sFen, fenIx );
             if ( tok != "/" )

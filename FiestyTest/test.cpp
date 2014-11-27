@@ -169,9 +169,9 @@ void CTester::testMoveGen()
     //
     TESTEQ( "wmgFen", pos.parseFen( CPos::kStartFen, errorText ), true );
     pos.genWhitePawnQuiets( moves );
-    TESTEQ( "wspMv", moves.asStr(), 
-        "16:a2a3 b2b3 c2c3 d2d3 e2e3 f2f3 g2g3 h2h3 a2a4 b2b4 c2c4 d2d4 "
-        "e2e4 f2f4 g2g4 h2h4" );
+    TESTEQ( "whitePawnQuiets", moves.asStr(), 
+        "16:h2h3 g2g3 f2f3 e2e3 d2d3 c2c3 b2b3 a2a3 h2h4 g2g4 f2f4 e2e4 "
+        "d2d4 c2c4 b2b4 a2a4" );
 
     //
     //  Test white promotions, single pushes from the non-second rank, 
@@ -181,7 +181,8 @@ void CTester::testMoveGen()
         "8/4k2P/8/8/3p2P1/1K3p2/1P1P1P2/8 w - - 0 1", errorText ), true );
     moves.reset();
     pos.genWhitePawnQuiets( moves );
-    TESTEQ( "wspMv", moves.asStr(), "6:d2d3 g4g5 h7h8=Q h7h8=R h7h8=B h7h8=N" );
+    TESTEQ( "whitePawnQuiets2", moves.asStr(), 
+        "6:h7h8=Q h7h8=R h7h8=B h7h8=N g4g5 d2d3" );
 
     //
     //  Test black pawn pushes from the starting position
@@ -189,7 +190,7 @@ void CTester::testMoveGen()
     TESTEQ( "bmgFen", pos.parseFen( CPos::kStartFen, errorText ), true );
     moves.reset();
     pos.genBlackPawnQuiets( moves );
-    TESTEQ( "bspMv", moves.asStr(), 
+    TESTEQ( "blackPawnQuiets", moves.asStr(), 
         "16:a7a6 b7b6 c7c6 d7d6 e7e6 f7f6 g7g6 h7h6 a7a5 b7b5 c7c5 d7d5 "
         "e7e5 f7f5 g7g5 h7h5" );
 
@@ -201,7 +202,8 @@ void CTester::testMoveGen()
         "4k3/p7/8/K2p1p2/3P4/8/7p/8 w - - 0 1", errorText ), true );
     moves.reset();
     pos.genBlackPawnQuiets( moves );
-    TESTEQ( "bspMv", moves.asStr(), "6:h2h1=Q h2h1=R h2h1=B h2h1=N f5f4 a7a6" );
+    TESTEQ( "blackPawnQuiets2", moves.asStr(), 
+        "6:h2h1=Q h2h1=R h2h1=B h2h1=N f5f4 a7a6" );
 
     //
     //  Test white pawn captures.
@@ -211,9 +213,9 @@ void CTester::testMoveGen()
         errorText ), true );
     moves.reset();
     pos.genWhitePawnCaptures( moves );
-    TESTEQ( "wspMv", moves.asStr(), 
-        "14:a2b3 d3e4 f3e4 g5f6 h5g6 g5h6 b7a8=Q b7a8=R b7a8=B b7a8=N "
-        "b7c8=Q b7c8=R b7c8=B b7c8=N" )
+    TESTEQ( "whitePawnCaptures", moves.asStr(), 
+        "14:b7c8=Q b7c8=R b7c8=B b7c8=N b7a8=Q b7a8=R b7a8=B b7a8=N g5h6 "
+        "h5g6 g5f6 d3e4 f3e4 a2b3" );
 
     //
     //  Test black pawn captures.
@@ -223,7 +225,7 @@ void CTester::testMoveGen()
         errorText ), true );
     moves.reset();
     pos.genBlackPawnCaptures( moves );
-    TESTEQ( "bpMv", moves.asStr(), 
+    TESTEQ( "blackPawnCaptures", moves.asStr(), 
         "12:f2e1=Q f2e1=R f2e1=B f2e1=N f2g1=Q f2g1=R f2g1=B f2g1=N b4a3 "
         "c6b5 c6d5 e6d5" );
 
@@ -235,10 +237,10 @@ void CTester::testMoveGen()
         errorText ), true );
     moves.reset();
     pos.genWhiteKnightQuiets( moves );
-    TESTEQ( "wnqMoves", moves.asStr(), 
-        "32:a1c2 a1b3 h1f2 h1g3 b2d1 b2d3 b2a4 b2c4 g2e1 g2e3 g2f4 g2h4 "
-        "d5c3 d5e3 d5b4 d5f4 d5b6 d5f6 d5c7 d5e7 b7a5 b7c5 b7d6 b7d8 g7f5 "
-        "g7h5 g7e6 g7e8 a8b6 a8c7 h8g6 h8f7" );
+    TESTEQ( "whiteKnightQuiets", moves.asStr(), 
+        "32:h8f7 h8g6 a8c7 a8b6 g7e8 g7e6 g7h5 g7f5 b7d8 b7d6 b7c5 b7a5 "
+        "d5e7 d5c7 d5f6 d5b6 d5f4 d5b4 d5e3 d5c3 g2h4 g2f4 g2e3 g2e1 b2c4 "
+        "b2a4 b2d3 b2d1 h1g3 h1f2 a1b3 a1c2" );
 
     //
     //  Test white knight captures
@@ -247,7 +249,7 @@ void CTester::testMoveGen()
         "8/8/3P1p2/8/4N3/3p4/5p2/8 w - - 0 1", errorText ), true );
     moves.reset();
     pos.genWhiteKnightCaptures( moves );
-    TESTEQ( "gwkc", moves.asStr(), "2:e4f2 e4f6" );
+    TESTEQ( "whiteKnightCaptures", moves.asStr(), "2:e4f6 e4f2" );
 
     //
     //  Test black knight quiets.
@@ -269,7 +271,7 @@ void CTester::testMoveGen()
         "8/8/3p1P2/8/4n3/3P4/5P2/8 w - - 0 1", errorText ), true );
     moves.reset();
     pos.genBlackKnightCaptures( moves );
-    TESTEQ( "gwbc", moves.asStr(), "2:e4f2 e4f6" );
+    TESTEQ( "blackKnightCaptures", moves.asStr(), "2:e4f2 e4f6" );
     endSuite();
 }
 

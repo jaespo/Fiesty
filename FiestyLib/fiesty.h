@@ -19,7 +19,11 @@
 #include <iostream>
 
 typedef std::uint8_t    U8;
-typedef std::int8_t     I8;
+typedef std::int8_t     S8;
+typedef std::uint16_t   U16;
+typedef std::int16_t    S16;
+typedef std::uint64_t   U64;
+typedef std::int64_t    S64;
 
 //
 //  Simple acility for debugging, can use insertion operators with x

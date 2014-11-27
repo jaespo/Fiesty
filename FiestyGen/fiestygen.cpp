@@ -31,8 +31,8 @@ void CGenerator::genKnightMoveSet()
     for ( U8 sq =  0; sq < CSqix::kNumSquares; sq++ )
     {
         CSqix sqix( sq );
-        I8 r = I8( sqix.getRank().get() );
-        I8 f = I8( sqix.getFile().get() );
+        S8 r = S8( sqix.getRank().get() );
+        S8 f = S8( sqix.getFile().get() );
         std::cout << "\n    /* " << sqix.asAbbr() << " */ ";
         CBitBoard bb( 0ULL );
         bb.setIfValid( r + 2, f + 1 );
