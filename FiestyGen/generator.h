@@ -20,7 +20,7 @@ public:
     static void generate();
 
 private: 
-    static void genKnightMoveSet();
+    static void genKnightAttacks();
 };
 
 #endif

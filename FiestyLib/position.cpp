@@ -152,7 +152,7 @@ void CPos::genBlackKnightQuiets( CMoves& rMoves )
     while ( bbFrom.get() )
     {
         fromSqix = bbFrom.popLsb(); 
-        CBitBoard bbTo = unoccupied( CGen::bbKnightMoveSet[fromSqix.get()] );
+        CBitBoard bbTo = unoccupied( CGen::bbKnightAttacks[fromSqix.get()] );
         while ( bbTo.get() )
         {
             toSqix = bbTo.popLsb(); 
@@ -177,7 +177,7 @@ void CPos::genBlackKnightCaptures( CMoves& rMoves )
     while ( bbFrom.get() )
     {
         fromSqix = bbFrom.popLsb(); 
-        CBitBoard bbTo = CGen::bbKnightMoveSet[fromSqix.get()] 
+        CBitBoard bbTo = CGen::bbKnightAttacks[fromSqix.get()] 
             & mbbColor[U8( EColor::kWhite )].get();
         while ( bbTo.get() )
         {
@@ -326,7 +326,7 @@ void CPos::genWhiteKnightQuiets( CMoves& rMoves )
     while ( bbFrom.get() )
     {
         fromSqix = bbFrom.popMsb(); 
-        CBitBoard bbTo = unoccupied( CGen::bbKnightMoveSet[fromSqix.get()] );
+        CBitBoard bbTo = unoccupied( CGen::bbKnightAttacks[fromSqix.get()] );
         while ( bbTo.get() )
         {
             toSqix = bbTo.popMsb(); 
@@ -351,7 +351,7 @@ void CPos::genWhiteKnightCaptures( CMoves& rMoves )
     while ( bbFrom.get() )
     {
         fromSqix = bbFrom.popMsb(); 
-        CBitBoard bbTo = CGen::bbKnightMoveSet[fromSqix.get()] 
+        CBitBoard bbTo = CGen::bbKnightAttacks[fromSqix.get()] 
             & mbbColor[U8( EColor::kBlack )].get();
         while ( bbTo.get() )
         {

@@ -19,15 +19,16 @@ int main( int argc, const char* argv[] )
 ///
 void CGenerator::generate()
 {
-    genKnightMoveSet();
+    genKnightAttacks();
+    genRookRays();
 }
 
 ///
 /// Generates source code for the knight moves
 ///
-void CGenerator::genKnightMoveSet()
+void CGenerator::genKnightAttacks()
 {
-    std::cout << "const YBitBoard CGen::bbKnightMoveSet[CSqix::kNumSquares] = {";
+    std::cout << "const YBitBoard CGen::bbKnightAttacks[CSqix::kNumSquares] = {";
     for ( U8 sq =  0; sq < CSqix::kNumSquares; sq++ )
     {
         CSqix sqix( sq );

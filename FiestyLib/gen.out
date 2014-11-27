@@ -1,5 +1,5 @@
 //FiestyGen (C) 2014 by Jeffery A Esposito
-const YBitBoard CGen::bbKnightMoveSet[CSqix::kNumSquares] = {
+const YBitBoard CGen::bbKnightAttacks[CSqix::kNumSquares] = {
     /* a1 */ 0x20400ULL,
     /* b1 */ 0x50800ULL,
     /* c1 */ 0xa1100ULL,
