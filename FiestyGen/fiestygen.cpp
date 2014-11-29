@@ -20,7 +20,6 @@ int main( int argc, const char* argv[] )
 void CGenerator::generate()
 {
     genKnightAttacks();
-    genRookRays();
 }
 
 ///
