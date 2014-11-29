@@ -33,6 +33,24 @@ std::string CBitBoard::asStr() const
 }
 
 ///
+/// returns a BitBoard as an 8x8 diagram
+///
+std::string CBitBoard::asDiagram() const
+{
+    std::string s;
+    for ( std::int8_t r = U8( ERank::kRank8 ); r >= 0; r-- )
+    {
+        for ( U8 f = U8( EFile::kFileA ); f <= U8( EFile::kFileH ); f++ )
+        {
+            CSqix sqix = CSqix( ERank( r ), EFile( f ) );
+            s.append( ( sqix.asBitBoard() & mBitBoard ) ? "1" : "0" );
+        }
+        s.append( "\n" );
+    }
+    return s;
+}
+
+///
 /// returns a BitBoard as a hex string
 ///
 std::string CBitBoard::asAbbr() const

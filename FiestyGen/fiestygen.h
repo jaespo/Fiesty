@@ -14,7 +14,7 @@
 /// CGennerator contains static methods that generate various move sets and 
 /// magics.
 ///
-class CGenerator
+class CFiestyGen
 {
 public:
     static void generate();
@@ -22,6 +22,7 @@ public:
 private: 
     static void genKnightAttacks();
 	static void genRookRays();
+    static void printBitBoardDiagram( std::string& rLabel, CBitBoard bb );
 };
 
 #endif

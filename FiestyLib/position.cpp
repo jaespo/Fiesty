@@ -152,7 +152,7 @@ void CPos::genBlackKnightQuiets( CMoves& rMoves )
     while ( bbFrom.get() )
     {
         fromSqix = bbFrom.popLsb(); 
-        CBitBoard bbTo = unoccupied( CGen::bbKnightAttacks[fromSqix.get()] );
+        CBitBoard bbTo = unoccupied( CGen::mbbKnightAttacks[fromSqix.get()] );
         while ( bbTo.get() )
         {
             toSqix = bbTo.popLsb(); 
@@ -177,7 +177,7 @@ void CPos::genBlackKnightCaptures( CMoves& rMoves )
     while ( bbFrom.get() )
     {
         fromSqix = bbFrom.popLsb(); 
-        CBitBoard bbTo = CGen::bbKnightAttacks[fromSqix.get()] 
+        CBitBoard bbTo = CGen::mbbKnightAttacks[fromSqix.get()] 
             & mbbColor[U8( EColor::kWhite )].get();
         while ( bbTo.get() )
         {
@@ -326,7 +326,7 @@ void CPos::genWhiteKnightQuiets( CMoves& rMoves )
     while ( bbFrom.get() )
     {
         fromSqix = bbFrom.popMsb(); 
-        CBitBoard bbTo = unoccupied( CGen::bbKnightAttacks[fromSqix.get()] );
+        CBitBoard bbTo = unoccupied( CGen::mbbKnightAttacks[fromSqix.get()] );
         while ( bbTo.get() )
         {
             toSqix = bbTo.popMsb(); 
@@ -351,7 +351,7 @@ void CPos::genWhiteKnightCaptures( CMoves& rMoves )
     while ( bbFrom.get() )
     {
         fromSqix = bbFrom.popMsb(); 
-        CBitBoard bbTo = CGen::bbKnightAttacks[fromSqix.get()] 
+        CBitBoard bbTo = CGen::mbbKnightAttacks[fromSqix.get()] 
             & mbbColor[U8( EColor::kBlack )].get();
         while ( bbTo.get() )
         {
@@ -480,6 +480,57 @@ void CPos::genWhitePawnQuiets( CMoves& rMoves )
         toSqix = bbPop.popMsb();
         fromSqix = toSqix.minusRanks( 2 );
         rMoves.addMove( CMove( fromSqix, toSqix ) );
+    }
+}
+
+///
+/// generates rook non-captures for white
+///
+/// @param rMoves
+///     the rook moves will be added to rMoves
+///
+void CPos::genWhiteRookQuiets( CMoves& rMoves )
+{
+    CSqix           toSqix;
+    CSqix           fromSqix;
+    CSqix           blockerSqix;
+    CBitBoard       bbOccRay;
+   
+    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kRook )].get() 
+        & mbbColor[U8( EColor::kWhite )].get();
+    while ( bbFrom.get() )
+    {
+        fromSqix = bbFrom.popMsb(); 
+
+        //
+        //  Get the rays from the rook position to the edge of the board in
+        //  each of the four directions.  (The rook's square is not included
+        //  in these rays.
+        //
+        CBitBoard bbNorthRay = CGen::mbbRookRays[fromSqix.get()].mbbNorth;
+        CBitBoard bbEastRay = CGen::mbbRookRays[fromSqix.get()].mbbEast;
+        CBitBoard bbSouthRay = CGen::mbbRookRays[fromSqix.get()].mbbSouth;
+        CBitBoard bbWestRay = CGen::mbbRookRays[fromSqix.get()].mbbWest;
+
+        //
+        //  For each of thes rays, find the blocker (if any) and mask off
+        //  the squares beyond the blocker.
+        //
+        if ( ( bbOccRay = occupied( bbNorthRay ) ).get() )
+            bbNorthRay &= CGen::mbbRookRays[bbOccRay.lsb().get()].mbbSouth;
+        if ( ( bbOccRay = occupied( bbEastRay ) ).get() )
+            bbEastRay &= CGen::mbbRookRays[bbOccRay.lsb().get()].mbbWest;
+        if ( ( bbOccRay = occupied( bbSouthRay ) ).get() )
+            bbSouthRay &= CGen::mbbRookRays[bbOccRay.msb().get()].mbbNorth;
+        if ( ( bbOccRay = occupied( bbWestRay ) ).get() )
+            bbWestRay &= CGen::mbbRookRays[bbOccRay.msb().get()].mbbEast;
+        CBitBoard bbTo = bbNorthRay.get() 
+            | bbEastRay.get() | bbSouthRay.get() | bbWestRay.get();
+        while ( bbTo.get() )
+        {
+            toSqix = bbTo.popMsb(); 
+            rMoves.addMove( CMove( fromSqix, toSqix ) );
+        }
     }
 }
 

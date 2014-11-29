@@ -1,0 +1,21 @@
+High Level Todos
+================
+[ ] Movegen
+[ ] Perft
+[ ] Hash
+[ ] Search
+[ ] UCI 
+[ ] eval
+[ ] endgame eval
+
+Performance Todos
+=================
+[ ] release compile options
+[ ] are class wrapper "gets" optimized correctly
+[ ] is setbit optimized 
+[ ] is clearbit optimized correctly
+[ ] go through all movegen in asm 
+[ ] does fastcall help
+[ ] magics
+[ ] does making big movegen procs inline help?
+ 

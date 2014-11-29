@@ -15,7 +15,7 @@
 /// Class that contains rank and file rays by direction, to the edge of the 
 /// board from the indexed square (not including the indexed square).
 ///
-class CRookRays
+struct SRookRays
 {
     YBitBoard       mbbNorth;
     YBitBoard       mbbEast;
@@ -41,28 +41,23 @@ class CBishopRays
 class CGen
 {
 public:
-    static void generate();
-
     //
     //  For each square, a bit board of the squares a knight attacks
     //
-    static const YBitBoard      bbKnightAttacks[CSqix::kNumSquares];
+    static const YBitBoard      mbbKnightAttacks[CSqix::kNumSquares];
 
     //
     //  For each square, a bit board of the ray from that square to the 
     //  edge of the board (not including the indexed square).
     //
-    static const CRookRays      bbRookRays[CSqix::kNumSquares];
+    static const SRookRays      mbbRookRays[CSqix::kNumSquares];
 
     //
     //  For each square, a bit board of the ray from that square to the 
     //  edge of the board (not including the indexed square).
     //
-    // static const CBishopRays    bbBishopRays[CSqix::kNumSquares];
+    // static const CBishopRays    mbbBishopRays[CSqix::kNumSquares];
 
-private: 
-    static void genKnightAttacks();
-    static void genRookRays();
 };
 
 #endif

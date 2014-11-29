@@ -21,29 +21,16 @@ public:
     YBitBoard get() const { return mBitBoard; }
 
     void operator |=( CBitBoard bb ) { mBitBoard |= bb.get(); }
+    void operator &=( CBitBoard bb ) { mBitBoard &= bb.get(); }
+    void operator ^=( CBitBoard bb ) { mBitBoard ^= bb.get(); }
+    CBitBoard operator ~() const { return ~mBitBoard; } 
+
     void setSquare( YSqix sqix ) { mBitBoard |= 1ULL << sqix; }
     void setIfValid( S8 rank, S8 file );
     
-    CSqix popLsb()
-    {
-        unsigned long index;
-        assert( mBitBoard != 0 );
-        _BitScanForward64( &index, mBitBoard );
-        mBitBoard ^= 1ULL << index;
-        return YSqix( index );
-    }
-    
-    CSqix popMsb()
-    {
-        unsigned long index;
-        assert( mBitBoard != 0 );
-        _BitScanReverse64( &index, mBitBoard );
-        mBitBoard ^= 1ULL << index;
-        return YSqix( index );
-    }
-
     std::string asStr() const;
     std::string asAbbr() const;
+    std::string asDiagram() const;
 
     ///
     /// @return the bb for a file
@@ -59,6 +46,54 @@ public:
 	static CBitBoard rankBits( CRank r ) 
     { 
         return CBitBoard( 0xFFULL << ( 8 * U8( r.get() ) ) );
+    }
+
+    ///
+    /// @returns 
+    ///     the square index of the least significan bit, and clears that bit
+    /// 
+    CSqix popLsb()
+    {
+        unsigned long index;
+        assert( mBitBoard != 0 );
+        _BitScanForward64( &index, mBitBoard );
+        mBitBoard ^= 1ULL << index;
+        return YSqix( index );
+    }
+    
+    ///
+    /// @returns 
+    ///     the square index of the most significan bit, and clears that bit
+    /// 
+    CSqix popMsb()
+    {
+        unsigned long index;
+        assert( mBitBoard != 0 );
+        _BitScanReverse64( &index, mBitBoard );
+        mBitBoard ^= 1ULL << index;
+        return YSqix( index );
+    }
+
+    ///
+    /// @returns the square index of the least significan bit
+    /// 
+    CSqix lsb() const
+    {
+        unsigned long index;
+        assert( mBitBoard != 0 );
+        _BitScanForward64( &index, mBitBoard );
+        return YSqix( index );
+    }
+    
+    ///
+    /// @returns the square index of the most significan bit
+    /// 
+    CSqix msb() const
+    {
+        unsigned long index;
+        assert( mBitBoard != 0 );
+        _BitScanReverse64( &index, mBitBoard );
+        return YSqix( index );
     }
 
     ///

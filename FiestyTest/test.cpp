@@ -272,6 +272,22 @@ void CTester::testMoveGen()
     moves.reset();
     pos.genBlackKnightCaptures( moves );
     TESTEQ( "blackKnightCaptures", moves.asStr(), "2:e4f2 e4f6" );
+
+    //
+    //  Test white rook quiets
+    //
+    TESTEQ( "whiteRookQuietsFen", pos.parseFen( 
+        "R6R/8/3p4/3R4/4R3/8/3R4/R6R w - - 0 1", errorText ), true );
+    moves.reset();
+    pos.genWhiteRookQuiets( moves );
+    TESTEQ( "whiteRookQuiets", moves.asStr(), 
+        "81:h8g8 h8f8 h8e8 h8d8 h8c8 h8b8 h8h7 h8h6 h8h5 h8h4 h8h3 h8h2 "
+        "a8g8 a8f8 a8e8 a8d8 a8c8 a8b8 a8a7 a8a6 a8a5 a8a4 a8a3 a8a2 d5h5 "
+        "d5g5 d5f5 d5e5 d5c5 d5b5 d5a5 d5d4 d5d3 e4e8 e4e7 e4e6 e4e5 e4h4 "
+        "e4g4 e4f4 e4d4 e4c4 e4b4 e4a4 e4e3 e4e2 e4e1 d2d4 d2d3 d2h2 d2g2 "
+        "d2f2 d2e2 d2c2 d2b2 d2a2 d2d1 h1h7 h1h6 h1h5 h1h4 h1h3 h1h2 h1g1 "
+        "h1f1 h1e1 h1d1 h1c1 h1b1 a1a7 a1a6 a1a5 a1a4 a1a3 a1a2 a1g1 a1f1 "
+        "a1e1 a1d1 a1c1 a1b1" );
     endSuite();
 }
 
@@ -525,7 +541,6 @@ void CTester::testSquare( void )
     TESTEQ( "asStrC4", c4.asStr(), "c4(26)" );
     endSuite();
 }
-
 
 ///
 /// Run all the tests

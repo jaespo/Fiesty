@@ -39,6 +39,9 @@
   <ItemGroup>
     <None Include="gen.out" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Todo.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{87281A39-F369-496C-809C-FB80EF79C0CC}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

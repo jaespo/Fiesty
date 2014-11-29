@@ -188,6 +188,15 @@ private:
         return ( bb.get() & ~( mbbColor[U8( EColor::kWhite )].get() 
             | mbbColor[U8( EColor::kBlack )].get() ) );
     }
+
+    ///
+    /// @returns the bitmask of occupied squares in the specified bitboard
+    ///
+    CBitBoard occupied( const CBitBoard& bb ) const 
+    {
+        return ( bb.get() & ( mbbColor[U8( EColor::kWhite )].get() 
+            | mbbColor[U8( EColor::kBlack )].get() ) );
+    }
 };
 
 #endif      // position.h
