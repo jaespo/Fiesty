@@ -49,3 +49,37 @@ void CGenerator::genKnightAttacks()
     }
     std::cout << " };\n" << std::flush;
 }
+
+///
+/// Generates source code for the rook rays.
+///
+void CGenerator::genKnightAttacks()
+{
+    std::cout << "const CRookRays CGen::mRookRays[CSqix::kNumSquares] = {";
+    for ( U8 sq =  0; sq < CSqix::kNumSquares; sq++ )
+    {
+        CSqix sqix( sq );
+        U8 rank = U8( sqix.getRank().get() );
+        U8 file = U8( sqix.getFile().get() );
+        std::cout << "\n    /* " << sqix.asAbbr() << " */ ";
+        CBitBoard bbNorth( 0ULL );
+		CBitBoard bbEast( 0ULL );
+		CBitBoard bbSouth( 0ULL );
+		CBitBoard bbWest( 0ULL );
+
+		//
+		//	Set the north bits
+		//
+		for ( U8 r = rank + 1; r <= U8( ERank::kRank8 ); r++ )
+			bbNorth.setSquare( CSqix( ERank( r ), EFile( file ) ).get() );
+		//
+		//	Set the north bits
+		//
+		for ( U8 r = rank + 1; r <= U8( ERank::kRank8 ); r++ )
+			bbNorth.setSquare( CSqix( ERank( r ), EFile( file ) ).get() );
+        std::cout << bb.asAbbr() << "ULL";
+        if( sq != CSqix::kNumSquares - 1 ) 
+            std::cout << ",";
+    }
+    std::cout << " };\n" << std::flush;
+}
