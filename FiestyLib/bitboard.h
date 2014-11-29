@@ -26,6 +26,8 @@ public:
     CBitBoard operator ~() const { return ~mBitBoard; } 
 
     void setSquare( YSqix sqix ) { mBitBoard |= 1ULL << sqix; }
+    void resetSquare( YSqix sqix ) { mBitBoard ^= 1ULL << sqix; }
+    CBitBoard getSquareBits( YSqix sqix ) { return mBitBoard & ( 1ULL << sqix ); }
     void setIfValid( S8 rank, S8 file );
     
     std::string asStr() const;

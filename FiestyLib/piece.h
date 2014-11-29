@@ -77,7 +77,7 @@ inline std::ostream& operator<<( std::ostream& os, CPieceType pt )
 }
 
 ///
-/// Class for a piece, includint color
+/// Class for a piece, including color
 ///
 class CPiece
 {

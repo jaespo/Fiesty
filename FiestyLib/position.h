@@ -143,7 +143,7 @@ public:
     void genWhiteBishopQuiets( CMoves& rMoves );        //TODO: code me
     void genWhiteBishopCaptures( CMoves& rMoves );      //TODO: code me
     void genWhiteRookQuiets( CMoves& rMoves );          //TODO: code me
-    void genWhiteRookCaptures( CMoves& rMoves );        //TODO: code me
+    void genWhiteRookCaptures( CMoves& rMoves );
     void genWhiteQueenQuiets( CMoves& rMoves );         //TODO: code me
     void genWhiteQueenCaptures( CMoves& rMoves );       //TODO: code me
     void genWhiteKingQuiets( CMoves& rMoves );          //TODO: code me    
@@ -167,19 +167,6 @@ public:
     void makeMove( CMove m );                       //TODO: code me
     void unmakeMove( CMove m );                     //TODO: code me
 
-private:
-    CColor          mWhoseMove;
-    U8              mHalfMoveClock;                 // for 50 move rule
-    U8              mDups;                          // for 3 time repetions
-    CPosRights      mPosRights;
-    std::uint16_t   mMoveNum;
-    CPiece          mBoard[U8( ERank::kNum ) * U8( EFile::kNum )];
-    CBitBoard       mbbPieceType[EPieceType::kNum];
-    CBitBoard       mbbColor[EColor::kNum];
-
-    static std::string nextFenTok( 
-        const std::string &sFen, size_t &rPos );
-
     ///
     /// @returns the bitmask of unoccupied squares in the specified bitboard
     ///
@@ -197,6 +184,38 @@ private:
         return ( bb.get() & ( mbbColor[U8( EColor::kWhite )].get() 
             | mbbColor[U8( EColor::kBlack )].get() ) );
     }
+
+    ///
+    /// @returns a non-zero bitboard if the square is occupied by a white
+    /// piece.
+    ///
+    CBitBoard isWhite( CSqix sqix )
+    {
+        return mbbColor[U8( EColor::kWhite )].getSquareBits( sqix.get() );
+    }
+
+    ///
+    /// @returns a non-zero bitboard if the square is occupied by a black
+    /// piece.
+    ///
+    CBitBoard isBlack( CSqix sqix )
+    {
+        return mbbColor[U8( EColor::kBlack )].getSquareBits( sqix.get() );
+    }
+
+private:
+    CColor          mWhoseMove;
+    U8              mHalfMoveClock;                 // for 50 move rule
+    U8              mDups;                          // for 3 time repetions
+    CPosRights      mPosRights;
+    std::uint16_t   mMoveNum;
+    CPiece          mBoard[U8( ERank::kNum ) * U8( EFile::kNum )];
+    CBitBoard       mbbPieceType[EPieceType::kNum];
+    CBitBoard       mbbColor[EColor::kNum];
+
+    static std::string nextFenTok( 
+        const std::string &sFen, size_t &rPos );
+
 };
 
 #endif      // position.h

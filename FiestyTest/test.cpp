@@ -288,6 +288,15 @@ void CTester::testMoveGen()
         "d2f2 d2e2 d2c2 d2b2 d2a2 d2d1 h1h7 h1h6 h1h5 h1h4 h1h3 h1h2 h1g1 "
         "h1f1 h1e1 h1d1 h1c1 h1b1 a1a7 a1a6 a1a5 a1a4 a1a3 a1a2 a1g1 a1f1 "
         "a1e1 a1d1 a1c1 a1b1" );
+
+    //
+    //  Test white rook captures
+    //
+    TESTEQ( "whiteRookCapturesFen", pos.parseFen( 
+        "8/8/2pp4/p1RP4/1R6/nP1RP1n1/2pP4/3q4 w - - 0 1", errorText ), true );
+    moves.reset();
+    pos.genWhiteRookCaptures( moves );
+    TESTEQ( "whiteRookCaptures", moves.asStr(), "3:c5c6 c5c2 c5a5" );
     endSuite();
 }
 

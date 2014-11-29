@@ -484,6 +484,66 @@ void CPos::genWhitePawnQuiets( CMoves& rMoves )
 }
 
 ///
+/// generates rook captures for white
+///
+/// @param rMoves
+///     the rook captures will be added to rMoves
+///
+void CPos::genWhiteRookCaptures( CMoves& rMoves )
+{
+    CSqix           toSqix;
+    CSqix           fromSqix;
+    CSqix           blockerSqix;
+    CBitBoard       bbOccRay;
+   
+    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kRook )].get() 
+        & mbbColor[U8( EColor::kWhite )].get();
+    while ( bbFrom.get() )
+    {
+        fromSqix = bbFrom.popMsb(); 
+
+        //
+        //  Get the rays from the rook position to the edge of the board in
+        //  each of the four directions.  (The rook's square is not included
+        //  in these rays.
+        //
+        CBitBoard bbNorthRay = CGen::mbbRookRays[fromSqix.get()].mbbNorth;
+        CBitBoard bbEastRay = CGen::mbbRookRays[fromSqix.get()].mbbEast;
+        CBitBoard bbSouthRay = CGen::mbbRookRays[fromSqix.get()].mbbSouth;
+        CBitBoard bbWestRay = CGen::mbbRookRays[fromSqix.get()].mbbWest;
+
+        //
+        //  Find the square of the blocking piece in each direction, and if 
+        //  it's black, generate a capture
+        //
+        if( ( bbOccRay = occupied( bbNorthRay ) ).get() )
+        {
+            toSqix = bbOccRay.lsb().get();
+            if ( isBlack( toSqix ).get() )
+                rMoves.addMove( CMove( fromSqix, toSqix ) );
+        }
+        if( ( bbOccRay = occupied( bbEastRay ) ).get() )
+        {
+            toSqix = bbOccRay.lsb().get();
+            if ( isBlack( toSqix ).get() )
+                rMoves.addMove( CMove( fromSqix, toSqix ) );
+        }
+        if( ( bbOccRay = occupied( bbSouthRay ) ).get() )
+        {
+            toSqix = bbOccRay.msb().get();
+            if ( isBlack( toSqix ).get() )
+                rMoves.addMove( CMove( fromSqix, toSqix ) );
+        }
+        if( ( bbOccRay = occupied( bbWestRay ) ).get() )
+        {
+            toSqix = bbOccRay.msb().get();
+            if ( isBlack( toSqix ).get() )
+                rMoves.addMove( CMove( fromSqix, toSqix ) );
+        }
+    }
+}
+
+///
 /// generates rook non-captures for white
 ///
 /// @param rMoves
