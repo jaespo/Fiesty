@@ -21,6 +21,7 @@ public:
 
 private: 
     static void genKnightAttacks();
+	static void genRookRays();
 };
 
 #endif
