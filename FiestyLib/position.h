@@ -142,7 +142,7 @@ public:
     void genWhiteKnightCaptures( CMoves& rMoves );
     void genWhiteBishopQuiets( CMoves& rMoves );        //TODO: code me
     void genWhiteBishopCaptures( CMoves& rMoves );      //TODO: code me
-    void genWhiteRookQuiets( CMoves& rMoves );          //TODO: code me
+    void genWhiteRookQuiets( CMoves& rMoves );
     void genWhiteRookCaptures( CMoves& rMoves );
     void genWhiteQueenQuiets( CMoves& rMoves );         //TODO: code me
     void genWhiteQueenCaptures( CMoves& rMoves );       //TODO: code me
@@ -162,10 +162,10 @@ public:
     void genBlackKingQuiets( CMoves& rMoves );          //TODO: code me    
     void genBlackKingCaptures( CMoves& rMoves );        //TODO: code me
 
-    void genMoves( CMoves& rMoves );                //TODO: code me
+    void genMoves( CMoves& rMoves );                    //TODO: code me
 
-    void makeMove( CMove m );                       //TODO: code me
-    void unmakeMove( CMove m );                     //TODO: code me
+    void makeMove( CMove m );                           //TODO: code me
+    void unmakeMove( CMove m );                         //TODO: code me
 
     ///
     /// @returns the bitmask of unoccupied squares in the specified bitboard

@@ -1,6 +1,6 @@
 High Level Todos
 ================
-[ ] Movegen
+[/] Movegen
 [ ] Perft
 [ ] Hash
 [ ] Search
@@ -18,4 +18,4 @@ Performance Todos
 [ ] does fastcall help
 [ ] magics
 [ ] does making big movegen procs inline help?
- 
+[ ] slider capture magics -- make sure the attack bitmask includes the blocker's square

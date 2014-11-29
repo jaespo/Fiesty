@@ -311,6 +311,117 @@ void CPos::genBlackPawnQuiets( CMoves& rMoves )
 }
 
 ///
+/// generates rook captures for black
+///
+/// @param rMoves
+///     the rook captures will be added to rMoves
+///
+void CPos::genBlackRookCaptures( CMoves& rMoves )
+{
+    CSqix           toSqix;
+    CSqix           fromSqix;
+    CSqix           blockerSqix;
+    CBitBoard       bbOccRay;
+   
+    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kRook )].get() 
+        & mbbColor[U8( EColor::kBlack )].get();
+    while ( bbFrom.get() )
+    {
+        fromSqix = bbFrom.popMsb(); 
+
+        //
+        //  Get the rays from the rook position to the edge of the board in
+        //  each of the four directions.  (The rook's square is not included
+        //  in these rays.
+        //
+        CBitBoard bbNorthRay = CGen::mbbRookRays[fromSqix.get()].mbbNorth;
+        CBitBoard bbEastRay = CGen::mbbRookRays[fromSqix.get()].mbbEast;
+        CBitBoard bbSouthRay = CGen::mbbRookRays[fromSqix.get()].mbbSouth;
+        CBitBoard bbWestRay = CGen::mbbRookRays[fromSqix.get()].mbbWest;
+
+        //
+        //  Find the square of the blocking piece in each direction, and if 
+        //  it's black, generate a capture
+        //
+        if ( ( bbOccRay = occupied( bbNorthRay ) ).get() )
+        {
+            toSqix = bbOccRay.lsb().get();
+            if ( isWhite( toSqix ).get() )
+                rMoves.addMove( CMove( fromSqix, toSqix ) );
+        }
+        if ( ( bbOccRay = occupied( bbEastRay ) ).get() )
+        {
+            toSqix = bbOccRay.lsb().get();
+            if ( isWhite( toSqix ).get() )
+                rMoves.addMove( CMove( fromSqix, toSqix ) );
+        }
+        if ( ( bbOccRay = occupied( bbSouthRay ) ).get() )
+        {
+            toSqix = bbOccRay.msb().get();
+            if ( isWhite( toSqix ).get() )
+                rMoves.addMove( CMove( fromSqix, toSqix ) );
+        }
+        if ( ( bbOccRay = occupied( bbWestRay ) ).get() )
+        {
+            toSqix = bbOccRay.msb().get();
+            if ( isWhite( toSqix ).get() )
+                rMoves.addMove( CMove( fromSqix, toSqix ) );
+        }
+    }
+}
+
+///
+/// generates rook non-captures for black
+///
+/// @param rMoves
+///     the rook moves will be added to rMoves
+///
+void CPos::genBlackRookQuiets( CMoves& rMoves )
+{
+    CSqix           toSqix;
+    CSqix           fromSqix;
+    CSqix           blockerSqix;
+    CBitBoard       bbOccRay;
+   
+    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kRook )].get() 
+        & mbbColor[U8( EColor::kBlack )].get();
+    while ( bbFrom.get() )
+    {
+        fromSqix = bbFrom.popMsb(); 
+
+        //
+        //  Get the rays from the rook position to the edge of the board in
+        //  each of the four directions.  (The rook's square is not included
+        //  in these rays.
+        //
+        CBitBoard bbNorthRay = CGen::mbbRookRays[fromSqix.get()].mbbNorth;
+        CBitBoard bbEastRay = CGen::mbbRookRays[fromSqix.get()].mbbEast;
+        CBitBoard bbSouthRay = CGen::mbbRookRays[fromSqix.get()].mbbSouth;
+        CBitBoard bbWestRay = CGen::mbbRookRays[fromSqix.get()].mbbWest;
+
+        //
+        //  For each of thes rays, find the blocker (if any) and mask off
+        //  the squares beyond the blocker.
+        //
+        if ( ( bbOccRay = occupied( bbNorthRay ) ).get() )
+            bbNorthRay &= CGen::mbbRookRays[bbOccRay.lsb().get()].mbbSouth;
+        if ( ( bbOccRay = occupied( bbEastRay ) ).get() )
+            bbEastRay &= CGen::mbbRookRays[bbOccRay.lsb().get()].mbbWest;
+        if ( ( bbOccRay = occupied( bbSouthRay ) ).get() )
+            bbSouthRay &= CGen::mbbRookRays[bbOccRay.msb().get()].mbbNorth;
+        if ( ( bbOccRay = occupied( bbWestRay ) ).get() )
+            bbWestRay &= CGen::mbbRookRays[bbOccRay.msb().get()].mbbEast;
+        CBitBoard bbTo = bbNorthRay.get() 
+            | bbEastRay.get() | bbSouthRay.get() | bbWestRay.get();
+        while ( bbTo.get() )
+        {
+            toSqix = bbTo.popMsb(); 
+            rMoves.addMove( CMove( fromSqix, toSqix ) );
+        }
+    }
+}
+
+///
 /// generates knight non-captures for white
 ///
 /// @param rMoves
@@ -516,25 +627,25 @@ void CPos::genWhiteRookCaptures( CMoves& rMoves )
         //  Find the square of the blocking piece in each direction, and if 
         //  it's black, generate a capture
         //
-        if( ( bbOccRay = occupied( bbNorthRay ) ).get() )
+        if ( ( bbOccRay = occupied( bbNorthRay ) ).get() )
         {
             toSqix = bbOccRay.lsb().get();
             if ( isBlack( toSqix ).get() )
                 rMoves.addMove( CMove( fromSqix, toSqix ) );
         }
-        if( ( bbOccRay = occupied( bbEastRay ) ).get() )
+        if ( ( bbOccRay = occupied( bbEastRay ) ).get() )
         {
             toSqix = bbOccRay.lsb().get();
             if ( isBlack( toSqix ).get() )
                 rMoves.addMove( CMove( fromSqix, toSqix ) );
         }
-        if( ( bbOccRay = occupied( bbSouthRay ) ).get() )
+        if ( ( bbOccRay = occupied( bbSouthRay ) ).get() )
         {
             toSqix = bbOccRay.msb().get();
             if ( isBlack( toSqix ).get() )
                 rMoves.addMove( CMove( fromSqix, toSqix ) );
         }
-        if( ( bbOccRay = occupied( bbWestRay ) ).get() )
+        if ( ( bbOccRay = occupied( bbWestRay ) ).get() )
         {
             toSqix = bbOccRay.msb().get();
             if ( isBlack( toSqix ).get() )

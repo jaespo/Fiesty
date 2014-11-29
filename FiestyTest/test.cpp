@@ -27,7 +27,8 @@ void CTester::beginSuite( char* pzSuiteName )
 ///
 void CTester::endSuite()
 {
-    std::cout << mgCurSuiteName << ": " << mgOkCount << " tests ok"<< std::endl;
+    std::cout 
+        << mgCurSuiteName << ": " << mgOkCount << " tests ok" << std::endl;
     mgbInSuite = false;
 }
 
@@ -297,6 +298,26 @@ void CTester::testMoveGen()
     moves.reset();
     pos.genWhiteRookCaptures( moves );
     TESTEQ( "whiteRookCaptures", moves.asStr(), "3:c5c6 c5c2 c5a5" );
+
+    //
+    //  Test black rook quiets
+    //
+    TESTEQ( "blackRookQuietsFen", pos.parseFen( 
+        "8/2P5/8/8/2r5/8/2r2p2/8 w - - 0 1", errorText ), true );
+    moves.reset();
+    pos.genBlackRookQuiets( moves );
+    TESTEQ( "blackRookQuiets", moves.asStr(), 
+        "16:c4c6 c4c5 c4h4 c4g4 c4f4 c4e4 c4d4 c4b4 c4a4 c4c3 c2c3 c2e2 "
+        "c2d2 c2b2 c2a2 c2c1" );
+
+    //
+    //  Test black rook captures
+    //
+    TESTEQ( "blackRookCapturesFen", pos.parseFen( 
+        "8/8/3P4/3p4/Pr1r2P1/8/8/8 w - - 0 1", errorText ), true );
+    moves.reset();
+    pos.genBlackRookCaptures( moves );
+    TESTEQ( "blackRookCaptures", moves.asStr(), "2:d4g4 b4a4" );
     endSuite();
 }
 
