@@ -327,7 +327,7 @@ void CPos::genBlackRookCaptures( CMoves& rMoves )
         & mbbColor[U8( EColor::kBlack )].get();
     while ( bbFrom.get() )
     {
-        fromSqix = bbFrom.popMsb(); 
+        fromSqix = bbFrom.popLsb(); 
 
         //
         //  Get the rays from the rook position to the edge of the board in
@@ -343,9 +343,9 @@ void CPos::genBlackRookCaptures( CMoves& rMoves )
         //  Find the square of the blocking piece in each direction, and if 
         //  it's black, generate a capture
         //
-        if ( ( bbOccRay = occupied( bbNorthRay ) ).get() )
+        if ( ( bbOccRay = occupied( bbSouthRay ) ).get() )
         {
-            toSqix = bbOccRay.lsb().get();
+            toSqix = bbOccRay.msb().get();
             if ( isWhite( toSqix ).get() )
                 rMoves.addMove( CMove( fromSqix, toSqix ) );
         }
@@ -355,15 +355,15 @@ void CPos::genBlackRookCaptures( CMoves& rMoves )
             if ( isWhite( toSqix ).get() )
                 rMoves.addMove( CMove( fromSqix, toSqix ) );
         }
-        if ( ( bbOccRay = occupied( bbSouthRay ) ).get() )
+        if ( ( bbOccRay = occupied( bbWestRay ) ).get() )
         {
             toSqix = bbOccRay.msb().get();
             if ( isWhite( toSqix ).get() )
                 rMoves.addMove( CMove( fromSqix, toSqix ) );
         }
-        if ( ( bbOccRay = occupied( bbWestRay ) ).get() )
+        if ( ( bbOccRay = occupied( bbNorthRay ) ).get() )
         {
-            toSqix = bbOccRay.msb().get();
+            toSqix = bbOccRay.lsb().get();
             if ( isWhite( toSqix ).get() )
                 rMoves.addMove( CMove( fromSqix, toSqix ) );
         }
@@ -387,7 +387,7 @@ void CPos::genBlackRookQuiets( CMoves& rMoves )
         & mbbColor[U8( EColor::kBlack )].get();
     while ( bbFrom.get() )
     {
-        fromSqix = bbFrom.popMsb(); 
+        fromSqix = bbFrom.popLsb(); 
 
         //
         //  Get the rays from the rook position to the edge of the board in
@@ -403,16 +403,82 @@ void CPos::genBlackRookQuiets( CMoves& rMoves )
         //  For each of thes rays, find the blocker (if any) and mask off
         //  the squares beyond the blocker.
         //
-        if ( ( bbOccRay = occupied( bbNorthRay ) ).get() )
-            bbNorthRay &= CGen::mbbRookRays[bbOccRay.lsb().get()].mbbSouth;
-        if ( ( bbOccRay = occupied( bbEastRay ) ).get() )
-            bbEastRay &= CGen::mbbRookRays[bbOccRay.lsb().get()].mbbWest;
         if ( ( bbOccRay = occupied( bbSouthRay ) ).get() )
             bbSouthRay &= CGen::mbbRookRays[bbOccRay.msb().get()].mbbNorth;
+        if ( ( bbOccRay = occupied( bbEastRay ) ).get() )
+            bbEastRay &= CGen::mbbRookRays[bbOccRay.lsb().get()].mbbWest;
         if ( ( bbOccRay = occupied( bbWestRay ) ).get() )
             bbWestRay &= CGen::mbbRookRays[bbOccRay.msb().get()].mbbEast;
+        if ( ( bbOccRay = occupied( bbNorthRay ) ).get() )
+            bbNorthRay &= CGen::mbbRookRays[bbOccRay.lsb().get()].mbbSouth;
         CBitBoard bbTo = bbNorthRay.get() 
             | bbEastRay.get() | bbSouthRay.get() | bbWestRay.get();
+        while ( bbTo.get() )
+        {
+            toSqix = bbTo.popLsb(); 
+            rMoves.addMove( CMove( fromSqix, toSqix ) );
+        }
+    }
+}
+
+///
+/// generates bishop non-captures for white
+///
+/// @param rMoves
+///     the bishop moves will be added to rMoves
+///
+void CPos::genWhiteBishopQuiets( CMoves& rMoves )
+{
+    CSqix           toSqix;
+    CSqix           fromSqix;
+    CSqix           blockerSqix;
+    CBitBoard       bbOccRay;
+   
+    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kBishop )].get() 
+        & mbbColor[U8( EColor::kWhite )].get();
+    while ( bbFrom.get() )
+    {
+        fromSqix = bbFrom.popMsb(); 
+
+        //
+        //  Get the rays from the bishop position to the edge of the board in
+        //  each of the four directions.  (The bishop's square is not included
+        //  in these rays.
+        //
+        CBitBoard bbNorthEastRay = CGen::mbbBishopRays[fromSqix.get()].mbbNorthEast;
+        CBitBoard bbSouthEastRay = CGen::mbbBishopRays[fromSqix.get()].mbbSouthEast;
+        CBitBoard bbSouthWestRay = CGen::mbbBishopRays[fromSqix.get()].mbbSouthWest;
+        CBitBoard bbNorthWestRay = CGen::mbbBishopRays[fromSqix.get()].mbbNorthWest;
+
+        //
+        //  For each of thes rays, find the blocker (if any) and mask off
+        //  the squares beyond the blocker.
+        //
+        if ( ( bbOccRay = occupied( bbNorthEastRay ) ).get() )
+        {
+            bbNorthEastRay 
+                &= CGen::mbbBishopRays[bbOccRay.lsb().get()].mbbSouthWest;
+        }
+        if ( ( bbOccRay = occupied( bbSouthWestRay ) ).get() )
+        {
+            bbSouthWestRay 
+                &= CGen::mbbBishopRays[bbOccRay.msb().get()].mbbNorthEast;
+        }
+        if ( ( bbOccRay = occupied( bbSouthEastRay ) ).get() )
+        {
+            bbSouthEastRay 
+                &= CGen::mbbBishopRays[bbOccRay.lsb().get()].mbbNorthWest;
+        }
+        if ( ( bbOccRay = occupied( bbNorthWestRay ) ).get() )
+        {
+            bbNorthWestRay 
+                &= CGen::mbbBishopRays[bbOccRay.msb().get()].mbbSouthEast;
+        }
+        CBitBoard bbTo 
+            = bbNorthEastRay.get() 
+            | bbSouthEastRay.get() 
+            | bbSouthWestRay.get() 
+            | bbNorthWestRay.get();
         while ( bbTo.get() )
         {
             toSqix = bbTo.popMsb(); 
@@ -639,13 +705,13 @@ void CPos::genWhiteRookCaptures( CMoves& rMoves )
             if ( isBlack( toSqix ).get() )
                 rMoves.addMove( CMove( fromSqix, toSqix ) );
         }
-        if ( ( bbOccRay = occupied( bbSouthRay ) ).get() )
+        if ( ( bbOccRay = occupied( bbWestRay ) ).get() )
         {
             toSqix = bbOccRay.msb().get();
             if ( isBlack( toSqix ).get() )
                 rMoves.addMove( CMove( fromSqix, toSqix ) );
         }
-        if ( ( bbOccRay = occupied( bbWestRay ) ).get() )
+        if ( ( bbOccRay = occupied( bbSouthRay ) ).get() )
         {
             toSqix = bbOccRay.msb().get();
             if ( isBlack( toSqix ).get() )

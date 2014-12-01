@@ -297,7 +297,7 @@ void CTester::testMoveGen()
         "8/8/2pp4/p1RP4/1R6/nP1RP1n1/2pP4/3q4 w - - 0 1", errorText ), true );
     moves.reset();
     pos.genWhiteRookCaptures( moves );
-    TESTEQ( "whiteRookCaptures", moves.asStr(), "3:c5c6 c5c2 c5a5" );
+    TESTEQ( "whiteRookCaptures", moves.asStr(), "3:c5c6 c5a5 c5c2" );
 
     //
     //  Test black rook quiets
@@ -307,8 +307,8 @@ void CTester::testMoveGen()
     moves.reset();
     pos.genBlackRookQuiets( moves );
     TESTEQ( "blackRookQuiets", moves.asStr(), 
-        "16:c4c6 c4c5 c4h4 c4g4 c4f4 c4e4 c4d4 c4b4 c4a4 c4c3 c2c3 c2e2 "
-        "c2d2 c2b2 c2a2 c2c1" );
+        "16:c2c1 c2a2 c2b2 c2d2 c2e2 c2c3 c4c3 c4a4 c4b4 c4d4 c4e4 c4f4 "
+        "c4g4 c4h4 c4c5 c4c6" );
 
     //
     //  Test black rook captures
@@ -317,7 +317,18 @@ void CTester::testMoveGen()
         "8/8/3P4/3p4/Pr1r2P1/8/8/8 w - - 0 1", errorText ), true );
     moves.reset();
     pos.genBlackRookCaptures( moves );
-    TESTEQ( "blackRookCaptures", moves.asStr(), "2:d4g4 b4a4" );
+    TESTEQ( "blackRookCaptures", moves.asStr(), "2:b4a4 d4g4" );
+
+    //
+    //  Test white bishop quiets
+    //
+    TESTEQ( "whiteBishopQuietsFen", pos.parseFen( 
+        "8/8/3pp3/p6P/1B1B2B1/P6P/3PP3/7B w - - 0 1", errorText ), true );
+    moves.reset();
+    pos.genWhiteBishopQuiets( moves );
+    TESTEQ( "whiteBishopQuiets", moves.asStr(), 
+        "24:g4f5 g4f3 d4h8 d4g7 d4a7 d4f6 d4b6 d4e5 d4c5 d4e3 d4c3 d4f2 "
+        "d4b2 d4g1 d4a1 b4c5 b4c3 h1a8 h1b7 h1c6 h1d5 h1e4 h1f3 h1g2" );
     endSuite();
 }
 

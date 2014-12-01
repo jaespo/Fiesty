@@ -23,6 +23,89 @@ void CFiestyGen::generate()
 {
     genKnightAttacks();
     genRookRays();
+    genBishopRays();
+}
+
+///
+/// Generates source code for the bishop rays.
+///
+void CFiestyGen::genBishopRays()
+{
+    std::cout << "const SBishopRays CGen::mbbBishopRays[CSqix::kNumSquares] = {";
+    for ( U8 sq =  0; sq < CSqix::kNumSquares; sq++ )
+    {
+        CSqix sqix( sq );
+        U8 bishopRank = U8( sqix.getRank().get() );
+        U8 bishopFile = U8( sqix.getFile().get() );
+        CBitBoard bbNorthEast( 0ULL );
+		CBitBoard bbSouthEast( 0ULL );
+		CBitBoard bbSouthWest( 0ULL );
+		CBitBoard bbNorthWest( 0ULL );
+
+		//
+		//	Loop setting the north-east bits
+		//
+        S8 r = bishopRank + 1;
+        S8 f = bishopFile + 1;
+		while ( r <= S8( ERank::kRank8 ) && f <= S8( EFile::kFileH ) )
+        {
+			bbNorthEast.setSquare( CSqix( ERank( r ), EFile( f ) ).get() );
+            r++;
+            f++;
+        }
+
+		//
+		//	Loop setting the south-east bits
+		//
+        r = bishopRank - 1;
+        f = bishopFile + 1;
+		while ( r >= S8( ERank::kRank1 ) && f <= S8( EFile::kFileH ) )
+        {
+			bbSouthEast.setSquare( CSqix( ERank( r ), EFile( f ) ).get() );
+            r--;
+            f++;
+        }
+
+		//
+		//	Loop setting the south-west bits
+		//
+        r = bishopRank - 1;
+        f = bishopFile - 1;
+		while ( r >= S8( ERank::kRank1 ) && f >= S8( EFile::kFileA ) )
+        {
+			bbSouthWest.setSquare( CSqix( ERank( r ), EFile( f ) ).get() );
+            r--;
+            f--;
+        }
+
+		//
+		//	Loop setting the north-west bits
+		//
+        r = bishopRank + 1;
+        f = bishopFile - 1;
+		while ( r <= S8( ERank::kRank8 ) && f >= S8( EFile::kFileA ) )
+        {
+			bbNorthWest.setSquare( CSqix( ERank( r ), EFile( f ) ).get() );
+            r++;
+            f--;
+        }
+
+#ifdef BBTRACE
+       printBitBoardDiagram( sqix.asAbbr() + " NorthEast",  bbNorthEast );
+       printBitBoardDiagram( sqix.asAbbr() + " SouthEast",  bbSouthEast );
+       printBitBoardDiagram( sqix.asAbbr() + " SouthWest",  bbSouthWest );
+       printBitBoardDiagram( sqix.asAbbr() + " NorthWest",  bbNorthWest );
+#endif
+
+       std::cout << "\n    /* " << sqix.asAbbr() << " */ { "
+            << bbNorthEast.asAbbr() << "ULL" << ", "
+            << bbSouthEast.asAbbr() << "ULL" << ", "
+            << bbSouthWest.asAbbr() << "ULL" << ", "
+            << bbNorthWest.asAbbr() << "ULL" << " }";
+        if ( sq != CSqix::kNumSquares - 1 )
+            std::cout << ", ";
+    }
+    std::cout << "};\n" << std::flush;
 }
 
 ///

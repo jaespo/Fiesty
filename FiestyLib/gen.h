@@ -24,10 +24,10 @@ struct SRookRays
 };
 
 ///
-/// Class that contains diagnol rays by direction, to the edge of the 
+/// Class that contains diagonal rays by direction, to the edge of the 
 /// board from the indexed square (not including the indexed square).
 ///
-class CBishopRays
+struct SBishopRays
 {
     YBitBoard       mbbNorthEast;
     YBitBoard       mbbSouthEast;
@@ -56,7 +56,7 @@ public:
     //  For each square, a bit board of the ray from that square to the 
     //  edge of the board (not including the indexed square).
     //
-    // static const CBishopRays    mbbBishopRays[CSqix::kNumSquares];
+    static const SBishopRays    mbbBishopRays[CSqix::kNumSquares];
 
 };
 

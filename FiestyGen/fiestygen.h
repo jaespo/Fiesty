@@ -1,4 +1,4 @@
-/// file generator.h
+/// file fiestygen.h
 ///
 /// Fiesty (C) 2014 by Jeffery A Esposito
 ///
@@ -22,6 +22,7 @@ public:
 private: 
     static void genKnightAttacks();
 	static void genRookRays();
+	static void genBishopRays();
     static void printBitBoardDiagram( std::string& rLabel, CBitBoard bb );
 };
 
