@@ -422,6 +422,67 @@ void CPos::genBlackRookQuiets( CMoves& rMoves )
 }
 
 ///
+/// generates bishop captures for white
+///
+/// @param rMoves
+///     the bishop captures will be added to rMoves
+///
+void CPos::genWhiteBishopCaptures( CMoves& rMoves )
+{
+    CSqix           toSqix;
+    CSqix           fromSqix;
+    CSqix           blockerSqix;
+    CBitBoard       bbOccRay;
+   
+    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kBishop )].get() 
+        & mbbColor[U8( EColor::kWhite )].get();
+    while ( bbFrom.get() )
+    {
+        fromSqix = bbFrom.popMsb(); 
+
+        //
+        //  Get the rays from the rook position to the edge of the board in
+        //  each of the four directions.  (The rook's square is not included
+        //  in these rays.
+        //
+        CBitBoard bbNorthEastRay = CGen::mbbBishopRays[fromSqix.get()].mbbNorthEast;
+        CBitBoard bbSouthEastRay = CGen::mbbBishopRays[fromSqix.get()].mbbSouthEast;
+        CBitBoard bbSouthWestRay = CGen::mbbBishopRays[fromSqix.get()].mbbSouthWest;
+        CBitBoard bbNorthWestRay = CGen::mbbBishopRays[fromSqix.get()].mbbNorthWest;
+        
+
+        //
+        //  Find the square of the blocking piece in each direction, and if 
+        //  it's black, generate a capture
+        //
+        if ( ( bbOccRay = occupied( bbNorthEastRay ) ).get() )
+        {
+            toSqix = bbOccRay.lsb().get();
+            if ( isBlack( toSqix ).get() )
+                rMoves.addMove( CMove( fromSqix, toSqix ) );
+        }
+        if ( ( bbOccRay = occupied( bbNorthWestRay ) ).get() )
+        {
+            toSqix = bbOccRay.lsb().get();
+            if ( isBlack( toSqix ).get() )
+                rMoves.addMove( CMove( fromSqix, toSqix ) );
+        }
+        if ( ( bbOccRay = occupied( bbSouthEastRay ) ).get() )
+        {
+            toSqix = bbOccRay.msb().get();
+            if ( isBlack( toSqix ).get() )
+                rMoves.addMove( CMove( fromSqix, toSqix ) );
+        }
+        if ( ( bbOccRay = occupied( bbSouthWestRay ) ).get() )
+        {
+            toSqix = bbOccRay.msb().get();
+            if ( isBlack( toSqix ).get() )
+                rMoves.addMove( CMove( fromSqix, toSqix ) );
+        }
+    }
+}
+
+///
 /// generates bishop non-captures for white
 ///
 /// @param rMoves
@@ -459,20 +520,20 @@ void CPos::genWhiteBishopQuiets( CMoves& rMoves )
             bbNorthEastRay 
                 &= CGen::mbbBishopRays[bbOccRay.lsb().get()].mbbSouthWest;
         }
+        if ( ( bbOccRay = occupied( bbSouthEastRay ) ).get() )
+        {
+            bbSouthEastRay 
+                &= CGen::mbbBishopRays[bbOccRay.msb().get()].mbbNorthWest;
+        }
         if ( ( bbOccRay = occupied( bbSouthWestRay ) ).get() )
         {
             bbSouthWestRay 
                 &= CGen::mbbBishopRays[bbOccRay.msb().get()].mbbNorthEast;
         }
-        if ( ( bbOccRay = occupied( bbSouthEastRay ) ).get() )
-        {
-            bbSouthEastRay 
-                &= CGen::mbbBishopRays[bbOccRay.lsb().get()].mbbNorthWest;
-        }
         if ( ( bbOccRay = occupied( bbNorthWestRay ) ).get() )
         {
             bbNorthWestRay 
-                &= CGen::mbbBishopRays[bbOccRay.msb().get()].mbbSouthEast;
+                &= CGen::mbbBishopRays[bbOccRay.lsb().get()].mbbSouthEast;
         }
         CBitBoard bbTo 
             = bbNorthEastRay.get() 
