@@ -340,6 +340,26 @@ void CTester::testMoveGen()
     TESTEQ( "whiteBishopCaptures", moves.asStr(), 
         "4:d4g7 d4b6 d4f2 d4c3" );
 
+    //
+    //  Test black bishop quiets
+    //
+    TESTEQ( "blackBishopQuietsFen", pos.parseFen( 
+        "8/p7/5P2/3b4/3b4/4p3/1p6/8 b - - 0 1", errorText ), true );
+    moves.reset();
+    pos.genBlackBishopQuiets( moves );
+    TESTEQ( "blackBishopQuiets", moves.asStr(), 
+        "17:d4c3 d4c5 d4e5 d4b6 d5h1 d5a2 d5g2 d5b3 d5f3 d5c4 d5e4 d5c6 "
+        "d5e6 d5b7 d5f7 d5a8 d5g8" );
+
+    //
+    //  Test black bishop captures
+    //
+    TESTEQ( "blackBishopCapturesFen", pos.parseFen( 
+        "N3N3/1pPp2P1/2b5/1p2b3/N3p3/5N2/1P5P/8 b - - 0 1", errorText ), true );
+    moves.reset();
+    pos.genBlackBishopCaptures( moves );
+    TESTEQ( "blackBishopCaptures", moves.asStr(), 
+        "4:e5g7 e5c7 e5h2 e5b2" );
     endSuite();
 }
 
