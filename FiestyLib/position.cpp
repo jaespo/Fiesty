@@ -849,6 +849,30 @@ void CPos::genWhitePawnQuiets( CMoves& rMoves )
 }
 
 ///
+/// generates captures for the white queen.
+///
+/// @param rMoves
+///     the queen captures will be added to rMoves
+///
+void CPos::genWhiteQueenQuiets( CMoves& rMoves )
+{
+    genWhiteRookCapturesFrom( rMoves, getPieces( EColor::kWhite, EPieceType::kQueen ) );
+    genWhiteBishopCapturesFrom( rMoves, getPieces( EColor::kWhite, EPieceType::kQueen ) );
+}
+
+///
+/// generates quiet moves for the white queen.
+///
+/// @param rMoves
+///     the queen moves will be added to rMoves
+///
+void CPos::genWhiteQueenQuiets( CMoves& rMoves )
+{
+    genRookQuietsFrom( rMoves, getPieces( EColor::kWhite, EPieceType::kQueen ) );
+    genBishopQuietsFrom( rMoves, getPieces( EColor::kWhite, EPieceType::kQueen ) );
+}
+
+///
 /// generates rook captures for white
 ///
 /// @param rMoves

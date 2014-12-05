@@ -130,6 +130,10 @@ public:
         std::string&                rsErrorText );
     CColor getWhoseMove() { return mWhoseMove; }
     CPiece getPiece( YSqix sqix ) { return mBoard[sqix]; }
+    CBitBoard getPieces( CColor c, CPieceType pt ) 
+    { 
+        return mbbColor[U8( c.get() )].get() & mbbPieceType[U8( pt.get() )].get()];
+    }
 
     std::string asAbbr() const { return asFen(); }
     std::string asStr() const;
@@ -140,8 +144,8 @@ public:
     void genWhitePawnCaptures( CMoves& rMoves );
     void genWhiteKnightQuiets( CMoves& rMoves );
     void genWhiteKnightCaptures( CMoves& rMoves );
-    void genWhiteBishopQuiets( CMoves& rMoves );        //TODO: code me
-    void genWhiteBishopCaptures( CMoves& rMoves );      //TODO: code me
+    void genWhiteBishopQuiets( CMoves& rMoves );
+    void genWhiteBishopCaptures( CMoves& rMoves );
     void genWhiteRookQuiets( CMoves& rMoves );
     void genWhiteRookCaptures( CMoves& rMoves );
     void genWhiteQueenQuiets( CMoves& rMoves );         //TODO: code me
@@ -153,19 +157,21 @@ public:
     void genBlackPawnCaptures( CMoves& rMoves );
     void genBlackKnightQuiets( CMoves& rMoves );
     void genBlackKnightCaptures( CMoves& rMoves );
-    void genBlackBishopQuiets( CMoves& rMoves );        //TODO: code me
-    void genBlackBishopCaptures( CMoves& rMoves );      //TODO: code me
-    void genBlackRookQuiets( CMoves& rMoves );          //TODO: code me
-    void genBlackRookCaptures( CMoves& rMoves );        //TODO: code me
+    void genBlackBishopQuiets( CMoves& rMoves );
+    void genBlackBishopCaptures( CMoves& rMoves );
+    void genBlackRookQuiets( CMoves& rMoves );
+    void genBlackRookCaptures( CMoves& rMoves );
     void genBlackQueenQuiets( CMoves& rMoves );         //TODO: code me
     void genBlackQueenCaptures( CMoves& rMoves );       //TODO: code me
     void genBlackKingQuiets( CMoves& rMoves );          //TODO: code me    
     void genBlackKingCaptures( CMoves& rMoves );        //TODO: code me
 
     void genMoves( CMoves& rMoves );                    //TODO: code me
+    void genLegalMoves( CMoves& rMoves );               //TODO: code me
 
     void makeMove( CMove m );                           //TODO: code me
     void unmakeMove( CMove m );                         //TODO: code me
+      
 
     ///
     /// @returns the bitmask of unoccupied squares in the specified bitboard
@@ -204,6 +210,9 @@ public:
     }
 
 private:
+    void genWhiteBishopCapturesFrom( CMoves& rMoves, CBitBoard bbFrom );
+    void genWhiteRookCapturesFrom( CMoves& rMoves, CBitBoard bbFrom );
+
     CColor          mWhoseMove;
     U8              mHalfMoveClock;                 // for 50 move rule
     U8              mDups;                          // for 3 time repetions
