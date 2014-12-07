@@ -360,6 +360,46 @@ void CTester::testMoveGen()
     pos.genBlackBishopCaptures( moves );
     TESTEQ( "blackBishopCaptures", moves.asStr(), 
         "4:e5g7 e5c7 e5h2 e5b2" );
+
+    //
+    //  Test white queen quiets
+    //
+    TESTEQ( "whiteQueenQuietsFen", pos.parseFen( 
+        "8/4p3/8/4Q3/8/4P1P1/1P6/8 w - - 0 1", errorText ), true );
+    moves.reset();
+    pos.genWhiteQueenQuiets( moves );
+    TESTEQ( "whiteQueenQuiets", moves.asStr(), 
+        "18:e5e6 e5h5 e5g5 e5f5 e5d5 e5c5 e5b5 e5a5 e5e4 e5h8 e5b8 e5g7 "
+        "e5c7 e5f6 e5d6 e5f4 e5d4 e5c3" );
+
+    //
+    //  Test white queen captures
+    //
+    TESTEQ( "whiteQueenCapturesFen", pos.parseFen( 
+        "8/4p3/8/4Q3/8/4P1P1/1P6/8 w - - 0 1", errorText ), true );
+    moves.reset();
+    pos.genWhiteQueenCaptures( moves );
+    TESTEQ( "whiteQueenCaptures", moves.asStr(), "1:e5e7" );
+
+    //
+    //  Test black queen quiets
+    //
+    TESTEQ( "blackQueenQuietsFen", pos.parseFen( 
+        "8/3p4/5p2/8/3q4/4P3/1P6/8 b - - 0 1", errorText ), true );
+    moves.reset();
+    pos.genBlackQueenQuiets( moves );
+    TESTEQ( "blackQueenQuiets", moves.asStr(), 
+        "17:d4d1 d4d2 d4d3 d4a4 d4b4 d4c4 d4e4 d4f4 d4g4 d4h4 d4d5 d4d6 "
+        "d4c3 d4c5 d4e5 d4b6 d4a7" );
+
+    //
+    //  Test black queen captures
+    //
+    TESTEQ( "blackQueenCapturesFen", pos.parseFen( 
+        "8/3p4/5p2/8/3q4/4P3/1P6/8 b - - 0 1", errorText ), true );
+    moves.reset();
+    pos.genBlackQueenCaptures( moves );
+    TESTEQ( "blackQueenCaptures", moves.asStr(), "2:d4e3 d4b2" );
     endSuite();
 }
 

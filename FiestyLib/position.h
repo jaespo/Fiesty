@@ -14,7 +14,7 @@
 #include "move.h"
 
 ///
-/// Class that represents the casting and en passant rights, an the number of
+/// Class that represents the casting and en passant rights, and the number of
 /// duplicates in a position.
 ///
 class CPosRights
@@ -132,7 +132,8 @@ public:
     CPiece getPiece( YSqix sqix ) { return mBoard[sqix]; }
     CBitBoard getPieces( CColor c, CPieceType pt ) 
     { 
-        return mbbColor[U8( c.get() )].get() & mbbPieceType[U8( pt.get() )].get()];
+        return ( mbbColor[U8( c.get() )].get() 
+            & mbbPieceType[U8( pt.get() )].get() );
     }
 
     std::string asAbbr() const { return asFen(); }
@@ -148,8 +149,8 @@ public:
     void genWhiteBishopCaptures( CMoves& rMoves );
     void genWhiteRookQuiets( CMoves& rMoves );
     void genWhiteRookCaptures( CMoves& rMoves );
-    void genWhiteQueenQuiets( CMoves& rMoves );         //TODO: code me
-    void genWhiteQueenCaptures( CMoves& rMoves );       //TODO: code me
+    void genWhiteQueenQuiets( CMoves& rMoves );
+    void genWhiteQueenCaptures( CMoves& rMoves );
     void genWhiteKingQuiets( CMoves& rMoves );          //TODO: code me    
     void genWhiteKingCaptures( CMoves& rMoves );        //TODO: code me
 
@@ -161,8 +162,8 @@ public:
     void genBlackBishopCaptures( CMoves& rMoves );
     void genBlackRookQuiets( CMoves& rMoves );
     void genBlackRookCaptures( CMoves& rMoves );
-    void genBlackQueenQuiets( CMoves& rMoves );         //TODO: code me
-    void genBlackQueenCaptures( CMoves& rMoves );       //TODO: code me
+    void genBlackQueenCaptures( CMoves& rMoves );
+    void genBlackQueenQuiets( CMoves& rMoves );
     void genBlackKingQuiets( CMoves& rMoves );          //TODO: code me    
     void genBlackKingCaptures( CMoves& rMoves );        //TODO: code me
 
@@ -210,8 +211,14 @@ public:
     }
 
 private:
+    void genBlackBishopCapturesFrom( CMoves& rMoves, CBitBoard bbFrom );
+    void genBlackBishopQuietsFrom( CMoves& rMoves, CBitBoard bbFrom );
+    void genBlackRookCapturesFrom( CMoves& rMoves, CBitBoard bbFrom );
+    void genBlackRookQuietsFrom( CMoves& rMoves, CBitBoard bbFrom );
     void genWhiteBishopCapturesFrom( CMoves& rMoves, CBitBoard bbFrom );
+    void genWhiteBishopQuietsFrom( CMoves& rMoves, CBitBoard bbFrom );
     void genWhiteRookCapturesFrom( CMoves& rMoves, CBitBoard bbFrom );
+    void genWhiteRookQuietsFrom( CMoves& rMoves, CBitBoard bbFrom );
 
     CColor          mWhoseMove;
     U8              mHalfMoveClock;                 // for 50 move rule
