@@ -151,8 +151,8 @@ public:
     void genWhiteRookCaptures( CMoves& rMoves );
     void genWhiteQueenQuiets( CMoves& rMoves );
     void genWhiteQueenCaptures( CMoves& rMoves );
-    void genWhiteKingQuiets( CMoves& rMoves );          //TODO: code me    
-    void genWhiteKingCaptures( CMoves& rMoves );        //TODO: code me
+    void genWhiteKingQuiets( CMoves& rMoves );
+    void genWhiteKingCaptures( CMoves& rMoves );
 
     void genBlackPawnQuiets( CMoves& rMoves );
     void genBlackPawnCaptures( CMoves& rMoves );
@@ -164,8 +164,8 @@ public:
     void genBlackRookCaptures( CMoves& rMoves );
     void genBlackQueenCaptures( CMoves& rMoves );
     void genBlackQueenQuiets( CMoves& rMoves );
-    void genBlackKingQuiets( CMoves& rMoves );          //TODO: code me    
-    void genBlackKingCaptures( CMoves& rMoves );        //TODO: code me
+    void genBlackKingQuiets( CMoves& rMoves );
+    void genBlackKingCaptures( CMoves& rMoves );
 
     void genMoves( CMoves& rMoves );                    //TODO: code me
     void genLegalMoves( CMoves& rMoves );               //TODO: code me

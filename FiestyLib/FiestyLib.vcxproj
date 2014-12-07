@@ -26,6 +26,7 @@
     <ClInclude Include="move.h" />
     <ClInclude Include="piece.h" />
     <ClInclude Include="position.h" />
+    <ClInclude Include="search.h" />
     <ClInclude Include="square.h" />
   </ItemGroup>
   <ItemGroup>

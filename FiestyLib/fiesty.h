@@ -120,4 +120,9 @@ typedef std::uint64_t    YHashKey;
 ///
 typedef std::uint64_t    YBitBoard;
 
+///
+/// evaluaution value
+///
+typedef U16              YVal;
+
 #endif  // fiesty.h
