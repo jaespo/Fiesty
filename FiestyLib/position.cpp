@@ -169,7 +169,7 @@ void CPos::genBlackBishopCapturesFrom( CMoves& rMoves, CBitBoard bbFrom )
    
     while ( bbFrom.get() )
     {
-        fromSqix = bbFrom.popMsb(); 
+        fromSqix = bbFrom.popLsb(); 
 
         //
         //  Get the rays from the rook position to the edge of the board in
@@ -319,6 +319,58 @@ void CPos::genBlackKnightQuiets( CMoves& rMoves )
         }
     }
 }
+
+///
+/// generates king captures for black
+///
+/// @param rMoves
+///     the king captures will be added to rMoves
+///
+void CPos::genBlackKingCaptures( CMoves& rMoves )
+{
+    CSqix           toSqix;
+    CSqix           fromSqix;
+   
+    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kKing )].get() 
+        & mbbColor[U8( EColor::kBlack )].get();
+    while ( bbFrom.get() )
+    {
+        fromSqix = bbFrom.popLsb(); 
+        CBitBoard bbTo = CGen::mbbKingAttacks[fromSqix.get()] 
+            & mbbColor[U8( EColor::kWhite )].get();
+        while ( bbTo.get() )
+        {
+            toSqix = bbTo.popLsb(); 
+            rMoves.addMove( CMove( fromSqix, toSqix ) );
+        }
+    }
+}
+
+///
+/// generates king non-captures for white
+///
+/// @param rMoves
+///     the king moves will be added to rMoves
+///
+void CPos::genBlackKingQuiets( CMoves& rMoves )
+{
+    CSqix           toSqix;
+    CSqix           fromSqix;
+   
+    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kKing )].get() 
+        & mbbColor[U8( EColor::kBlack )].get();
+    while ( bbFrom.get() )
+    {
+        fromSqix = bbFrom.popLsb(); 
+        CBitBoard bbTo = unoccupied( CGen::mbbKingAttacks[fromSqix.get()] );
+        while ( bbTo.get() )
+        {
+            toSqix = bbTo.popLsb(); 
+            rMoves.addMove( CMove( fromSqix, toSqix ) );
+        }
+    }
+}
+
 
 ///
 /// generates knight captures for black
@@ -683,7 +735,6 @@ void CPos::genWhiteBishopCapturesFrom( CMoves& rMoves, CBitBoard bbFrom )
         CBitBoard bbNorthWestRay 
             = CGen::mbbBishopRays[fromSqix.get()].mbbNorthWest;
         
-
         //
         //  Find the square of the blocking piece in each direction, and if 
         //  it's black, generate a capture

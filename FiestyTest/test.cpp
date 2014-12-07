@@ -400,6 +400,45 @@ void CTester::testMoveGen()
     moves.reset();
     pos.genBlackQueenCaptures( moves );
     TESTEQ( "blackQueenCaptures", moves.asStr(), "2:d4e3 d4b2" );
+
+    //
+    //  Test white king quiets
+    //
+    TESTEQ( "whiteKingQuietsFen", pos.parseFen( 
+        "8/8/8/4P3/3K4/8/8/8 w - - 0 1", errorText ), true );
+    moves.reset();
+    pos.genWhiteKingQuiets( moves );
+    TESTEQ( "whiteKingQuiets", moves.asStr(), 
+        "7:d4d5 d4c5 d4e4 d4c4 d4e3 d4d3 d4c3" );
+
+    //
+    //  Test white king captures
+    //
+    TESTEQ( "whiteKingCapturesFen", pos.parseFen( 
+        "8/8/8/8/8/8/4p3/4Kq2 w - - 0 1", errorText ), true );
+    moves.reset();
+    pos.genWhiteKingCaptures( moves );
+    TESTEQ( "whiteKingCaptures", moves.asStr(), "2:e1e2 e1f1" );
+
+    //
+    //  Test black king quiets
+    //
+    TESTEQ( "blackKingQuietsFen", pos.parseFen( 
+        "8/8/8/8/8/8/pp6/1k6 b - - 0 1", errorText ), true );
+    moves.reset();
+    pos.genBlackKingQuiets( moves );
+    TESTEQ( "blackKingQuiets", moves.asStr(), 
+        "3:b1a1 b1c1 b1c2" );
+
+    //
+    //  Test black king captures
+    //
+    TESTEQ( "blackKingCapturesFen", pos.parseFen( 
+        "6R1/5ppk/6Pp/8/8/8/8/8 b - - 0 1", errorText ), true );
+    moves.reset();
+    pos.genBlackKingCaptures( moves );
+    TESTEQ( "blackKingCaptures", moves.asStr(), "2:h7g6 h7g8" );
+
     endSuite();
 }
 

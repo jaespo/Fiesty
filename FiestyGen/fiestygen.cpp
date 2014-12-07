@@ -6,7 +6,7 @@
 #include "bitboard.h"
 #include "fiestygen.h"
 
-#define BBTRACE 
+// #define BBTRACE 
 
 int main( int argc, const char* argv[] )
 {
