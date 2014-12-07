@@ -6,7 +6,7 @@
 #include "bitboard.h"
 #include "fiestygen.h"
 
-// #define BBTRACE 
+#define BBTRACE 
 
 int main( int argc, const char* argv[] )
 {
@@ -22,6 +22,7 @@ int main( int argc, const char* argv[] )
 void CFiestyGen::generate()
 {
     genKnightAttacks();
+    genKingAttacks();
     genRookRays();
     genBishopRays();
 }
@@ -106,6 +107,37 @@ void CFiestyGen::genBishopRays()
             std::cout << ", ";
     }
     std::cout << "};\n" << std::flush;
+}
+
+///
+/// Generates source code for the king moves
+///
+void CFiestyGen::genKingAttacks()
+{
+    std::cout << "const YBitBoard CGen::mbbKingAttacks[CSqix::kNumSquares] = {";
+    for ( U8 sq =  0; sq < CSqix::kNumSquares; sq++ )
+    {
+        CSqix sqix( sq );
+        S8 r = S8( sqix.getRank().get() );
+        S8 f = S8( sqix.getFile().get() );
+        CBitBoard bb( 0ULL );
+        bb.setIfValid( r + 1, f - 1 );
+        bb.setIfValid( r + 1, f );
+        bb.setIfValid( r + 1, f + 1 );
+        bb.setIfValid( r, f - 1 );
+        bb.setIfValid( r, f + 1 );
+        bb.setIfValid( r - 1, f - 1 );
+        bb.setIfValid( r - 1, f );
+        bb.setIfValid( r - 1, f + 1 );
+#ifdef BBTRACE
+        printBitBoardDiagram( sqix.asAbbr(), bb );
+#endif
+        std::cout << "\n    /* " << sqix.asAbbr() << " */ ";
+        std::cout << bb.asAbbr() << "ULL";
+        if( sq != CSqix::kNumSquares - 1 ) 
+            std::cout << ",";
+    }
+    std::cout << " };\n" << std::flush;
 }
 
 ///

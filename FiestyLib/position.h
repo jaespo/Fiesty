@@ -172,7 +172,6 @@ public:
 
     void makeMove( CMove m );                           //TODO: code me
     void unmakeMove( CMove m );                         //TODO: code me
-      
 
     ///
     /// @returns the bitmask of unoccupied squares in the specified bitboard

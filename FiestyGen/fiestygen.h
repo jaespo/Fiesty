@@ -20,6 +20,7 @@ public:
     static void generate();
 
 private: 
+    static void genKingAttacks();
     static void genKnightAttacks();
 	static void genRookRays();
 	static void genBishopRays();

@@ -47,6 +47,11 @@ public:
     static const YBitBoard      mbbKnightAttacks[CSqix::kNumSquares];
 
     //
+    //  For each square, a bit board of the squares a king attacks
+    //
+    static const YBitBoard      mbbKingAttacks[CSqix::kNumSquares];
+
+    //
     //  For each square, a bit board of the ray from that square to the 
     //  edge of the board (not including the indexed square).
     //
