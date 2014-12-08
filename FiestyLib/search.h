@@ -28,6 +28,7 @@ class CSearch
 public:
     CSearch( CPos& rPos ) { mpPos = &rPos; }
     void determineBestMove( CMove& rBestMoves ); // Todo ...
+    U64 perft( U16 depthLeft ); // Todo
 
 private:
     CPos*           mpPos;

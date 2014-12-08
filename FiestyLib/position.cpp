@@ -1,4 +1,3 @@
-///
 /// file position.cpp
 ///
 /// Fiesty (C) 2014 by Jeffery A Esposito

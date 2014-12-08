@@ -35,6 +35,7 @@
     <ClCompile Include="move.cpp" />
     <ClCompile Include="piece.cpp" />
     <ClCompile Include="position.cpp" />
+    <ClCompile Include="search.cpp" />
     <ClCompile Include="square.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -167,9 +167,10 @@ public:
     void genBlackKingQuiets( CMoves& rMoves );
     void genBlackKingCaptures( CMoves& rMoves );
 
-    void genMoves( CMoves& rMoves );                    //TODO: code me
     void genLegalMoves( CMoves& rMoves );               //TODO: code me
-
+    void genCheckers();                                 //TODO:
+    void genMoves( CMoves& rMoves );                    //TODO: code me
+    
     void makeMove( CMove m );                           //TODO: code me
     void unmakeMove( CMove m );                         //TODO: code me
 
@@ -227,6 +228,7 @@ private:
     CPiece          mBoard[U8( ERank::kNum ) * U8( EFile::kNum )];
     CBitBoard       mbbPieceType[EPieceType::kNum];
     CBitBoard       mbbColor[EColor::kNum];
+    CBitBoard       mbbCheckers;
 
     static std::string nextFenTok( 
         const std::string &sFen, size_t &rPos );
