@@ -167,8 +167,9 @@ public:
     void genBlackKingQuiets( CMoves& rMoves );
     void genBlackKingCaptures( CMoves& rMoves );
 
+    void findWhiteCheckers();
+    void findBlackCheckers();
     void genLegalMoves( CMoves& rMoves );               //TODO: code me
-    void genCheckers();                                 //TODO:
     void genMoves( CMoves& rMoves );                    //TODO: code me
     
     void makeMove( CMove m );                           //TODO: code me
@@ -219,6 +220,16 @@ private:
     void genWhiteBishopQuietsFrom( CMoves& rMoves, CBitBoard bbFrom );
     void genWhiteRookCapturesFrom( CMoves& rMoves, CBitBoard bbFrom );
     void genWhiteRookQuietsFrom( CMoves& rMoves, CBitBoard bbFrom );
+
+    void findWhiteKnightCheckers(); // TODO
+    void findWhiteRankAndFileCheckers(); // TODO
+    void findWhiteDiagonalCheckers(); // TODO
+    void findWhitePawnCheckers(); // TODO
+
+    void findBlackKnightCheckers(); // todo
+    void findBlackRankAndFileCheckers(); // todo
+    void findBlackDiagonalCheckers(); // todo
+    void findBlackPawnCheckers(); // todo
 
     CColor          mWhoseMove;
     U8              mHalfMoveClock;                 // for 50 move rule

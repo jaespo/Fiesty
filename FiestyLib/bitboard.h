@@ -77,6 +77,11 @@ public:
     }
 
     ///
+    /// @returns the number of bits set in the bitboard
+    ///
+    U64 popcnt() { return __popcnt64( mBitBoard ); }
+
+    ///
     /// @returns the square index of the least significan bit
     /// 
     CSqix lsb() const

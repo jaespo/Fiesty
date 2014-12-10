@@ -71,7 +71,9 @@ public:
     void reset() { mNumMoves = 0; }
 
     void addMove( CMove m ) { mMoves[mNumMoves++] = m; }
-    std::uint8_t getNumMoves() const { return mNumMoves; }
+    U8 getNumMoves() const { return mNumMoves; }
+    CMove get( U16 ix ) { return mMoves[ix]; }
+
     std::string asStr() const { return asAbbr(); }
     std::string asAbbr() const;
 

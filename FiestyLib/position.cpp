@@ -252,10 +252,14 @@ void CPos::genBlackBishopQuietsFrom( CMoves& rMoves, CBitBoard bbFrom )
         //  each of the four directions.  (The bishop's square is not included
         //  in these rays.)
         //
-        CBitBoard bbNorthEastRay = CGen::mbbBishopRays[fromSqix.get()].mbbNorthEast;
-        CBitBoard bbSouthEastRay = CGen::mbbBishopRays[fromSqix.get()].mbbSouthEast;
-        CBitBoard bbSouthWestRay = CGen::mbbBishopRays[fromSqix.get()].mbbSouthWest;
-        CBitBoard bbNorthWestRay = CGen::mbbBishopRays[fromSqix.get()].mbbNorthWest;
+        CBitBoard bbNorthEastRay 
+            = CGen::mbbBishopRays[fromSqix.get()].mbbNorthEast;
+        CBitBoard bbSouthEastRay 
+            = CGen::mbbBishopRays[fromSqix.get()].mbbSouthEast;
+        CBitBoard bbSouthWestRay 
+            = CGen::mbbBishopRays[fromSqix.get()].mbbSouthWest;
+        CBitBoard bbNorthWestRay 
+            = CGen::mbbBishopRays[fromSqix.get()].mbbNorthWest;
 
         //
         //  For each of thes rays, find the blocker (if any) and mask off
@@ -292,6 +296,21 @@ void CPos::genBlackBishopQuietsFrom( CMoves& rMoves, CBitBoard bbFrom )
             rMoves.addMove( CMove( fromSqix, toSqix ) );
         }
     }
+}
+
+///
+/// finds the black pieces giving check to the white king and saves it in 
+/// mbbCheckers.
+///
+void CPos::findBlackCheckers()
+{
+    mbbCheckers = 0ULL;
+    findBlackRankAndFileCheckers();
+    findBlackDiagonalCheckers();
+    if ( mbbCheckers.popcnt() < 2 )
+        findBlackKnightCheckers();
+    if ( mbbCheckers.popcnt() < 2 )
+        findBlackPawnCheckers();
 }
 
 ///
@@ -684,6 +703,21 @@ void CPos::genBlackRookQuietsFrom( CMoves& rMoves, CBitBoard bbFrom )
             rMoves.addMove( CMove( fromSqix, toSqix ) );
         }
     }
+}
+
+///
+/// finds the white pieces giving check to the black king 
+/// and saves it in mbbCheckers.
+///
+void CPos::findWhiteCheckers()
+{
+    mbbCheckers = 0ULL;
+    findWhiteRankAndFileCheckers();
+    findWhiteDiagonalCheckers();
+    if ( mbbCheckers.popcnt() < 2 )
+        findWhiteKnightCheckers();
+    if ( mbbCheckers.popcnt() < 2 )
+        findWhitePawnCheckers();
 }
 
 ///
