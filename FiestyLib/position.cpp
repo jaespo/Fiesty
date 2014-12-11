@@ -136,6 +136,36 @@ void CPos::clearBoard()
 }
 
 ///
+/// finds the black pieces giving check to the white king 
+/// and saves them in mbbCheckers.
+///
+void CPos::findWhiteCheckers()
+{
+    mbbCheckers = 0ULL;
+    findWhiteRankAndFileCheckers();
+    findWhiteDiagonalCheckers();
+    if ( mbbCheckers.popcnt() < 2 )
+        findWhiteKnightCheckers();
+    if ( mbbCheckers.popcnt() < 2 )
+        findWhitePawnCheckers();
+}
+
+///
+/// finds the white pieces giving check to the black king 
+/// and saves them in mbbCheckers.
+///
+void CPos::findWhiteCheckers()
+{
+    mbbCheckers = 0ULL;
+    findWhiteRankAndFileCheckers();
+    findWhiteDiagonalCheckers();
+    if ( mbbCheckers.popcnt() < 2 )
+        findWhiteKnightCheckers();
+    if ( mbbCheckers.popcnt() < 2 )
+        findWhitePawnCheckers();
+}
+
+///
 /// generates bishop captures for black
 ///
 /// @param rMoves
@@ -296,21 +326,6 @@ void CPos::genBlackBishopQuietsFrom( CMoves& rMoves, CBitBoard bbFrom )
             rMoves.addMove( CMove( fromSqix, toSqix ) );
         }
     }
-}
-
-///
-/// finds the black pieces giving check to the white king and saves it in 
-/// mbbCheckers.
-///
-void CPos::findBlackCheckers()
-{
-    mbbCheckers = 0ULL;
-    findBlackRankAndFileCheckers();
-    findBlackDiagonalCheckers();
-    if ( mbbCheckers.popcnt() < 2 )
-        findBlackKnightCheckers();
-    if ( mbbCheckers.popcnt() < 2 )
-        findBlackPawnCheckers();
 }
 
 ///
@@ -705,20 +720,7 @@ void CPos::genBlackRookQuietsFrom( CMoves& rMoves, CBitBoard bbFrom )
     }
 }
 
-///
-/// finds the white pieces giving check to the black king 
-/// and saves it in mbbCheckers.
-///
-void CPos::findWhiteCheckers()
-{
-    mbbCheckers = 0ULL;
-    findWhiteRankAndFileCheckers();
-    findWhiteDiagonalCheckers();
-    if ( mbbCheckers.popcnt() < 2 )
-        findWhiteKnightCheckers();
-    if ( mbbCheckers.popcnt() < 2 )
-        findWhitePawnCheckers();
-}
+    void genLegalMoves( CMoves& rMoves );               //TODO: code me
 
 ///
 /// generates bishop captures for white
