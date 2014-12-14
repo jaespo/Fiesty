@@ -169,6 +169,7 @@ public:
 
     void findWhiteCheckers();
     void findBlackCheckers();
+
     void genLegalMoves( CMoves& rMoves );               //TODO: code me
     void genMoves( CMoves& rMoves );                    //TODO: code me
     
@@ -221,15 +222,15 @@ private:
     void genWhiteRookCapturesFrom( CMoves& rMoves, CBitBoard bbFrom );
     void genWhiteRookQuietsFrom( CMoves& rMoves, CBitBoard bbFrom );
 
-    void findWhiteKnightCheckers(); // TODO
-    void findWhiteRankAndFileCheckers(); // TODO
-    void findWhiteDiagonalCheckers(); // TODO
-    void findWhitePawnCheckers(); // TODO
+    void findWhiteKnightCheckers( CSqix kingSqix ); // TODO
+    void findWhiteRankAndFileCheckers( CSqix kingSqix ); // TODO
+    void findWhiteDiagonalCheckers( CSqix kingSqix ); // TODO
+    void findWhitePawnCheckers( CSqix kingSqix ); // TODO
 
-    void findBlackKnightCheckers(); // todo
-    void findBlackRankAndFileCheckers(); // todo
-    void findBlackDiagonalCheckers(); // todo
-    void findBlackPawnCheckers(); // todo
+    void findBlackKnightCheckers( CSqix kingSqix ); // todo
+    void findBlackRankAndFileCheckers( CSqix kingSqix ); // todo
+    void findBlackDiagonalCheckers( CSqix kingSqix ); // todo
+    void findBlackPawnCheckers( CSqix kingSqix ); // todo
 
     CColor          mWhoseMove;
     U8              mHalfMoveClock;                 // for 50 move rule

@@ -139,15 +139,26 @@ void CPos::clearBoard()
 /// finds the black pieces giving check to the white king 
 /// and saves them in mbbCheckers.
 ///
-void CPos::findWhiteCheckers()
+void CPos::findBlackCheckers()
 {
     mbbCheckers = 0ULL;
-    findWhiteRankAndFileCheckers();
-    findWhiteDiagonalCheckers();
+
+    CSqix kingSqix = getPieces( EColor::kWhite, EPieceType::kKing ).msb();
+    findBlackRankAndFileCheckers( kingSqix );
+    findBlackDiagonalCheckers( kingSqix );
     if ( mbbCheckers.popcnt() < 2 )
-        findWhiteKnightCheckers();
+        findBlackKnightCheckers( kingSqix );
     if ( mbbCheckers.popcnt() < 2 )
-        findWhitePawnCheckers();
+        findBlackPawnCheckers( kingSqix );
+}
+
+///
+/// finds white knights giving check to the black king
+///
+void CPos::findWhiteKnightCheckers( CSqix kingSqix )
+{
+    CBitBoard bbKnights = getPieces( EColor::kWhite, EPieceType::kKnight );
+    mbbCheckers |= ( CGen::mbbKnightAttacks[kingSqix.get()] & bbKnights.get() );
 }
 
 ///
@@ -156,13 +167,14 @@ void CPos::findWhiteCheckers()
 ///
 void CPos::findWhiteCheckers()
 {
+    CSqix kingSqix = getPieces( EColor::kBlack, EPieceType::kKing ).msb();
     mbbCheckers = 0ULL;
-    findWhiteRankAndFileCheckers();
-    findWhiteDiagonalCheckers();
+    findWhiteRankAndFileCheckers( kingSqix );
+    findWhiteDiagonalCheckers( kingSqix );
     if ( mbbCheckers.popcnt() < 2 )
-        findWhiteKnightCheckers();
+        findWhiteKnightCheckers( kingSqix );
     if ( mbbCheckers.popcnt() < 2 )
-        findWhitePawnCheckers();
+        findWhitePawnCheckers( kingSqix );
 }
 
 ///
@@ -173,13 +185,7 @@ void CPos::findWhiteCheckers()
 ///
 void CPos::genBlackBishopCaptures( CMoves& rMoves )
 {
-    CSqix           toSqix;
-    CSqix           fromSqix;
-    CSqix           blockerSqix;
-    CBitBoard       bbOccRay;
-   
-    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kBishop )].get() 
-        & mbbColor[U8( EColor::kBlack )].get();
+    CBitBoard bbFrom = getPieces( EColor::kBlack, EPieceType::kBishop );
     genBlackBishopCapturesFrom( rMoves, bbFrom );
 }
 
@@ -205,10 +211,14 @@ void CPos::genBlackBishopCapturesFrom( CMoves& rMoves, CBitBoard bbFrom )
         //  each of the four directions.  (The rook's square is not included
         //  in these rays.
         //
-        CBitBoard bbNorthEastRay = CGen::mbbBishopRays[fromSqix.get()].mbbNorthEast;
-        CBitBoard bbSouthEastRay = CGen::mbbBishopRays[fromSqix.get()].mbbSouthEast;
-        CBitBoard bbSouthWestRay = CGen::mbbBishopRays[fromSqix.get()].mbbSouthWest;
-        CBitBoard bbNorthWestRay = CGen::mbbBishopRays[fromSqix.get()].mbbNorthWest;
+        CBitBoard bbNorthEastRay 
+            = CGen::mbbBishopRays[fromSqix.get()].mbbNorthEast;
+        CBitBoard bbSouthEastRay 
+            = CGen::mbbBishopRays[fromSqix.get()].mbbSouthEast;
+        CBitBoard bbSouthWestRay 
+            = CGen::mbbBishopRays[fromSqix.get()].mbbSouthWest;
+        CBitBoard bbNorthWestRay 
+            = CGen::mbbBishopRays[fromSqix.get()].mbbNorthWest;
         
 
         //
@@ -250,13 +260,7 @@ void CPos::genBlackBishopCapturesFrom( CMoves& rMoves, CBitBoard bbFrom )
 ///
 void CPos::genBlackBishopQuiets( CMoves& rMoves )
 {
-    CSqix           toSqix;
-    CSqix           fromSqix;
-    CSqix           blockerSqix;
-    CBitBoard       bbOccRay;
-   
-    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kBishop )].get() 
-        & mbbColor[U8( EColor::kBlack )].get();
+    CBitBoard bbFrom = getPieces( EColor::kBlack, EPieceType::kBishop );
     genBlackBishopQuietsFrom( rMoves, bbFrom );
 }
 
@@ -339,8 +343,7 @@ void CPos::genBlackKnightQuiets( CMoves& rMoves )
     CSqix           toSqix;
     CSqix           fromSqix;
    
-    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kKnight )].get() 
-        & mbbColor[U8( EColor::kBlack )].get();
+    CBitBoard bbFrom = getPieces( EColor::kBlack, EPieceType::kKnight );
     while ( bbFrom.get() )
     {
         fromSqix = bbFrom.popLsb(); 
@@ -364,18 +367,14 @@ void CPos::genBlackKingCaptures( CMoves& rMoves )
     CSqix           toSqix;
     CSqix           fromSqix;
    
-    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kKing )].get() 
-        & mbbColor[U8( EColor::kBlack )].get();
-    while ( bbFrom.get() )
+    CBitBoard bbFrom = getPieces( EColor::kBlack, EPieceType::kKing );
+    fromSqix = bbFrom.lsb(); 
+    CBitBoard bbTo = CGen::mbbKingAttacks[fromSqix.get()] 
+        & mbbColor[U8( EColor::kWhite )].get();
+    while ( bbTo.get() )
     {
-        fromSqix = bbFrom.popLsb(); 
-        CBitBoard bbTo = CGen::mbbKingAttacks[fromSqix.get()] 
-            & mbbColor[U8( EColor::kWhite )].get();
-        while ( bbTo.get() )
-        {
-            toSqix = bbTo.popLsb(); 
-            rMoves.addMove( CMove( fromSqix, toSqix ) );
-        }
+        toSqix = bbTo.popLsb(); 
+        rMoves.addMove( CMove( fromSqix, toSqix ) );
     }
 }
 
@@ -390,17 +389,13 @@ void CPos::genBlackKingQuiets( CMoves& rMoves )
     CSqix           toSqix;
     CSqix           fromSqix;
    
-    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kKing )].get() 
-        & mbbColor[U8( EColor::kBlack )].get();
-    while ( bbFrom.get() )
+    CBitBoard bbFrom = getPieces( EColor::kBlack, EPieceType::kKing );
+    fromSqix = bbFrom.lsb(); 
+    CBitBoard bbTo = unoccupied( CGen::mbbKingAttacks[fromSqix.get()] );
+    while ( bbTo.get() )
     {
-        fromSqix = bbFrom.popLsb(); 
-        CBitBoard bbTo = unoccupied( CGen::mbbKingAttacks[fromSqix.get()] );
-        while ( bbTo.get() )
-        {
-            toSqix = bbTo.popLsb(); 
-            rMoves.addMove( CMove( fromSqix, toSqix ) );
-        }
+        toSqix = bbTo.popLsb(); 
+        rMoves.addMove( CMove( fromSqix, toSqix ) );
     }
 }
 
@@ -416,8 +411,7 @@ void CPos::genBlackKnightCaptures( CMoves& rMoves )
     CSqix           toSqix;
     CSqix           fromSqix;
    
-    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kKnight )].get() 
-        & mbbColor[U8( EColor::kBlack )].get();
+    CBitBoard bbFrom = getPieces( EColor::kBlack, EPieceType::kKnight );
     while ( bbFrom.get() )
     {
         fromSqix = bbFrom.popLsb(); 
@@ -442,8 +436,8 @@ void CPos::genBlackPawnCaptures( CMoves& rMoves )
     CSqix           toSqix;
     CSqix           fromSqix;
    
-    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kPawn )].get() 
-        & mbbColor[U8( EColor::kBlack )].get();
+    CBitBoard bbFrom = getPieces( EColor::kBlack, EPieceType::kPawn );
+
     //
     //  We can capture on squares that have a white piece or that have just
     //  passed by (for an en-passant).
@@ -471,10 +465,14 @@ void CPos::genBlackPawnCaptures( CMoves& rMoves )
             {
                 if ( toSqix.getRank().get() == ERank::kRank1 )
                 {
-                    rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kQueen ) );
-                    rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kRook ) );
-                    rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kBishop ) );
-                    rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kKnight ) );
+                    rMoves.addMove( 
+                        CMove( fromSqix, toSqix, EPieceType::kQueen ) );
+                    rMoves.addMove( 
+                        CMove( fromSqix, toSqix, EPieceType::kRook ) );
+                    rMoves.addMove( 
+                        CMove( fromSqix, toSqix, EPieceType::kBishop ) );
+                    rMoves.addMove( 
+                        CMove( fromSqix, toSqix, EPieceType::kKnight ) );
                 }
                 else
                 {
@@ -493,10 +491,14 @@ void CPos::genBlackPawnCaptures( CMoves& rMoves )
             {
                 if ( toSqix.getRank().get() == ERank::kRank1 )
                 {
-                    rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kQueen ) );
-                    rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kRook ) );
-                    rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kBishop ) );
-                    rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kKnight ) );
+                    rMoves.addMove( 
+                        CMove( fromSqix, toSqix, EPieceType::kQueen ) );
+                    rMoves.addMove( 
+                        CMove( fromSqix, toSqix, EPieceType::kRook ) );
+                    rMoves.addMove( 
+                        CMove( fromSqix, toSqix, EPieceType::kBishop ) );
+                    rMoves.addMove( 
+                        CMove( fromSqix, toSqix, EPieceType::kKnight ) );
                 }
                 else
                 {
@@ -522,8 +524,7 @@ void CPos::genBlackPawnQuiets( CMoves& rMoves )
     //
     //  Start with the single pushes
     //
-    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kPawn )].get() 
-        & mbbColor[U8( EColor::kBlack )].get();
+    CBitBoard bbFrom = getPieces( EColor::kBlack, EPieceType::kPawn );
     CBitBoard bbPop = bbTo = unoccupied( bbFrom.retreatRanks( 1 ) );
     while ( bbPop.get() )
     {
@@ -562,13 +563,7 @@ void CPos::genBlackPawnQuiets( CMoves& rMoves )
 ///
 void CPos::genBlackRookCaptures( CMoves& rMoves )
 {
-    CSqix           toSqix;
-    CSqix           fromSqix;
-    CSqix           blockerSqix;
-    CBitBoard       bbOccRay;
-   
-    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kRook )].get() 
-        & mbbColor[U8( EColor::kBlack )].get();
+    CBitBoard bbFrom = getPieces( EColor::kBlack, EPieceType::kRook );
     genBlackRookCapturesFrom( rMoves, bbFrom );
 }
 
@@ -666,8 +661,7 @@ void CPos::genBlackQueenQuiets( CMoves& rMoves )
 ///
 void CPos::genBlackRookQuiets( CMoves& rMoves )
 {
-    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kRook )].get() 
-        & mbbColor[U8( EColor::kBlack )].get();
+    CBitBoard bbFrom = getPieces( EColor::kBlack, EPieceType::kRook );
     genBlackRookQuietsFrom( rMoves, bbFrom );
 }
 
@@ -720,8 +714,6 @@ void CPos::genBlackRookQuietsFrom( CMoves& rMoves, CBitBoard bbFrom )
     }
 }
 
-    void genLegalMoves( CMoves& rMoves );               //TODO: code me
-
 ///
 /// generates bishop captures for white
 ///
@@ -730,8 +722,7 @@ void CPos::genBlackRookQuietsFrom( CMoves& rMoves, CBitBoard bbFrom )
 ///
 void CPos::genWhiteBishopCaptures( CMoves& rMoves )
 {
-    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kBishop )].get() 
-        & mbbColor[U8( EColor::kWhite )].get();
+    CBitBoard bbFrom = getPieces( EColor::kWhite, EPieceType::kBishop );
     genWhiteBishopCapturesFrom( rMoves, bbFrom );
 }
 
@@ -809,13 +800,7 @@ void CPos::genWhiteBishopCapturesFrom( CMoves& rMoves, CBitBoard bbFrom )
 ///
 void CPos::genWhiteBishopQuiets( CMoves& rMoves )
 {
-    CSqix           toSqix;
-    CSqix           fromSqix;
-    CSqix           blockerSqix;
-    CBitBoard       bbOccRay;
-   
-    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kBishop )].get() 
-        & mbbColor[U8( EColor::kWhite )].get();
+    CBitBoard bbFrom = getPieces( EColor::kWhite, EPieceType::kBishop );
     genWhiteBishopQuietsFrom( rMoves, bbFrom );
 }
 
@@ -901,18 +886,14 @@ void CPos::genWhiteKingCaptures( CMoves& rMoves )
     CSqix           toSqix;
     CSqix           fromSqix;
    
-    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kKing )].get() 
-        & mbbColor[U8( EColor::kWhite )].get();
-    while ( bbFrom.get() )
+    CBitBoard bbFrom = getPieces( EColor::kWhite, EPieceType::kKing );
+    fromSqix = bbFrom.msb(); 
+    CBitBoard bbTo = CGen::mbbKingAttacks[fromSqix.get()] 
+        & mbbColor[U8( EColor::kBlack )].get();
+    while ( bbTo.get() )
     {
-        fromSqix = bbFrom.popMsb(); 
-        CBitBoard bbTo = CGen::mbbKingAttacks[fromSqix.get()] 
-            & mbbColor[U8( EColor::kBlack )].get();
-        while ( bbTo.get() )
-        {
-            toSqix = bbTo.popMsb(); 
-            rMoves.addMove( CMove( fromSqix, toSqix ) );
-        }
+        toSqix = bbTo.popMsb(); 
+        rMoves.addMove( CMove( fromSqix, toSqix ) );
     }
 }
 
@@ -927,17 +908,13 @@ void CPos::genWhiteKingQuiets( CMoves& rMoves )
     CSqix           toSqix;
     CSqix           fromSqix;
    
-    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kKing )].get() 
-        & mbbColor[U8( EColor::kWhite )].get();
-    while ( bbFrom.get() )
+    CBitBoard bbFrom = getPieces( EColor::kWhite, EPieceType::kKing );
+    fromSqix = bbFrom.msb(); 
+    CBitBoard bbTo = unoccupied( CGen::mbbKingAttacks[fromSqix.get()] );
+    while ( bbTo.get() )
     {
-        fromSqix = bbFrom.popMsb(); 
-        CBitBoard bbTo = unoccupied( CGen::mbbKingAttacks[fromSqix.get()] );
-        while ( bbTo.get() )
-        {
-            toSqix = bbTo.popMsb(); 
-            rMoves.addMove( CMove( fromSqix, toSqix ) );
-        }
+        toSqix = bbTo.popMsb(); 
+        rMoves.addMove( CMove( fromSqix, toSqix ) );
     }
 }
 
@@ -952,8 +929,7 @@ void CPos::genWhiteKnightCaptures( CMoves& rMoves )
     CSqix           toSqix;
     CSqix           fromSqix;
    
-    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kKnight )].get() 
-        & mbbColor[U8( EColor::kWhite )].get();
+    CBitBoard bbFrom = getPieces( EColor::kWhite, EPieceType::kKnight );
     while ( bbFrom.get() )
     {
         fromSqix = bbFrom.popMsb(); 
@@ -978,8 +954,7 @@ void CPos::genWhiteKnightQuiets( CMoves& rMoves )
     CSqix           toSqix;
     CSqix           fromSqix;
    
-    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kKnight )].get() 
-        & mbbColor[U8( EColor::kWhite )].get();
+    CBitBoard bbFrom = getPieces( EColor::kWhite, EPieceType::kKnight );
     while ( bbFrom.get() )
     {
         fromSqix = bbFrom.popMsb(); 
@@ -1003,8 +978,8 @@ void CPos::genWhitePawnCaptures( CMoves& rMoves )
     CSqix           toSqix;
     CSqix           fromSqix;
    
-    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kPawn )].get() 
-        & mbbColor[U8( EColor::kWhite )].get();
+    CBitBoard bbFrom = getPieces( EColor::kWhite, EPieceType::kPawn );
+
     //
     //  We can capture on squares that have a black piece or that have just
     //  passed by (for an en-passant).
@@ -1031,10 +1006,14 @@ void CPos::genWhitePawnCaptures( CMoves& rMoves )
             {
                 if ( toSqix.getRank().get() == ERank::kRank8 )
                 {
-                    rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kQueen ) );
-                    rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kRook ) );
-                    rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kBishop ) );
-                    rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kKnight ) );
+                    rMoves.addMove( 
+                        CMove( fromSqix, toSqix, EPieceType::kQueen ) );
+                    rMoves.addMove( 
+                        CMove( fromSqix, toSqix, EPieceType::kRook ) );
+                    rMoves.addMove( 
+                        CMove( fromSqix, toSqix, EPieceType::kBishop ) );
+                    rMoves.addMove( 
+                        CMove( fromSqix, toSqix, EPieceType::kKnight ) );
                 }
                 else
                 {
@@ -1053,10 +1032,14 @@ void CPos::genWhitePawnCaptures( CMoves& rMoves )
             {
                 if ( toSqix.getRank().get() == ERank::kRank8 )
                 {
-                    rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kQueen ) );
-                    rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kRook ) );
-                    rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kBishop ) );
-                    rMoves.addMove( CMove( fromSqix, toSqix, EPieceType::kKnight ) );
+                    rMoves.addMove( 
+                        CMove( fromSqix, toSqix, EPieceType::kQueen ) );
+                    rMoves.addMove( 
+                        CMove( fromSqix, toSqix, EPieceType::kRook ) );
+                    rMoves.addMove( 
+                        CMove( fromSqix, toSqix, EPieceType::kBishop ) );
+                    rMoves.addMove( 
+                        CMove( fromSqix, toSqix, EPieceType::kKnight ) );
                 }
                 else
                 {
@@ -1082,8 +1065,7 @@ void CPos::genWhitePawnQuiets( CMoves& rMoves )
     //
     //  Start with the single pushes
     //
-    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kPawn )].get() 
-        & mbbColor[U8( EColor::kWhite )].get();
+    CBitBoard bbFrom = getPieces( EColor::kWhite, EPieceType::kPawn );
     CBitBoard bbPop = bbTo = unoccupied( bbFrom.advanceRanks( 1 ) );
     while ( bbPop.get() )
     {
@@ -1122,8 +1104,10 @@ void CPos::genWhitePawnQuiets( CMoves& rMoves )
 ///
 void CPos::genWhiteQueenCaptures( CMoves& rMoves )
 {
-    genWhiteRookCapturesFrom( rMoves, getPieces( EColor::kWhite, EPieceType::kQueen ) );
-    genWhiteBishopCapturesFrom( rMoves, getPieces( EColor::kWhite, EPieceType::kQueen ) );
+    genWhiteRookCapturesFrom( rMoves, 
+        getPieces( EColor::kWhite, EPieceType::kQueen ) );
+    genWhiteBishopCapturesFrom( rMoves, 
+        getPieces( EColor::kWhite, EPieceType::kQueen ) );
 }
 
 ///
@@ -1134,8 +1118,10 @@ void CPos::genWhiteQueenCaptures( CMoves& rMoves )
 ///
 void CPos::genWhiteQueenQuiets( CMoves& rMoves )
 {
-    genWhiteRookQuietsFrom( rMoves, getPieces( EColor::kWhite, EPieceType::kQueen ) );
-    genWhiteBishopQuietsFrom( rMoves, getPieces( EColor::kWhite, EPieceType::kQueen ) );
+    genWhiteRookQuietsFrom( rMoves, 
+        getPieces( EColor::kWhite, EPieceType::kQueen ) );
+    genWhiteBishopQuietsFrom( rMoves, 
+        getPieces( EColor::kWhite, EPieceType::kQueen ) );
 }
 
 ///
@@ -1204,13 +1190,7 @@ void CPos::genWhiteRookCapturesFrom( CMoves& rMoves, CBitBoard bbFrom )
 ///
 void CPos::genWhiteRookCaptures( CMoves& rMoves )
 {
-    CSqix           toSqix;
-    CSqix           fromSqix;
-    CSqix           blockerSqix;
-    CBitBoard       bbOccRay;
-   
-    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kRook )].get() 
-        & mbbColor[U8( EColor::kWhite )].get();
+    CBitBoard bbFrom = getPieces( EColor::kWhite, EPieceType::kRook );
     genWhiteRookCapturesFrom( rMoves, bbFrom );
 }
 
@@ -1222,8 +1202,7 @@ void CPos::genWhiteRookCaptures( CMoves& rMoves )
 ///
 void CPos::genWhiteRookQuiets( CMoves& rMoves )
 {
-    CBitBoard bbFrom = mbbPieceType[U8( EPieceType::kRook )].get() 
-        & mbbColor[U8( EColor::kWhite )].get();
+    CBitBoard bbFrom = getPieces( EColor::kWhite, EPieceType::kRook );
     genWhiteRookQuietsFrom( rMoves, bbFrom );
 }
 
