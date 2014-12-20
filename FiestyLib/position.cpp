@@ -153,6 +153,15 @@ void CPos::findBlackCheckers()
 }
 
 ///
+/// finds black knights giving check to the white king
+///
+void CPos::findBlackKnightCheckers( CSqix kingSqix )
+{
+    CBitBoard bbKnights = getPieces( EColor::kBlack, EPieceType::kKnight );
+    mbbCheckers |= ( CGen::mbbKnightAttacks[kingSqix.get()] & bbKnights.get() );
+}
+
+///
 /// finds white knights giving check to the black king
 ///
 void CPos::findWhiteKnightCheckers( CSqix kingSqix )
