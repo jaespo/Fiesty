@@ -162,15 +162,6 @@ void CPos::findBlackKnightCheckers( CSqix kingSqix )
 }
 
 ///
-/// finds white knights giving check to the black king
-///
-void CPos::findWhiteKnightCheckers( CSqix kingSqix )
-{
-    CBitBoard bbKnights = getPieces( EColor::kWhite, EPieceType::kKnight );
-    mbbCheckers |= ( CGen::mbbKnightAttacks[kingSqix.get()] & bbKnights.get() );
-}
-
-///
 /// finds the white pieces giving check to the black king 
 /// and saves them in mbbCheckers.
 ///
@@ -184,6 +175,82 @@ void CPos::findWhiteCheckers()
         findWhiteKnightCheckers( kingSqix );
     if ( mbbCheckers.popcnt() < 2 )
         findWhitePawnCheckers( kingSqix );
+}
+
+///
+/// finds white knights giving check to the black king
+///
+void CPos::findWhiteKnightCheckers( CSqix kingSqix )
+{
+    CBitBoard bbKnights = getPieces( EColor::kWhite, EPieceType::kKnight );
+    mbbCheckers |= ( CGen::mbbKnightAttacks[kingSqix.get()] & bbKnights.get() );
+}
+
+///
+/// finds white checkers along the rank and file giving check to
+/// the black king.
+//
+void CPos::findWhiteRankAndFileCheckers( CSqix kingSqix )
+{
+	CBitBoard bbRooksAndQueens 
+		= getPieces( EColor::kWhite, EPieceType::kRook ).get()
+		& getPieces( EColor::kWhite, EPieceType::kQueen ).get();
+
+	//
+    //  Get the rays from the rook position to the edge of the board in
+    //  each of the four directions.  (The kings's square is not included
+    //  in these rays.)
+    //
+    CBitBoard bbNorthRay = CGen::mbbRookRays[kingSqix.get()].mbbNorth;
+    CBitBoard bbEastRay = CGen::mbbRookRays[kingSqix.get()].mbbEast;
+    CBitBoard bbWestRay = CGen::mbbRookRays[kingSqix.get()].mbbWest;
+
+    //
+    //  Find the square of the blocking piece in each direction, and if 
+    //  it's black, generate a capture
+    //
+    CBitBoard bbSouthRay = CGen::mbbRookRays[kingSqix.get()].mbbSouth;
+	CBitBoard bbOccRay = occupied( bbSouthRay );
+    if ( bbOccRay.get() )
+    {
+		CSqix toSqix = bbOccRay.msb().get();
+		CBitBoard bbChecker = toSqix.asBitBoard() & bbRooksAndQueens.get();
+		if ( bbChecker.get() )
+		{
+			mbbCheckers |= bbChecker;
+			return;
+		}
+    }
+    if ( ( bbOccRay = occupied( bbEastRay ) ).get() )
+    {
+        CSqix toSqix = bbOccRay.lsb().get();
+		CBitBoard bbChecker = toSqix.asBitBoard() & bbRooksAndQueens.get();
+		if ( bbChecker.get() )
+		{
+			mbbCheckers |= bbChecker;
+			return;
+		}
+    }
+    if ( ( bbOccRay = occupied( bbWestRay ) ).get() )
+    {
+        CSqix toSqix = bbOccRay.msb().get();
+		CBitBoard bbChecker = toSqix.asBitBoard() & bbRooksAndQueens.get();
+		if ( bbChecker.get() )
+		{
+			mbbCheckers |= bbChecker;
+			return;
+		}
+    }
+    if ( ( bbOccRay = occupied( bbNorthRay ) ).get() )
+    {
+        CSqix toSqix = bbOccRay.lsb().get();
+		CBitBoard bbChecker = toSqix.asBitBoard() & bbRooksAndQueens.get();
+		if ( bbChecker.get() )
+		{
+			mbbCheckers |= bbChecker;
+			return;
+		}
+    }
 }
 
 ///

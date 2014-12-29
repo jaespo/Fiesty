@@ -222,12 +222,12 @@ private:
     void genWhiteRookCapturesFrom( CMoves& rMoves, CBitBoard bbFrom );
     void genWhiteRookQuietsFrom( CMoves& rMoves, CBitBoard bbFrom );
 
-    void findWhiteKnightCheckers( CSqix kingSqix ); // TODO
+    void findWhiteKnightCheckers( CSqix kingSqix );
     void findWhiteRankAndFileCheckers( CSqix kingSqix ); // TODO
     void findWhiteDiagonalCheckers( CSqix kingSqix ); // TODO
     void findWhitePawnCheckers( CSqix kingSqix ); // TODO
 
-    void findBlackKnightCheckers( CSqix kingSqix ); // todo
+    void findBlackKnightCheckers( CSqix kingSqix );
     void findBlackRankAndFileCheckers( CSqix kingSqix ); // todo
     void findBlackDiagonalCheckers( CSqix kingSqix ); // todo
     void findBlackPawnCheckers( CSqix kingSqix ); // todo
