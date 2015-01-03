@@ -222,21 +222,22 @@ private:
     void genWhiteRookCapturesFrom( CMoves& rMoves, CBitBoard bbFrom );
     void genWhiteRookQuietsFrom( CMoves& rMoves, CBitBoard bbFrom );
 
+    void findDiagonalCheckers( CSqix kingSqix, CBitBoard bbBishopsAndQueens );
     void findRankAndFileCheckers( CSqix kingSqix, CBitBoard bbRooksAndQueens );
 
     void findWhiteKnightCheckers( CSqix kingSqix );
-    void findWhiteRankAndFileCheckers( CSqix kingSqix ); // TODO
-    void findWhiteDiagonalCheckers( CSqix kingSqix ); // TODO
+    void findWhiteRankAndFileCheckers( CSqix kingSqix );
+    void findWhiteDiagonalCheckers( CSqix kingSqix );
     void findWhitePawnCheckers( CSqix kingSqix ); // TODO
 
     void findBlackKnightCheckers( CSqix kingSqix );
-    void findBlackRankAndFileCheckers( CSqix kingSqix ); // todo
-    void findBlackDiagonalCheckers( CSqix kingSqix ); // todo
+    void findBlackRankAndFileCheckers( CSqix kingSqix );
+    void findBlackDiagonalCheckers( CSqix kingSqix );
     void findBlackPawnCheckers( CSqix kingSqix ); // todo
 
     CColor          mWhoseMove;
     U8              mHalfMoveClock;                 // for 50 move rule
-    U8              mDups;                          // for 3 time repetions
+    U8              mDups;                          // for 3 time repetitions
     CPosRights      mPosRights;
     std::uint16_t   mMoveNum;
     CPiece          mBoard[U8( ERank::kNum ) * U8( EFile::kNum )];

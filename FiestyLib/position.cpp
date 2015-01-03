@@ -153,6 +153,18 @@ void CPos::findBlackCheckers()
 }
 
 ///
+/// finds black checkers along the diagonals giving check to
+/// the white king.
+///
+void CPos::findBlackDiagonalCheckers( CSqix kingSqix )
+{
+	CBitBoard bbBishopsAndQueens 
+		= getPieces( EColor::kWhite, EPieceType::kBishop ).get()
+		& getPieces( EColor::kWhite, EPieceType::kQueen ).get();
+    findDiagonalCheckers( kingSqix, bbBishopsAndQueens );
+}
+
+///
 /// finds black knights giving check to the white king
 ///
 void CPos::findBlackKnightCheckers( CSqix kingSqix )
@@ -186,88 +198,65 @@ void CPos::findDiagonalCheckers(
     //  each of the four directions.  (The kings's square is not included
     //  in these rays.)
     //
+
+    //
+    //  NorthEast
+    //
     CBitBoard bbNorthEastRay 
-        = CGen::mbbBishopRays[fromSqix.get()].mbbNorthEast;
-    CBitBoard bbSouthEastRay 
-        = CGen::mbbBishopRays[fromSqix.get()].mbbSouthEast;
-    CBitBoard bbSouthWestRay 
-        = CGen::mbbBishopRays[fromSqix.get()].mbbSouthWest;
-    CBitBoard bbNorthWestRay 
-        = CGen::mbbBishopRays[fromSqix.get()].mbbNorthWest;
-        
-    //
-    //  Find the square of the blocking piece in each direction, and if 
-    //  it's black, generate a capture
-    //
-    if ( ( bbOccRay = occupied( bbNorthEastRay ) ).get() )
-    {
-        toSqix = bbOccRay.lsb().get();
-        if ( isBlack( toSqix ).get() )
-            rMoves.addMove( CMove( fromSqix, toSqix ) );
-    }
-    if ( ( bbOccRay = occupied( bbNorthWestRay ) ).get() )
-    {
-        toSqix = bbOccRay.lsb().get();
-        if ( isBlack( toSqix ).get() )
-            rMoves.addMove( CMove( fromSqix, toSqix ) );
-    }
-    if ( ( bbOccRay = occupied( bbSouthEastRay ) ).get() )
-    {
-        toSqix = bbOccRay.msb().get();
-        if ( isBlack( toSqix ).get() )
-            rMoves.addMove( CMove( fromSqix, toSqix ) );
-    }
-    if ( ( bbOccRay = occupied( bbSouthWestRay ) ).get() )
-    {
-        toSqix = bbOccRay.msb().get();
-        if ( isBlack( toSqix ).get() )
-            rMoves.addMove( CMove( fromSqix, toSqix ) );
-    }
-
-
-    //
-    //  Find the square of the blocking piece in each direction, and if 
-    //  it's black, generate a capture
-    //
-    CBitBoard bbSouthRay = CGen::mbbRookRays[kingSqix.get()].mbbSouth;
-	CBitBoard bbOccRay = occupied( bbSouthRay );
+        = CGen::mbbBishopRays[kingSqix.get()].mbbNorthEast;
+	CBitBoard bbOccRay = occupied( bbNorthEastRay );
     if ( bbOccRay.get() )
     {
-		CSqix toSqix = bbOccRay.msb().get();
-		CBitBoard bbChecker = toSqix.asBitBoard() & bbRooksAndQueens.get();
+        CSqix toSqix = bbOccRay.lsb().get();
+		CBitBoard bbChecker = toSqix.asBitBoard() & bbBishopsAndQueens.get();
 		if ( bbChecker.get() )
 		{
 			mbbCheckers |= bbChecker;
 			return;
 		}
     }
-    CBitBoard bbEastRay = CGen::mbbRookRays[kingSqix.get()].mbbEast;
-    if ( ( bbOccRay = occupied( bbEastRay ) ).get() )
+
+    //
+    //  NorthWest
+    //
+    CBitBoard bbNorthWestRay 
+        = CGen::mbbBishopRays[kingSqix.get()].mbbNorthWest;
+    if ( ( bbOccRay = occupied( bbNorthWestRay ) ).get() )
     {
         CSqix toSqix = bbOccRay.lsb().get();
-		CBitBoard bbChecker = toSqix.asBitBoard() & bbRooksAndQueens.get();
+		CBitBoard bbChecker = toSqix.asBitBoard() & bbBishopsAndQueens.get();
 		if ( bbChecker.get() )
 		{
 			mbbCheckers |= bbChecker;
 			return;
 		}
     }
-    CBitBoard bbWestRay = CGen::mbbRookRays[kingSqix.get()].mbbWest;
-    if ( ( bbOccRay = occupied( bbWestRay ) ).get() )
+
+    //
+    //  SouthEast
+    //
+    CBitBoard bbSouthEastRay 
+        = CGen::mbbBishopRays[kingSqix.get()].mbbSouthEast;
+    if ( ( bbOccRay = occupied( bbSouthEastRay ) ).get() )
     {
         CSqix toSqix = bbOccRay.msb().get();
-		CBitBoard bbChecker = toSqix.asBitBoard() & bbRooksAndQueens.get();
+		CBitBoard bbChecker = toSqix.asBitBoard() & bbBishopsAndQueens.get();
 		if ( bbChecker.get() )
 		{
 			mbbCheckers |= bbChecker;
 			return;
 		}
     }
-    CBitBoard bbNorthRay = CGen::mbbRookRays[kingSqix.get()].mbbNorth;
-    if ( ( bbOccRay = occupied( bbNorthRay ) ).get() )
+
+    //
+    //  SouthWest
+    //
+    CBitBoard bbSouthWestRay 
+        = CGen::mbbBishopRays[kingSqix.get()].mbbSouthWest;
+    if ( ( bbOccRay = occupied( bbSouthWestRay ) ).get() )
     {
-        CSqix toSqix = bbOccRay.lsb().get();
-		CBitBoard bbChecker = toSqix.asBitBoard() & bbRooksAndQueens.get();
+        CSqix toSqix = bbOccRay.msb().get();
+		CBitBoard bbChecker = toSqix.asBitBoard() & bbBishopsAndQueens.get();
 		if ( bbChecker.get() )
 		{
 			mbbCheckers |= bbChecker;
@@ -275,6 +264,7 @@ void CPos::findDiagonalCheckers(
 		}
     }
 }
+
 ///
 /// finds the checker contained in the bbRooksAndQueens bitboard.  This method
 /// is called from each corresponding color specific method.
