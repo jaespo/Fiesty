@@ -162,48 +162,68 @@ void CPos::findBlackKnightCheckers( CSqix kingSqix )
 }
 
 ///
-/// finds the white pieces giving check to the black king 
-/// and saves them in mbbCheckers.
+/// finds black checkers along the rank and file giving check to
+/// the white king.
 ///
-void CPos::findWhiteCheckers()
-{
-    CSqix kingSqix = getPieces( EColor::kBlack, EPieceType::kKing ).msb();
-    mbbCheckers = 0ULL;
-    findWhiteRankAndFileCheckers( kingSqix );
-    findWhiteDiagonalCheckers( kingSqix );
-    if ( mbbCheckers.popcnt() < 2 )
-        findWhiteKnightCheckers( kingSqix );
-    if ( mbbCheckers.popcnt() < 2 )
-        findWhitePawnCheckers( kingSqix );
-}
-
-///
-/// finds white knights giving check to the black king
-///
-void CPos::findWhiteKnightCheckers( CSqix kingSqix )
-{
-    CBitBoard bbKnights = getPieces( EColor::kWhite, EPieceType::kKnight );
-    mbbCheckers |= ( CGen::mbbKnightAttacks[kingSqix.get()] & bbKnights.get() );
-}
-
-///
-/// finds white checkers along the rank and file giving check to
-/// the black king.
-//
-void CPos::findWhiteRankAndFileCheckers( CSqix kingSqix )
+void CPos::findBlackRankAndFileCheckers( CSqix kingSqix )
 {
 	CBitBoard bbRooksAndQueens 
-		= getPieces( EColor::kWhite, EPieceType::kRook ).get()
-		& getPieces( EColor::kWhite, EPieceType::kQueen ).get();
+		= getPieces( EColor::kBlack, EPieceType::kRook ).get()
+		& getPieces( EColor::kBlack, EPieceType::kQueen ).get();
+    findRankAndFileCheckers( kingSqix, bbRooksAndQueens );
+}
 
+///
+/// finds the checker contained in the bbBishopssAndQueens bitboard.  This 
+/// method is called from each corresponding color specific method.
+///
+void CPos::findDiagonalCheckers( 
+    CSqix           kingSqix, 
+    CBitBoard       bbBishopsAndQueens )
+{
 	//
-    //  Get the rays from the rook position to the edge of the board in
+    //  Get the rays from the king's position to the edge of the board in
     //  each of the four directions.  (The kings's square is not included
     //  in these rays.)
     //
-    CBitBoard bbNorthRay = CGen::mbbRookRays[kingSqix.get()].mbbNorth;
-    CBitBoard bbEastRay = CGen::mbbRookRays[kingSqix.get()].mbbEast;
-    CBitBoard bbWestRay = CGen::mbbRookRays[kingSqix.get()].mbbWest;
+    CBitBoard bbNorthEastRay 
+        = CGen::mbbBishopRays[fromSqix.get()].mbbNorthEast;
+    CBitBoard bbSouthEastRay 
+        = CGen::mbbBishopRays[fromSqix.get()].mbbSouthEast;
+    CBitBoard bbSouthWestRay 
+        = CGen::mbbBishopRays[fromSqix.get()].mbbSouthWest;
+    CBitBoard bbNorthWestRay 
+        = CGen::mbbBishopRays[fromSqix.get()].mbbNorthWest;
+        
+    //
+    //  Find the square of the blocking piece in each direction, and if 
+    //  it's black, generate a capture
+    //
+    if ( ( bbOccRay = occupied( bbNorthEastRay ) ).get() )
+    {
+        toSqix = bbOccRay.lsb().get();
+        if ( isBlack( toSqix ).get() )
+            rMoves.addMove( CMove( fromSqix, toSqix ) );
+    }
+    if ( ( bbOccRay = occupied( bbNorthWestRay ) ).get() )
+    {
+        toSqix = bbOccRay.lsb().get();
+        if ( isBlack( toSqix ).get() )
+            rMoves.addMove( CMove( fromSqix, toSqix ) );
+    }
+    if ( ( bbOccRay = occupied( bbSouthEastRay ) ).get() )
+    {
+        toSqix = bbOccRay.msb().get();
+        if ( isBlack( toSqix ).get() )
+            rMoves.addMove( CMove( fromSqix, toSqix ) );
+    }
+    if ( ( bbOccRay = occupied( bbSouthWestRay ) ).get() )
+    {
+        toSqix = bbOccRay.msb().get();
+        if ( isBlack( toSqix ).get() )
+            rMoves.addMove( CMove( fromSqix, toSqix ) );
+    }
+
 
     //
     //  Find the square of the blocking piece in each direction, and if 
@@ -221,6 +241,7 @@ void CPos::findWhiteRankAndFileCheckers( CSqix kingSqix )
 			return;
 		}
     }
+    CBitBoard bbEastRay = CGen::mbbRookRays[kingSqix.get()].mbbEast;
     if ( ( bbOccRay = occupied( bbEastRay ) ).get() )
     {
         CSqix toSqix = bbOccRay.lsb().get();
@@ -231,6 +252,7 @@ void CPos::findWhiteRankAndFileCheckers( CSqix kingSqix )
 			return;
 		}
     }
+    CBitBoard bbWestRay = CGen::mbbRookRays[kingSqix.get()].mbbWest;
     if ( ( bbOccRay = occupied( bbWestRay ) ).get() )
     {
         CSqix toSqix = bbOccRay.msb().get();
@@ -241,6 +263,7 @@ void CPos::findWhiteRankAndFileCheckers( CSqix kingSqix )
 			return;
 		}
     }
+    CBitBoard bbNorthRay = CGen::mbbRookRays[kingSqix.get()].mbbNorth;
     if ( ( bbOccRay = occupied( bbNorthRay ) ).get() )
     {
         CSqix toSqix = bbOccRay.lsb().get();
@@ -251,6 +274,114 @@ void CPos::findWhiteRankAndFileCheckers( CSqix kingSqix )
 			return;
 		}
     }
+}
+///
+/// finds the checker contained in the bbRooksAndQueens bitboard.  This method
+/// is called from each corresponding color specific method.
+///
+void CPos::findRankAndFileCheckers( 
+    CSqix           kingSqix, 
+    CBitBoard       bbRooksAndQueens )
+{
+	//
+    //  Get the rays from the king's position to the edge of the board in
+    //  each of the four directions.  (The kings's square is not included
+    //  in these rays.)
+    //
+    CBitBoard bbSouthRay = CGen::mbbRookRays[kingSqix.get()].mbbSouth;
+	CBitBoard bbOccRay = occupied( bbSouthRay );
+    if ( bbOccRay.get() )
+    {
+		CSqix toSqix = bbOccRay.msb().get();
+		CBitBoard bbChecker = toSqix.asBitBoard() & bbRooksAndQueens.get();
+		if ( bbChecker.get() )
+		{
+			mbbCheckers |= bbChecker;
+			return;
+		}
+    }
+    CBitBoard bbEastRay = CGen::mbbRookRays[kingSqix.get()].mbbEast;
+    if ( ( bbOccRay = occupied( bbEastRay ) ).get() )
+    {
+        CSqix toSqix = bbOccRay.lsb().get();
+		CBitBoard bbChecker = toSqix.asBitBoard() & bbRooksAndQueens.get();
+		if ( bbChecker.get() )
+		{
+			mbbCheckers |= bbChecker;
+			return;
+		}
+    }
+    CBitBoard bbWestRay = CGen::mbbRookRays[kingSqix.get()].mbbWest;
+    if ( ( bbOccRay = occupied( bbWestRay ) ).get() )
+    {
+        CSqix toSqix = bbOccRay.msb().get();
+		CBitBoard bbChecker = toSqix.asBitBoard() & bbRooksAndQueens.get();
+		if ( bbChecker.get() )
+		{
+			mbbCheckers |= bbChecker;
+			return;
+		}
+    }
+    CBitBoard bbNorthRay = CGen::mbbRookRays[kingSqix.get()].mbbNorth;
+    if ( ( bbOccRay = occupied( bbNorthRay ) ).get() )
+    {
+        CSqix toSqix = bbOccRay.lsb().get();
+		CBitBoard bbChecker = toSqix.asBitBoard() & bbRooksAndQueens.get();
+		if ( bbChecker.get() )
+		{
+			mbbCheckers |= bbChecker;
+			return;
+		}
+    }
+}
+
+///
+/// finds the white pieces giving check to the black king 
+/// and saves them in mbbCheckers.
+///
+void CPos::findWhiteCheckers()
+{
+    CSqix kingSqix = getPieces( EColor::kBlack, EPieceType::kKing ).msb();
+    mbbCheckers = 0ULL;
+    findWhiteRankAndFileCheckers( kingSqix );
+    findWhiteDiagonalCheckers( kingSqix );
+    if ( mbbCheckers.popcnt() < 2 )
+        findWhiteKnightCheckers( kingSqix );
+    if ( mbbCheckers.popcnt() < 2 )
+        findWhitePawnCheckers( kingSqix );
+}
+
+///
+/// finds white checkers along the diagonals giving check to
+/// the black king.
+///
+void CPos::findWhiteDiagonalCheckers( CSqix kingSqix )
+{
+	CBitBoard bbBishopsAndQueens 
+		= getPieces( EColor::kWhite, EPieceType::kBishop ).get()
+		& getPieces( EColor::kWhite, EPieceType::kQueen ).get();
+    findDiagonalCheckers( kingSqix, bbBishopsAndQueens );
+}
+
+///
+/// finds white knights giving check to the black king
+///
+void CPos::findWhiteKnightCheckers( CSqix kingSqix )
+{
+    CBitBoard bbKnights = getPieces( EColor::kWhite, EPieceType::kKnight );
+    mbbCheckers |= ( CGen::mbbKnightAttacks[kingSqix.get()] & bbKnights.get() );
+}
+
+///
+/// finds white checkers along the rank and file giving check to
+/// the black king.
+///
+void CPos::findWhiteRankAndFileCheckers( CSqix kingSqix )
+{
+	CBitBoard bbRooksAndQueens 
+		= getPieces( EColor::kWhite, EPieceType::kRook ).get()
+		& getPieces( EColor::kWhite, EPieceType::kQueen ).get();
+    findRankAndFileCheckers( kingSqix, bbRooksAndQueens );
 }
 
 ///

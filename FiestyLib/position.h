@@ -222,6 +222,8 @@ private:
     void genWhiteRookCapturesFrom( CMoves& rMoves, CBitBoard bbFrom );
     void genWhiteRookQuietsFrom( CMoves& rMoves, CBitBoard bbFrom );
 
+    void findRankAndFileCheckers( CSqix kingSqix, CBitBoard bbRooksAndQueens );
+
     void findWhiteKnightCheckers( CSqix kingSqix );
     void findWhiteRankAndFileCheckers( CSqix kingSqix ); // TODO
     void findWhiteDiagonalCheckers( CSqix kingSqix ); // TODO
