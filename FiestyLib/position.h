@@ -234,7 +234,7 @@ private:
     void findBlackKnightCheckers( CSqix kingSqix );
     void findBlackRankAndFileCheckers( CSqix kingSqix );
     void findBlackDiagonalCheckers( CSqix kingSqix );
-    void findBlackPawnCheckers( CBitBoard bbKing );
+    void findBlackPawnCheckers( CBitBoard bbKing ); 
     void findBlackKingCheckers( CSqix kingSqix ); // todo ...
 
     CColor          mWhoseMove;
