@@ -143,13 +143,14 @@ void CPos::findBlackCheckers()
 {
     mbbCheckers = 0ULL;
 
-    CSqix kingSqix = getPieces( EColor::kWhite, EPieceType::kKing ).msb();
+    CBitBoard bbKing = getPieces( EColor::kWhite, EPieceType::kKing );
+    CSqix kingSqix = bbKing.msb();
     findBlackRankAndFileCheckers( kingSqix );
     findBlackDiagonalCheckers( kingSqix );
     if ( mbbCheckers.popcnt() < 2 )
         findBlackKnightCheckers( kingSqix );
     if ( mbbCheckers.popcnt() < 2 )
-        findBlackPawnCheckers( kingSqix );
+        findBlackPawnCheckers( bbKing );
 }
 
 ///
@@ -171,6 +172,19 @@ void CPos::findBlackKnightCheckers( CSqix kingSqix )
 {
     CBitBoard bbKnights = getPieces( EColor::kBlack, EPieceType::kKnight );
     mbbCheckers |= ( CGen::mbbKnightAttacks[kingSqix.get()] & bbKnights.get() );
+}
+
+///
+/// finds black pawn checkers that give check to the white king.
+///
+void CPos::findWhitePawnCheckers( CBitBoard bbKing )
+{
+
+    CBitBoard bbFrom = getPieces( EColor::kBlack, EPieceType::kPawn );
+    CBitBoard bbUp1 = bbFrom.advanceRanks( 1 );
+    CBitBoard bbCheckers = bbKing.get() 
+        & ( bbUp1.leftFiles( 1 ).get() | bbUp1.rightFiles( 1 ).get() );
+    mbbCheckers |= bbCheckers;
 }
 
 ///
@@ -331,14 +345,15 @@ void CPos::findRankAndFileCheckers(
 ///
 void CPos::findWhiteCheckers()
 {
-    CSqix kingSqix = getPieces( EColor::kBlack, EPieceType::kKing ).msb();
+    CBitBoard bbKing = getPieces( EColor::kBlack, EPieceType::kKing );
+    CSqix kingSqix = bbKing.msb();
     mbbCheckers = 0ULL;
     findWhiteRankAndFileCheckers( kingSqix );
     findWhiteDiagonalCheckers( kingSqix );
     if ( mbbCheckers.popcnt() < 2 )
         findWhiteKnightCheckers( kingSqix );
     if ( mbbCheckers.popcnt() < 2 )
-        findWhitePawnCheckers( kingSqix );
+        findWhitePawnCheckers( bbKing );
 }
 
 ///
@@ -360,6 +375,19 @@ void CPos::findWhiteKnightCheckers( CSqix kingSqix )
 {
     CBitBoard bbKnights = getPieces( EColor::kWhite, EPieceType::kKnight );
     mbbCheckers |= ( CGen::mbbKnightAttacks[kingSqix.get()] & bbKnights.get() );
+}
+
+///
+/// finds white pawn checkers that give check to the black king.
+///
+void CPos::findBlackPawnCheckers( CBitBoard bbKing )
+{
+
+    CBitBoard bbFrom = getPieces( EColor::kWhite, EPieceType::kPawn );
+    CBitBoard bbDown1 = bbFrom.retreatRanks( 1 );
+    CBitBoard bbCheckers = bbKing.get() 
+        & ( bbDown1.leftFiles( 1 ).get() | bbDown1.rightFiles( 1 ).get() );
+    mbbCheckers |= bbCheckers;
 }
 
 ///
