@@ -166,6 +166,18 @@ void CPos::findBlackDiagonalCheckers( CSqix kingSqix )
 }
 
 ///
+/// finds black kings giving check to the white king.  This is needed because
+/// perft checks my legal moves by trying the move and seeing if it leaves 
+/// the king in check.
+///
+void CPos::findBlackKingCheckers( CSqix whiteKingSqix )
+{
+    CBitBoard bbBlackKing = getPieces( EColor::kBlack, EPieceType::kKing );
+    mbbCheckers 
+        |= ( CGen::mbbKingAttacks[whiteKingSqix.get()] & bbBlackKing.get() );
+}
+
+///
 /// finds black knights giving check to the white king
 ///
 void CPos::findBlackKnightCheckers( CSqix kingSqix )
@@ -366,6 +378,18 @@ void CPos::findWhiteDiagonalCheckers( CSqix kingSqix )
 		= getPieces( EColor::kWhite, EPieceType::kBishop ).get()
 		& getPieces( EColor::kWhite, EPieceType::kQueen ).get();
     findDiagonalCheckers( kingSqix, bbBishopsAndQueens );
+}
+
+///
+/// finds white kings giving check to the black king.  This is needed because
+/// perft checks my legal moves by trying the move and seeing if it leaves 
+/// the king in check.
+///
+void CPos::findWhiteKingCheckers( CSqix blackKingSqix )
+{
+    CBitBoard bbWhiteKing = getPieces( EColor::kWhite, EPieceType::kKing );
+    mbbCheckers 
+        |= ( CGen::mbbKingAttacks[blackKingSqix.get()] & bbWhiteKing.get() );
 }
 
 ///

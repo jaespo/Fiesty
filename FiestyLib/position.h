@@ -229,13 +229,13 @@ private:
     void findWhiteRankAndFileCheckers( CSqix kingSqix );
     void findWhiteDiagonalCheckers( CSqix kingSqix );
     void findWhitePawnCheckers( CBitBoard bbKing );
-    void findWhiteKingCheckers( CSqix kingSqix ); // todo ...
+    void findWhiteKingCheckers( CSqix kingSqix );
 
     void findBlackKnightCheckers( CSqix kingSqix );
     void findBlackRankAndFileCheckers( CSqix kingSqix );
     void findBlackDiagonalCheckers( CSqix kingSqix );
     void findBlackPawnCheckers( CBitBoard bbKing ); 
-    void findBlackKingCheckers( CSqix kingSqix ); // todo ...
+    void findBlackKingCheckers( CSqix kingSqix );
 
     CColor          mWhoseMove;
     U8              mHalfMoveClock;                 // for 50 move rule
