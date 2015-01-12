@@ -105,6 +105,26 @@ void CTester::testBitBoard()
 }
 
 ///
+/// tests checks
+///
+void CTester::testCheck()
+{
+    beginSuite( "testCheck" );
+
+    CPos            pos;
+    std::string     errorText;
+
+    //
+    //  Test for no checkers in the starting position
+    //
+    TESTEQ( "checkWhiteStartFen", 
+        pos.parseFen( CPos::kStartFen, errorText ), true );
+    pos.findWhiteCheckers();
+    TESTEQ( "checkWhiteStart", pos.getCheckers().asStrSquares(), "" );
+    endSuite();
+}
+
+///
 /// Test the moves.h
 ///
 void CTester::testMove()
@@ -704,4 +724,5 @@ void CTester::testAll()
     testBitBoard();
     testPosition();
     testMoveGen();
+    testCheck();
 }

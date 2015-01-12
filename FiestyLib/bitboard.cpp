@@ -33,6 +33,21 @@ std::string CBitBoard::asStr() const
 }
 
 ///
+/// returns a BitBoard as a string of squares, for example "e4 e5"
+///
+std::string CBitBoard::asStrSquares() const
+{
+    std::string s;
+    CBitBoard bb = *this;
+    while ( bb.get() )
+    {
+        CSqix sqix = bb.popLsb();
+        s.append( sqix.asAbbr() );
+    }
+    return s;
+}
+
+///
 /// returns a BitBoard as an 8x8 diagram
 ///
 std::string CBitBoard::asDiagram() const

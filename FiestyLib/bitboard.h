@@ -27,12 +27,13 @@ public:
 
     void setSquare( YSqix sqix ) { mBitBoard |= 1ULL << sqix; }
     void resetSquare( YSqix sqix ) { mBitBoard ^= 1ULL << sqix; }
-    CBitBoard getSquareBits( YSqix sqix ) { return mBitBoard & ( 1ULL << sqix ); }
+    CBitBoard getSquareBits( YSqix sqix ) const { return mBitBoard & ( 1ULL << sqix ); }
     void setIfValid( S8 rank, S8 file );
     
     std::string asStr() const;
     std::string asAbbr() const;
     std::string asDiagram() const;
+    std::string asStrSquares() const;
 
     ///
     /// @return the bb for a file

@@ -128,9 +128,10 @@ public:
     bool parseFen( 
         const std::string&          sFen,
         std::string&                rsErrorText );
-    CColor getWhoseMove() { return mWhoseMove; }
-    CPiece getPiece( YSqix sqix ) { return mBoard[sqix]; }
-    CBitBoard getPieces( CColor c, CPieceType pt ) 
+    CBitBoard getCheckers() const { return mbbCheckers; }
+    CColor getWhoseMove() const { return mWhoseMove; }
+    CPiece getPiece( YSqix sqix ) const { return mBoard[sqix]; }
+    CBitBoard getPieces( CColor c, CPieceType pt ) const
     { 
         return ( mbbColor[U8( c.get() )].get() 
             & mbbPieceType[U8( pt.get() )].get() );
@@ -198,7 +199,7 @@ public:
     /// @returns a non-zero bitboard if the square is occupied by a white
     /// piece.
     ///
-    CBitBoard isWhite( CSqix sqix )
+    CBitBoard isWhite( CSqix sqix ) const
     {
         return mbbColor[U8( EColor::kWhite )].getSquareBits( sqix.get() );
     }
@@ -207,7 +208,7 @@ public:
     /// @returns a non-zero bitboard if the square is occupied by a black
     /// piece.
     ///
-    CBitBoard isBlack( CSqix sqix )
+    CBitBoard isBlack( CSqix sqix ) const
     {
         return mbbColor[U8( EColor::kBlack )].getSquareBits( sqix.get() );
     }
