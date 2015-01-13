@@ -113,14 +113,69 @@ void CTester::testCheck()
 
     CPos            pos;
     std::string     errorText;
+    bool            bOk;
 
     //
     //  Test for no checkers in the starting position
     //
     TESTEQ( "checkWhiteStartFen", 
-        pos.parseFen( CPos::kStartFen, errorText ), true );
+        bOk = pos.parseFen( CPos::kStartFen, errorText ), true );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
     pos.findWhiteCheckers();
     TESTEQ( "checkWhiteStart", pos.getCheckers().asStrSquares(), "" );
+
+    //
+    //  Test white pawn checking to the left
+    //
+    TESTEQ( "checkWhitePawnLeftFen", 
+        bOk = pos.parseFen( "8/8/8/8/4k3/3P4/4P3/4K3 w - - 0 1", errorText ), true );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    pos.findWhiteCheckers();
+    TESTEQ( "checkWhitePawnLeft", pos.getCheckers().asStrSquares(), "d3" );
+
+    //
+    //  Test white pawn checking to the right
+    //
+    TESTEQ( "checkWhitePawnRightFen", 
+        bOk = pos.parseFen( "8/8/8/8/2k5/3P4/4P3/4K3 w - - 0 1", errorText ), true );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    pos.findWhiteCheckers();
+    TESTEQ( "checkWhitePawnRight", pos.getCheckers().asStrSquares(), "d3" );
+
+    //
+    //  Make sure nothing terrible happens when the black king is on the 
+    //  8th rank.
+    //
+    TESTEQ( "checkWhitePawn8thRankFen", 
+        bOk = pos.parseFen( "8/8/8/8/8/3P4/4P3/2k1K3 w - - 0 1", errorText ), true );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    pos.findWhiteCheckers();
+    TESTEQ( "checkWhitePawn8thRank", pos.getCheckers().asStrSquares(), "" );
+
+    //
+    //  Test that checks don't wrap over the left side of the board.
+    //
+    TESTEQ( "checkWhitePawnWrapLeftFen", 
+        bOk = pos.parseFen( "8/8/8/8/7k/P7/4P3/4K3 w - - 0 1", errorText ), true );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    pos.findWhiteCheckers();
+    TESTEQ( "checkWhitePawnWrapLeft", pos.getCheckers().asStrSquares(), "" );
+
+    //
+    //  Test that checks don't wrap over the right side of the board.
+    //
+    TESTEQ( "checkWhitePawnWrapRightFen", 
+        bOk = pos.parseFen( "k7/7P/K7/8/8/8/6P1/8 w - - 0 1", errorText ), true );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    pos.findWhiteCheckers();
+    TESTEQ( "checkWhitePawnWrapRight", pos.getCheckers().asStrSquares(), "" );
+
     endSuite();
 }
 
