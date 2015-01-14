@@ -151,6 +151,8 @@ void CPos::findBlackCheckers()
         findBlackKnightCheckers( kingSqix );
     if ( mbbCheckers.popcnt() < 2 )
         findBlackPawnCheckers( bbWhiteKing );
+    if ( mbbCheckers.popcnt() < 2 )
+        findBlackKingCheckers( kingSqix );
 }
 
 ///
@@ -366,6 +368,9 @@ void CPos::findWhiteCheckers()
         findWhiteKnightCheckers( kingSqix );
     if ( mbbCheckers.popcnt() < 2 )
         findWhitePawnCheckers( bbKing );
+    if ( mbbCheckers.popcnt() < 2 )
+        findWhiteKingCheckers( kingSqix );
+
 }
 
 ///

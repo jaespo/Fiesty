@@ -253,7 +253,7 @@ void CTester::testCheck()
     if ( !bOk ) 
         std::cout << errorText << std::endl;
     pos.findWhiteCheckers();
-    TESTEQ( "checkWhiteKnightFen", pos.getCheckers().asStrSquares(), "b6" );
+    TESTEQ( "checkWhiteKnight", pos.getCheckers().asStrSquares(), "b6" );
 
     //
     //  Test black knight check
@@ -276,6 +276,27 @@ void CTester::testCheck()
     pos.findWhiteCheckers();
     TESTEQ( "checkWhiteKnightNonCheck", pos.getCheckers().asStrSquares(), "" );
 
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //  King Checks
+    //
+    //////////////////////////////////////////////////////////////////////////
+
+    //
+    //  Test white king check
+    //
+    TESTEQ( "checkWhiteKingFen", 
+        bOk = pos.parseFen( "2kK4/8/1n2p3/8/8/8/2n4p/8 w - - 0 1", errorText ), true );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    pos.findWhiteCheckers();
+    TESTEQ( "checkWhiteKing", pos.getCheckers().asStrSquares(), "d8" );
+
+    //
+    //  Test black king check
+    //
+    pos.findBlackCheckers();
+    TESTEQ( "checkBlackKing", pos.getCheckers().asStrSquares(), "c8" );
     endSuite();
 }
 
