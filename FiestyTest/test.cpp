@@ -125,11 +125,17 @@ void CTester::testCheck()
     pos.findWhiteCheckers();
     TESTEQ( "checkWhiteStart", pos.getCheckers().asStrSquares(), "" );
 
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //  White Pawn Checks
+    //
+    //////////////////////////////////////////////////////////////////////////
+
     //
     //  Test white pawn checking to the left
     //
     TESTEQ( "checkWhitePawnLeftFen", 
-        bOk = pos.parseFen( "8/8/8/8/4k3/3P4/4P3/4K3 w - - 0 1", errorText ), true );
+        bOk = pos.parseFen( "8/8/8/8/4k3/3P4/4P3/4K3 b - - 0 1", errorText ), true );
     if ( !bOk ) 
         std::cout << errorText << std::endl;
     pos.findWhiteCheckers();
@@ -139,7 +145,7 @@ void CTester::testCheck()
     //  Test white pawn checking to the right
     //
     TESTEQ( "checkWhitePawnRightFen", 
-        bOk = pos.parseFen( "8/8/8/8/2k5/3P4/4P3/4K3 w - - 0 1", errorText ), true );
+        bOk = pos.parseFen( "8/8/8/8/2k5/3P4/4P3/4K3 b - - 0 1", errorText ), true );
     if ( !bOk ) 
         std::cout << errorText << std::endl;
     pos.findWhiteCheckers();
@@ -147,20 +153,20 @@ void CTester::testCheck()
 
     //
     //  Make sure nothing terrible happens when the black king is on the 
-    //  8th rank.
+    //  1st rank.
     //
-    TESTEQ( "checkWhitePawn8thRankFen", 
-        bOk = pos.parseFen( "8/8/8/8/8/3P4/4P3/2k1K3 w - - 0 1", errorText ), true );
+    TESTEQ( "checkWhitePawn1stRankFen", 
+        bOk = pos.parseFen( "8/8/8/8/8/3P4/4P3/2k1K3 b - - 0 1", errorText ), true );
     if ( !bOk ) 
         std::cout << errorText << std::endl;
     pos.findWhiteCheckers();
-    TESTEQ( "checkWhitePawn8thRank", pos.getCheckers().asStrSquares(), "" );
+    TESTEQ( "checkWhitePawn1stRank", pos.getCheckers().asStrSquares(), "" );
 
     //
     //  Test that checks don't wrap over the left side of the board.
     //
     TESTEQ( "checkWhitePawnWrapLeftFen", 
-        bOk = pos.parseFen( "8/8/8/8/7k/P7/4P3/4K3 w - - 0 1", errorText ), true );
+        bOk = pos.parseFen( "8/8/8/8/7k/P7/4P3/4K3 b - - 0 1", errorText ), true );
     if ( !bOk ) 
         std::cout << errorText << std::endl;
     pos.findWhiteCheckers();
@@ -170,11 +176,105 @@ void CTester::testCheck()
     //  Test that checks don't wrap over the right side of the board.
     //
     TESTEQ( "checkWhitePawnWrapRightFen", 
-        bOk = pos.parseFen( "k7/7P/K7/8/8/8/6P1/8 w - - 0 1", errorText ), true );
+        bOk = pos.parseFen( "k7/7P/K7/8/8/8/6P1/8 b - - 0 1", errorText ), true );
     if ( !bOk ) 
         std::cout << errorText << std::endl;
     pos.findWhiteCheckers();
     TESTEQ( "checkWhitePawnWrapRight", pos.getCheckers().asStrSquares(), "" );
+
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //  Black Pawn Checks
+    //
+    //////////////////////////////////////////////////////////////////////////
+
+    //
+    //  Test black pawn checking to the left
+    //
+    TESTEQ( "checkBlackPawnLeftFen", 
+        bOk = pos.parseFen( "2k5/8/4p3/3p4/2K5/8/8/8 w - - 0 1", errorText ), true );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    pos.findBlackCheckers();
+    TESTEQ( "checkBlackPawnLeft", pos.getCheckers().asStrSquares(), "d5" );
+
+    //
+    //  Test Black pawn checking to the right
+    //
+    TESTEQ( "checkBlackPawnRightFen", 
+        bOk = pos.parseFen( "2k5/8/4p3/3p1K2/8/8/8/8 w - - 0 1", errorText ), true );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    pos.findBlackCheckers();
+    TESTEQ( "checkBlackPawnRight", pos.getCheckers().asStrSquares(), "e6" );
+
+    //
+    //  Make sure nothing terrible happens when the white king is on the 
+    //  8th rank.
+    //
+    TESTEQ( "checkBlackPawn8thRankFen", 
+        bOk = pos.parseFen( "2k1K3/8/4p3/3p4/8/8/8/8 w - - 0 1", errorText ), true );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    pos.findBlackCheckers();
+    TESTEQ( "checkBlackPawn8thRank", pos.getCheckers().asStrSquares(), "" );
+
+    //
+    //  Test that checks don't wrap over the left side of the board.
+    //
+    TESTEQ( "checkBlackPawnWrapLeftFen", 
+        bOk = pos.parseFen( "2k5/8/4p3/8/p7/7K/8/8 w - - 0 1", errorText ), true );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    pos.findBlackCheckers();
+    TESTEQ( "checkBlackPawnWrapLeft", pos.getCheckers().asStrSquares(), "" );
+
+    //
+    //  Test that checks don't wrap over the right side of the board.
+    //
+    TESTEQ( "checkBlackPawnWrapRightFen", 
+        bOk = pos.parseFen( "2k5/8/4p3/8/8/8/7p/K7 w - - 0 1", errorText ), true );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    pos.findBlackCheckers();
+    TESTEQ( "checkBlackPawnWrapRightFen", pos.getCheckers().asStrSquares(), "" );
+
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //  Knight Checks
+    //
+    //////////////////////////////////////////////////////////////////////////
+
+    //
+    //  Test white knight check
+    //
+    TESTEQ( "checkWhiteKnightFen", 
+        bOk = pos.parseFen( "2k5/8/1N2p3/8/8/8/7p/K7 b - - 0 1", errorText ), true );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    pos.findWhiteCheckers();
+    TESTEQ( "checkWhiteKnightFen", pos.getCheckers().asStrSquares(), "b6" );
+
+    //
+    //  Test black knight check
+    //
+    TESTEQ( "checkBlackKnightFen", 
+        bOk = pos.parseFen( "2k5/8/1n2p3/8/3K4/8/2n4p/8 w - - 0 1", errorText ), true );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    pos.findBlackCheckers();
+    TESTEQ( "checkBlackKnight", pos.getCheckers().asStrSquares(), "c2" );
+
+    //
+    //  Make sure a black knight does register as given check to the black
+    //  king.
+    //
+    TESTEQ( "checkWhiteKnightNonCheckFen", 
+        bOk = pos.parseFen( "2k5/8/1n2p3/8/3K4/8/2n4p/8 b - - 0 1", errorText ), true );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    pos.findWhiteCheckers();
+    TESTEQ( "checkWhiteKnightNonCheck", pos.getCheckers().asStrSquares(), "" );
 
     endSuite();
 }

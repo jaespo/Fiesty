@@ -143,14 +143,14 @@ void CPos::findBlackCheckers()
 {
     mbbCheckers = 0ULL;
 
-    CBitBoard bbKing = getPieces( EColor::kWhite, EPieceType::kKing );
-    CSqix kingSqix = bbKing.msb();
+    CBitBoard bbWhiteKing = getPieces( EColor::kWhite, EPieceType::kKing );
+    CSqix kingSqix = bbWhiteKing.msb();
     findBlackRankAndFileCheckers( kingSqix );
     findBlackDiagonalCheckers( kingSqix );
     if ( mbbCheckers.popcnt() < 2 )
         findBlackKnightCheckers( kingSqix );
     if ( mbbCheckers.popcnt() < 2 )
-        findBlackPawnCheckers( bbKing );
+        findBlackPawnCheckers( bbWhiteKing );
 }
 
 ///
@@ -192,7 +192,7 @@ void CPos::findBlackKnightCheckers( CSqix kingSqix )
 void CPos::findBlackPawnCheckers( CBitBoard bbWhiteKing )
 {
 
-    CBitBoard bbPawns = getPieces( EColor::kWhite, EPieceType::kPawn );
+    CBitBoard bbPawns = getPieces( EColor::kBlack, EPieceType::kPawn );
     CBitBoard bbKingUp1 = bbWhiteKing.advanceRanks( 1 );
     CBitBoard bbCheckers = bbPawns.get() 
         & ( bbKingUp1.leftFiles( 1 ).get() | bbKingUp1.rightFiles( 1 ).get() );
