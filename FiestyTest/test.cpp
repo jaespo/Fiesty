@@ -388,11 +388,66 @@ void CTester::testCheck()
     pos.findBlackCheckers();
     TESTEQ( "checkBlackRookLeftRank", pos.getCheckers().asStrSquares(), "c3" );
 
+    //
+    //  Test black rook check -- right rank
+    //
+    TESTEQ( "checkBlackRookRightRankFen", 
+        bOk = pos.parseFen( "8/8/1nR1pk2/5p2/8/8/PPP4p/1K4r1 w - - 0 1", 
+            errorText ), true );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    pos.findBlackCheckers();
+    TESTEQ( "checkBlackRookRightRank", pos.getCheckers().asStrSquares(), "g1" );
+
+    //
+    //  Test black rook check -- forward file
+    //
+    TESTEQ( "checkBlackRookForwardFileFen", 
+        bOk = pos.parseFen( "8/6K1/1nR1p3/4kp2/8/6r1/PPP4p/8 w - - 0 1",
+            errorText ), true );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    pos.findBlackCheckers();
+    TESTEQ( "checkBlackRookForwardFile", pos.getCheckers().asStrSquares(), "g3" );
+
+    //
+    //  Test black rook check -- reverse file
+    //
+    TESTEQ( "checkBlackRookReverseFileFen", 
+        bOk = pos.parseFen( "7r/8/1nR1p2K/4kp2/8/8/PPP4p/8 w - - 0 1", 
+            errorText ), true );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    pos.findBlackCheckers();
+    TESTEQ( "checkBlackRookReverseFile", pos.getCheckers().asStrSquares(), "h8" );
+
+    //
+    //  Test black rook check -- white blocker
+    //
+    TESTEQ( "checkBlackRookWhiteBlockerFen", 
+        bOk = pos.parseFen( "8/8/1nR1prBK/4kp2/8/8/PPP4p/8 w - - 0 1", 
+            errorText ), true );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    pos.findBlackCheckers();
+    TESTEQ( "checkBlackRookWhiteBlocker", pos.getCheckers().asStrSquares(), "" );
+
+    //
+    //  Test black rook check -- black blocker
+    //
+    TESTEQ( "checkBlackRookBlackBlockerFen", 
+        bOk = pos.parseFen( "8/8/1nR1p1B1/5p2/1K2k1r1/8/PPP4p/8 w - - 0 1", 
+            errorText ), true );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    pos.findBlackCheckers();
+    TESTEQ( "checkBlackRookBlackBlocker", pos.getCheckers().asStrSquares(), "" );
+
     endSuite();
 }
 
 ///
-/// Test the moves.h
+/// Test move generation
 ///
 void CTester::testMove()
 {
