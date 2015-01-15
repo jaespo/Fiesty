@@ -297,6 +297,97 @@ void CTester::testCheck()
     //
     pos.findBlackCheckers();
     TESTEQ( "checkBlackKing", pos.getCheckers().asStrSquares(), "c8" );
+
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //  White Rook Checks
+    //
+    //////////////////////////////////////////////////////////////////////////
+
+    //
+    //  Test rook check -- left rank
+    //
+    TESTEQ( "checkWhiteRookLeftRankFen", 
+        bOk = pos.parseFen( "R1k5/8/1n2p3/8/8/3K4/2n4p/8 b - - 0 1", 
+            errorText ), true );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    pos.findWhiteCheckers();
+    TESTEQ( "checkWhiteRookRank", pos.getCheckers().asStrSquares(), "a8" );
+
+    //
+    //  Test white rook check -- right rank
+    //
+    TESTEQ( "checkWhiteRookRightRankFen", 
+        bOk = pos.parseFen( "2k3R1/8/1n2p3/8/8/3K4/2n4p/8 b - - 0 1", 
+            errorText ), true );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    pos.findWhiteCheckers();
+    TESTEQ( "checkWhiteRookRightRank", pos.getCheckers().asStrSquares(), "g8" );
+
+    //
+    //  Test white rook check -- forward file
+    //
+    TESTEQ( "checkWhiteRookForwardFileFen", 
+        bOk = pos.parseFen( "2k5/8/1n2p3/8/8/2RK4/2n4p/8 b - - 0 1", 
+            errorText ), true );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    pos.findWhiteCheckers();
+    TESTEQ( "checkWhiteRookForwardFile", pos.getCheckers().asStrSquares(), "c3" );
+
+    //
+    //  Test white rook check -- reverse file
+    //
+    TESTEQ( "checkWhiteRookReverseFileFen", 
+        bOk = pos.parseFen( "8/8/1n2pk2/8/8/3K4/2n4p/5R2 w - - 0 1", 
+            errorText ), true );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    pos.findWhiteCheckers();
+    TESTEQ( "checkWhiteRookReverseFile", pos.getCheckers().asStrSquares(), "f1" );
+
+
+    //
+    //  Test white rook check -- white blocker
+    //
+    TESTEQ( "checkWhiteRookWhiteBlockerFen", 
+        bOk = pos.parseFen( "8/8/1n2pk2/8/8/3K4/2n2P1p/5R2 b - - 0 1", 
+            errorText ), true );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    pos.findWhiteCheckers();
+    TESTEQ( "checkWhiteRookWhiteBlocker", pos.getCheckers().asStrSquares(), "" );
+
+    //
+    //  Test white rook check -- black blocker
+    //
+    TESTEQ( "checkWhiteRookBlackBlockerFen", 
+        bOk = pos.parseFen( "8/8/1nR1pk2/5p2/8/3K4/2n4p/8 b - - 0 1", 
+            errorText ), true );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    pos.findWhiteCheckers();
+    TESTEQ( "checkWhiteRookBlackBlocker", pos.getCheckers().asStrSquares(), "" );
+
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //  Black Rook Checks
+    //
+    //////////////////////////////////////////////////////////////////////////
+
+    //
+    //  Test black rook check -- left rank
+    //
+    TESTEQ( "checkBlackRookLeftRankFen", 
+        bOk = pos.parseFen( "8/8/1nR1pk2/5p2/8/2rK4/2n4p/8 w - - 0 1", 
+            errorText ), true );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    pos.findBlackCheckers();
+    TESTEQ( "checkBlackRookLeftRank", pos.getCheckers().asStrSquares(), "c3" );
+
     endSuite();
 }
 

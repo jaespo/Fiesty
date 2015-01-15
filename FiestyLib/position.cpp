@@ -163,7 +163,7 @@ void CPos::findBlackDiagonalCheckers( CSqix kingSqix )
 {
 	CBitBoard bbBishopsAndQueens 
 		= getPieces( EColor::kWhite, EPieceType::kBishop ).get()
-		& getPieces( EColor::kWhite, EPieceType::kQueen ).get();
+		| getPieces( EColor::kWhite, EPieceType::kQueen ).get();
     findDiagonalCheckers( kingSqix, bbBishopsAndQueens );
 }
 
@@ -209,7 +209,7 @@ void CPos::findBlackRankAndFileCheckers( CSqix kingSqix )
 {
 	CBitBoard bbRooksAndQueens 
 		= getPieces( EColor::kBlack, EPieceType::kRook ).get()
-		& getPieces( EColor::kBlack, EPieceType::kQueen ).get();
+		| getPieces( EColor::kBlack, EPieceType::kQueen ).get();
     findRankAndFileCheckers( kingSqix, bbRooksAndQueens );
 }
 
@@ -381,7 +381,7 @@ void CPos::findWhiteDiagonalCheckers( CSqix kingSqix )
 {
 	CBitBoard bbBishopsAndQueens 
 		= getPieces( EColor::kWhite, EPieceType::kBishop ).get()
-		& getPieces( EColor::kWhite, EPieceType::kQueen ).get();
+		| getPieces( EColor::kWhite, EPieceType::kQueen ).get();
     findDiagonalCheckers( kingSqix, bbBishopsAndQueens );
 }
 
@@ -428,7 +428,7 @@ void CPos::findWhiteRankAndFileCheckers( CSqix kingSqix )
 {
 	CBitBoard bbRooksAndQueens 
 		= getPieces( EColor::kWhite, EPieceType::kRook ).get()
-		& getPieces( EColor::kWhite, EPieceType::kQueen ).get();
+		| getPieces( EColor::kWhite, EPieceType::kQueen ).get();
     findRankAndFileCheckers( kingSqix, bbRooksAndQueens );
 }
 
