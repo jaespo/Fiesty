@@ -307,14 +307,15 @@ void CTester::testCheck()
     //
     //  Test bishop check -- northeast
     //
-    TESTEQ( "checkWhiteRookLeftFen", 
-        bOk = pos.parseFen( "R1k5/8/1n2p3/8/8/3K4/2n4p/8 b - - 0 1", 
-            errorText ), true );
+    bOk = pos.parseFen( "2k5/8/Bn2p3/8/8/3K4/2n4p/8 w - - 0 1", 
+            errorText );
     if ( !bOk ) 
         std::cout << errorText << std::endl;
+    TESTEQ( "checkWhiteRookRightRankFen", bOk, true );
     pos.findWhiteCheckers();
-    TESTEQ( "checkWhiteRookLeftRank", pos.getCheckers().asStrSquares(), "a8" );
+    TESTEQ( "checkWhiteRookLeftRank", pos.getCheckers().asStrSquares(), "a6" );
 
+#if 0
     //
     //  Test white rook check -- right rank
     //
@@ -370,6 +371,9 @@ void CTester::testCheck()
         std::cout << errorText << std::endl;
     pos.findWhiteCheckers();
     TESTEQ( "checkWhiteRookBlackBlocker", pos.getCheckers().asStrSquares(), "" );
+
+#endif 0
+// ------------- end if white bishop checks
 
     //////////////////////////////////////////////////////////////////////////
     //
