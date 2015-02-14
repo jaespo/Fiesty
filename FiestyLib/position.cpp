@@ -162,8 +162,8 @@ void CPos::findBlackCheckers()
 void CPos::findBlackDiagonalCheckers( CSqix kingSqix )
 {
 	CBitBoard bbBishopsAndQueens 
-		= getPieces( EColor::kWhite, EPieceType::kBishop ).get()
-		| getPieces( EColor::kWhite, EPieceType::kQueen ).get();
+		= getPieces( EColor::kBlack, EPieceType::kBishop ).get()
+		| getPieces( EColor::kBlack, EPieceType::kQueen ).get();
     findDiagonalCheckers( kingSqix, bbBishopsAndQueens );
 }
 

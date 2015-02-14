@@ -364,7 +364,138 @@ void CTester::testCheck()
     pos.findWhiteCheckers();
     TESTEQ( "checkWhiteBishpBlackBlocker", pos.getCheckers().asStrSquares(), "" );
 
-// ------------- end white bishop checks
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //  White Bishop Checks
+    //
+    //////////////////////////////////////////////////////////////////////////
+
+    //
+    //  Test white bishop check -- northeast
+    //
+    bOk = pos.parseFen( "2k5/8/Bn2p3/8/8/3K4/2n4p/8 w - - 0 1", errorText );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    TESTEQ( "checkWhiteBishopNEFen", bOk, true );
+    pos.findWhiteCheckers();
+    TESTEQ( "checkWhiteBishopNE", pos.getCheckers().asStrSquares(), "a6" );
+
+    //
+    //  Test white bishop check -- southeast
+    //
+    bOk = pos.parseFen( "4B3/8/1n2p3/7k/8/3K4/2n4p/8 w - - 0 1", errorText );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    TESTEQ( "checkWhiteBishopSEFen", bOk, true );
+    pos.findWhiteCheckers();
+    TESTEQ( "checkWhiteBishopSE", pos.getCheckers().asStrSquares(), "e8" );
+
+    //
+    //  Test white bishop check -- southwest
+    //
+    bOk = pos.parseFen( "4B3/8/1n2p3/8/k7/3K4/2n4p/8 w - - 0 1", errorText );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    TESTEQ( "checkWhiteBishopSWFen", bOk, true );
+    pos.findWhiteCheckers();
+    TESTEQ( "checkWhiteBishopSW", pos.getCheckers().asStrSquares(), "e8" );
+
+    //
+    //  Test white bishop check -- northwest
+    //
+    bOk = pos.parseFen( "8/3B4/1n2p3/8/k7/3K4/2n4p/8 w - - 0 1", errorText );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    TESTEQ( "checkWhiteBishopNWFen", bOk, true );
+    pos.findWhiteCheckers();
+    TESTEQ( "checkWhiteBishopNW", pos.getCheckers().asStrSquares(), "d7" );
+
+    //
+    //  Test white bishop check -- white blocker
+    //
+    bOk = pos.parseFen( "8/3B4/1n2p3/1P6/k7/3K4/2n4p/8 w - - 0 1", errorText );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    TESTEQ( "checkWhiteBishopWhiteBlockerFen", bOk, true );
+    pos.findWhiteCheckers();
+    TESTEQ( "checkWhiteBishpWhiteBlocker", pos.getCheckers().asStrSquares(), "" );
+
+    //
+    //  Test white bishop check -- black blocker
+    //
+    bOk = pos.parseFen( "8/3B4/1n2p3/1P6/6k1/3K4/2n4p/8 w - - 0 1", errorText );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    TESTEQ( "checkWhiteBishopBlackBlockerFen", bOk, true );
+    pos.findWhiteCheckers();
+    TESTEQ( "checkWhiteBishpBlackBlocker", pos.getCheckers().asStrSquares(), "" );
+    
+
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //  Black Bishop Checks
+    //
+    //////////////////////////////////////////////////////////////////////////
+
+    //
+    //  Test black bishop check -- northeast
+    //
+    bOk = pos.parseFen( "8/3B4/1n2p3/1P6/6k1/3K4/2b4p/8 w - - 0 1", errorText );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    TESTEQ( "checkBlackBishopNEFen", bOk, true );
+    pos.findBlackCheckers();
+    TESTEQ( "checkBlackBishopNE", pos.getCheckers().asStrSquares(), "c2" );
+
+    //
+    //  Test black bishop check -- southeast
+    //
+    bOk = pos.parseFen( "8/3B4/1n2p3/1P6/2b3k1/3K4/7p/8 w - - 0 1", errorText );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    TESTEQ( "checkBlackBishopSEFen", bOk, true );
+    pos.findBlackCheckers();
+    TESTEQ( "checkBlackBishopSE", pos.getCheckers().asStrSquares(), "c4" );
+
+    //
+    //  Test black bishop check -- southwest
+    //
+    bOk = pos.parseFen( "8/3B4/1n2p1b1/1P6/6k1/3K4/7p/8 w - - 0 1", errorText );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    TESTEQ( "checkBlackBishopSWFen", bOk, true );
+    pos.findBlackCheckers();
+    TESTEQ( "checkBlackBishopSW", pos.getCheckers().asStrSquares(), "g6" );
+
+    //
+    //  Test black bishop check -- northwest
+    //
+    bOk = pos.parseFen( "8/3B4/1n2p3/1P6/4K1k1/8/7p/7b w - - 0 1", errorText );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    TESTEQ( "checkBlackBishopNWFen", bOk, true );
+    pos.findBlackCheckers();
+    TESTEQ( "checkBlackBishopNW", pos.getCheckers().asStrSquares(), "h1" );
+
+    //
+    //  Test black bishop check -- black blocker
+    //
+    bOk = pos.parseFen( "8/3B4/1n2p3/1P6/4K1n1/8/6kp/7b w - - 0 1", errorText );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    TESTEQ( "checkBlackBishopBBFen", bOk, true );
+    pos.findBlackCheckers();
+    TESTEQ( "checkBlackBishopBB", pos.getCheckers().asStrSquares(), "" );
+
+    //
+    //  Test black bishop check -- white blocker
+    //
+    bOk = pos.parseFen( "8/1b6/1nB1p3/1P6/4K1n1/8/3k3p/8 w - - 0 1", errorText );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    TESTEQ( "checkBlackBishopBBFen", bOk, true );
+    pos.findBlackCheckers();
+    TESTEQ( "checkBlackBishopBB", pos.getCheckers().asStrSquares(), "" );
 
     //////////////////////////////////////////////////////////////////////////
     //
