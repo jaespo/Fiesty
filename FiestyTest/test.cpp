@@ -642,6 +642,91 @@ void CTester::testCheck()
     pos.findBlackCheckers();
     TESTEQ( "checkBlackRookBlackBlocker", pos.getCheckers().asStrSquares(), "" );
 
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //  Queen checks
+    //
+    //  Queen checks are essentially just like rook an bishop checks, so test
+    //  them lightly just to make sure they work ok.
+    //
+    //////////////////////////////////////////////////////////////////////////
+
+    //
+    //  White queen check
+    //
+    bOk = pos.parseFen( "8/1b6/1nB1p3/1P6/1Q2K1n1/8/3k3p/8 w - - 0 1", 
+        errorText );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+     TESTEQ( "checkWhiteQueenFen", bOk, true );
+    pos.findWhiteCheckers();
+    TESTEQ( "checkWhiteQueen", pos.getCheckers().asStrSquares(), "b4" );
+
+    //
+    //  Black queen check
+    //
+    bOk = pos.parseFen( "8/1b6/1nB1p3/1P6/4K1n1/Q3q3/3k3p/8 w - - 0 1", 
+        errorText );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    TESTEQ( "checkBlackQueenFen", bOk, true );
+    pos.findBlackCheckers();
+    TESTEQ( "checkBlackQueen", pos.getCheckers().asStrSquares(), "e3" );
+    
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //  Double checks
+    //
+    //////////////////////////////////////////////////////////////////////////
+ 
+    //
+    //  White queen/bishop double check
+    //
+    bOk = pos.parseFen( "8/1b6/1n2p3/1P6/4K1n1/2B1q3/Q2k3p/8 w - - 0 1", 
+        errorText );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    TESTEQ( "checkWhiteQueenBishopDoubleFen", bOk, true );
+    pos.findWhiteCheckers();
+    TESTEQ( "checkWhiteQueenBishopDouble", 
+        pos.getCheckers().asStrSquares(), "a2c3" );
+
+    //
+    //  White rook/knight double check
+    //
+    bOk = pos.parseFen( "3R4/1b6/1n2p3/1P6/2N1K1n1/4q3/3k3p/8 w - - 0 1", 
+        errorText );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    TESTEQ( "checkWhiteRookKnightDoubleFen", bOk, true );
+    pos.findWhiteCheckers();
+    TESTEQ( "checkWhiteRookKnightDouble",
+        pos.getCheckers().asStrSquares(), "c4d8" );
+
+    //
+    //  Black rook/bishop double check
+    //
+    bOk = pos.parseFen( "8/1b6/1n1bp3/1P6/r4Kn1/8/3k3p/8 w - - 0 1", 
+        errorText );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    TESTEQ( "checkBlackRookBishopDoubleFen", bOk, true );
+    pos.findBlackCheckers();
+    TESTEQ( "checkBlackRookBishopDouble", 
+        pos.getCheckers().asStrSquares(), "a4d6" );
+
+    //
+    //  Black queen/knight double check
+    //
+    bOk = pos.parseFen( "8/8/1n2p3/1P6/4K2q/8/3k1n1p/8 w - - 0 1", 
+        errorText );
+    if ( !bOk ) 
+        std::cout << errorText << std::endl;
+    TESTEQ( "checkBlackQueenKnightDoubleFen", bOk, true );
+    pos.findBlackCheckers();
+    TESTEQ( "checkBlackQueenKnight", 
+        pos.getCheckers().asStrSquares(), "f2h4" );
+
     endSuite();
 }
 
