@@ -27,6 +27,7 @@ private:
     static void testSquare();
     static void testMoveGen();
     static void testCheck();
+    static void testPerft();
 
     static int          mgOkCount;
     static char*        mgCurSuiteName;

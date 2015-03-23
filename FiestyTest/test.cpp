@@ -7,6 +7,7 @@
 #include "test.h"
 #include "piece.h"
 #include "position.h"
+#include "search.h"
 
 int          CTester::mgOkCount          = 0;
 char*        CTester::mgCurSuiteName     = nullptr;
@@ -1319,6 +1320,26 @@ void CTester::testSquare( void )
     endSuite();
 }
 
+//
+//  Tests the perft values
+//
+void CTester::testPerft()
+{
+    CPos            pos;
+    std::string     errorText;
+
+    bool bOk = pos.parseFen( CPos::kStartFen, errorText );
+    if ( !bOk )
+    {
+        std::cout << "Parsefen failed: " << errorText;
+        TESTEQ( "Perft1ParseFen", true, bOk );
+    }
+
+    CSearcher searcher( pos );
+    U64 count = searcher.perft( 1 );
+    TESTEQ( "perft1", 20, count );
+}
+
 ///
 /// Run all the tests
 ///
@@ -1331,4 +1352,5 @@ void CTester::testAll()
     testPosition();
     testMoveGen();
     testCheck();
+    testPerft();
 }

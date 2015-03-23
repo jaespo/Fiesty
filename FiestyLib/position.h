@@ -119,7 +119,11 @@ private:
 class CPos
 {
 public:
+    //
+    //  Typedefs and constants
+    //
     static const char* kStartFen;
+    enum ELegalMoveType { kLegal, kQuasiLegal };
 
     CPos() { clearBoard(); }
 
@@ -171,8 +175,10 @@ public:
     void findWhiteCheckers();
     void findBlackCheckers();
 
-    void genLegalMoves( CMoves& rMoves );               //TODO: code me
-    void genMoves( CMoves& rMoves );                    //TODO: code me
+    void genWhiteMoves( CMoves& rMoves );
+    void genWhiteLegalMoves( CMoves& rMoves );
+    void genBlackMoves( CMoves& rMoves );
+    void genBlackLegalMoves( CMoves& rMoves );
     
     void makeMove( CMove m );                           //TODO: code me
     void unmakeMove( CMove m );                         //TODO: code me

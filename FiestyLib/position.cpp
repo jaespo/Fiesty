@@ -433,6 +433,44 @@ void CPos::findWhiteRankAndFileCheckers( CSqix kingSqix )
 }
 
 ///
+/// generates all black quasi-legal moves in the position
+///
+void CPos::genBlackMoves( CMoves& rMoves )
+{
+    genBlackPawnQuiets( rMoves );
+    genBlackPawnCaptures( rMoves );
+    genBlackKnightQuiets( rMoves );
+    genBlackKnightCaptures( rMoves );
+    genBlackBishopQuiets( rMoves );
+    genBlackBishopCaptures( rMoves );
+    genBlackRookQuiets( rMoves );
+    genBlackRookCaptures( rMoves );
+    genBlackQueenQuiets( rMoves );
+    genBlackQueenCaptures( rMoves );
+    genBlackKingQuiets( rMoves );
+    genBlackKingCaptures( rMoves );
+}
+
+///
+/// generates all black legal moves in the position
+///
+void CPos::genBlackLegalMoves( CMoves& rMoves )
+{
+    CMoves      quasiMoves;
+
+    genBlackMoves( quasiMoves );
+    for ( int moveIx = 0; moveIx < quasiMoves.getNumMoves(); moveIx++ )
+    {
+        makeMove( quasiMoves.get( moveIx ) );
+        if ( !getCheckers().get() )
+        {
+            rMoves.addMove( quasiMoves.get( moveIx ) );
+        }
+        unmakeMove( quasiMoves.get( moveIx ) );
+    }
+}
+
+///
 /// generates bishop captures for black
 ///
 /// @param rMoves
@@ -966,6 +1004,44 @@ void CPos::genBlackRookQuietsFrom( CMoves& rMoves, CBitBoard bbFrom )
             toSqix = bbTo.popLsb(); 
             rMoves.addMove( CMove( fromSqix, toSqix ) );
         }
+    }
+}
+
+///
+/// generates all quasi-legal moves in the position
+///
+void CPos::genWhiteMoves( CMoves& rMoves )
+{
+    genWhitePawnQuiets( rMoves );
+    genWhitePawnCaptures( rMoves );
+    genWhiteKnightQuiets( rMoves );
+    genWhiteKnightCaptures( rMoves );
+    genWhiteBishopQuiets( rMoves );
+    genWhiteBishopCaptures( rMoves );
+    genWhiteRookQuiets( rMoves );
+    genWhiteRookCaptures( rMoves );
+    genWhiteQueenQuiets( rMoves );
+    genWhiteQueenCaptures( rMoves );
+    genWhiteKingQuiets( rMoves );
+    genWhiteKingCaptures( rMoves );
+}
+
+///
+/// generates all quasi-legal moves in the position
+///
+void CPos::genWhiteLegalMoves( CMoves& rMoves )
+{
+    CMoves      quasiMoves;
+
+    genWhiteMoves( quasiMoves );
+    for ( int moveIx = 0; moveIx < quasiMoves.getNumMoves(); moveIx++ )
+    {
+        makeMove( quasiMoves.get( moveIx ) );
+        if ( !getCheckers().get() )
+        {
+            rMoves.addMove( quasiMoves.get( moveIx ) );
+        }
+        unmakeMove( quasiMoves.get( moveIx ) );
     }
 }
 

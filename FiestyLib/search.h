@@ -23,12 +23,12 @@ private:
 ///
 /// Class that does the searching
 ///
-class CSearch
+class CSearcher
 {
 public:
-    CSearch( CPos& rPos ) { mpPos = &rPos; }
+    CSearcher( CPos& rPos ) { mpPos = &rPos; }
     void determineBestMove( CMove& rBestMoves ); // Todo ...
-    U64 perft( U16 depthLeft ); // Todo
+    U64 perft( U16 depthLeft ); // Todo...
 
 private:
     CPos*           mpPos;
