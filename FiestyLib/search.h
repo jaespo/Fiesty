@@ -34,8 +34,9 @@ private:
     CPos*           mpPos;
     CMoves          mBestMoves;
 
+    U64 perftWhite( U16 depthLeft );
+    U64 perftBlack( U16 depthLeft );
     YVal alphaBeta( YVal lowerBound, YVal upperBound, U16 depthLeft ); // Todo ...
     YVal qsearch( YVal lowerBound, YVal upperBound );   // Todo ...
 };
-
 #endif 

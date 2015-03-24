@@ -8,7 +8,8 @@
 #include "search.h"
 
 ///
-/// generates the perft node count for the current position.
+/// Generates the perft node count for the current position with black to
+/// to move.
 ///
 U64 CSearcher::perftBlack( U16 depthLeft )
 {
@@ -18,19 +19,32 @@ U64 CSearcher::perftBlack( U16 depthLeft )
     CMoves      moves;
     U64         nodeCount = 0;
 
-    mpPos->genLegalMoves( moves ); ...
+    mpPos->genBlackMoves( moves );
     for ( U16 moveIx = 0; moveIx = moves.getNumMoves(); moveIx++ )
     {
         CMove move = moves.get( moveIx );
-        mpPos->makeMove( move ); ...
-        nodeCount += perft( depthLeft - 1 );
-        mpPos->unmakeMove( move ); ...
+        mpPos->makeMove( move );
+
+        //
+        //  If the move leaves us in check, it's not legal.  The
+        //  can be removed when genBlackMoves implements check evasion.
+        //
+        mpPos->findWhiteCheckers();
+        if ( mpPos->getCheckers().get() )
+        {
+            if ( depthLeft == 1 ) 
+                nodeCount++;
+            else
+                nodeCount += perftBlack( depthLeft - 1 );
+        }
+        mpPos->unmakeMove( move );
     }
     return nodeCount;
 }
 
 ///
-/// generates the perft node count for the current position.
+/// Generates the perft node count for the current position with white to
+/// to move.
 ///
 U64 CSearcher::perftWhite( U16 depthLeft )
 {
@@ -40,13 +54,25 @@ U64 CSearcher::perftWhite( U16 depthLeft )
     CMoves      moves;
     U64         nodeCount = 0;
 
-    mpPos->genLegalMoves( moves ); ...
+    mpPos->genWhiteMoves( moves );
     for ( U16 moveIx = 0; moveIx = moves.getNumMoves(); moveIx++ )
     {
         CMove move = moves.get( moveIx );
-        mpPos->makeMove( move ); ...
-        nodeCount += perft( depthLeft - 1 );
-        mpPos->unmakeMove( move ); ...
+        mpPos->makeMove( move );
+
+        //
+        //  If the move leaves us in check, it's not legal.  The
+        //  can be removed when genWhiteMoves implements check evasion.
+        //
+        mpPos->findBlackCheckers();
+        if ( mpPos->getCheckers().get() )
+        {
+            if ( depthLeft == 1 ) 
+                nodeCount++;
+            else
+                nodeCount += perftBlack( depthLeft - 1 );
+        }
+        mpPos->unmakeMove( move );
     }
     return nodeCount;
 }
@@ -58,5 +84,10 @@ U64 CSearcher::perft( U16 depthLeft )
 {
     if ( mpPos->getWhoseMove() == EColor::kWhite )
     {
+        return perftWhite( depthLeft );
+    }
+    else 
+    {
+        return perftBlack( depthLeft );
     }
 }
