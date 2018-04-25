@@ -456,17 +456,18 @@ void CPos::genBlackMoves( CMoves& rMoves )
 ///
 void CPos::genBlackLegalMoves( CMoves& rMoves )
 {
-    CMoves      quasiMoves;
+    CMoves			quasiMoves;
+	CUndoContext	undoContext;
 
     genBlackMoves( quasiMoves );
     for ( int moveIx = 0; moveIx < quasiMoves.getNumMoves(); moveIx++ )
     {
-        makeMove( quasiMoves.get( moveIx ) );
+        makeMoveForPerft( quasiMoves.get( moveIx ), undoContext );
         if ( !getCheckers().get() )
         {
             rMoves.addMove( quasiMoves.get( moveIx ) );
         }
-        unmakeMove( quasiMoves.get( moveIx ) );
+        unmakeMoveForPerft( quasiMoves.get( moveIx ), undoContext );
     }
 }
 
@@ -1590,6 +1591,37 @@ void CPos::genWhiteRookQuietsFrom( CMoves& rMoves, CBitBoard bbFrom )
 }
 
 ///
+///	makes the specified move in this position, ignoring duplicate
+/// positions and the 50 move rule.
+///
+///	@param m
+///		is the move to make
+///
+///	@param undoContext
+///		is the context used to undo the move
+///
+void CPos::makeMoveForPerft( CMove m, CUndoContext undoContext )
+{
+	undoContext.setPieceMoved( mBoard[m.getFrom().get()] );
+	void setPieceCaptured(CPiece p) { mPieceCaptured = p; }
+	void setPosRights(CPosRights pr) { mPosRights = pr; }
+
+	mWhoseMove = mWhoseMove.getOpponent();
+	updatePosRights( m );
+	++mMoveNum;
+	mbbPieceType[mBoard[m.getFrom().get()].getPieceType()].resetSquare(m.getFrom());
+	mbbPieceType[mBoard[m.getTo().get()].getPieceType()].setSquare(m.getTo());
+	mbbColor[mBoard[m.getFrom().get()].getColor()].resetSquare( m.getFrom() );
+	mbbColor[mBoard[m.getTo().get()].getColor()].resetSquare( m.getTo() );
+	mBoard[m.getTo().get()] = mBoard[m.getFrom()];
+	mBoard[m.getFrom().get()] = CPiece(EPiece::kNone);
+	if (mWhoseMove.isWhite())
+		findWhiteCheckers();
+	else
+		findBlackCheckers();
+}
+
+///
 ///  get the next token in the fen string.  
 ///
 ///  @param sFen
@@ -1751,58 +1783,134 @@ bool CPos::parseFen(
                 mPosRights.setBlackOO();
                 break;
             case 'q': 
-                mPosRights.setBlackOOO();
-                break;
+				mPosRights.setBlackOOO();
+				break;
             default:
-                rsErrorText = "Invalid castling flag: " + tok[j];
-                return false;
-            }
-        }
-    }
+				rsErrorText = "Invalid castling flag: " + tok[j];
+				return false;
+			}
+		}
+	}
 
-    //
-    //  Set the en passant square
-    //
-    tok = nextFenTok( sFen, fenIx );
-    if ( tok != "-" )
-    {
-        CSqix           epSqix;
-        std::string     errMsg;
-        if ( !CSqix::parseSqix( tok, epSqix, errMsg ) )
-        {
-            rsErrorText = "Invalid en passant: " + tok;
-            return false;
-        }
-        mPosRights.setEnPassantFile( epSqix.getFile() );
-    }
+	//
+	//  Set the en passant square
+	//
+	tok = nextFenTok(sFen, fenIx);
+	if (tok != "-")
+	{
+		CSqix           epSqix;
+		std::string     errMsg;
+		if (!CSqix::parseSqix(tok, epSqix, errMsg))
+		{
+			rsErrorText = "Invalid en passant: " + tok;
+			return false;
+		}
+		mPosRights.setEnPassantFile(epSqix.getFile());
+	}
 
-    //
-    //  Set the half move clock (50 move rule).
-    //
-    tok = nextFenTok( sFen, fenIx );
-    char* pzEnd;
-    const char* pzNum = tok.c_str();
-    long num = std::strtol( tok.c_str(), &pzEnd, 10 );
-    if ( pzEnd == pzNum || pzEnd != pzNum + std::strlen( pzNum ) )
-    {
-        rsErrorText = "Invalid half move clock: " + tok;
-        return false;
-    }
-    mHalfMoveClock = U8( num );
+	//
+	//  Set the half move clock (50 move rule).
+	//
+	tok = nextFenTok(sFen, fenIx);
+	char* pzEnd;
+	const char* pzNum = tok.c_str();
+	long num = std::strtol(tok.c_str(), &pzEnd, 10);
+	if (pzEnd == pzNum || pzEnd != pzNum + std::strlen(pzNum))
+	{
+		rsErrorText = "Invalid half move clock: " + tok;
+		return false;
+	}
+	mHalfMoveClock = U8(num);
 
-    //
-    //  Set the move number
-    //
-    tok = nextFenTok( sFen, fenIx );
-    pzNum = tok.c_str();
-    num = std::strtol( tok.c_str(), &pzEnd, 10 );
-    if ( pzEnd == pzNum || pzEnd != pzNum + std::strlen( pzNum ) )
-    {
-        rsErrorText = "Invalid half move number: " + tok;
-        return false;
-    }
-    mMoveNum = std::uint16_t( num );
-    return true;
+	//
+	//  Set the move number
+	//
+	tok = nextFenTok(sFen, fenIx);
+	pzNum = tok.c_str();
+	num = std::strtol(tok.c_str(), &pzEnd, 10);
+	if (pzEnd == pzNum || pzEnd != pzNum + std::strlen(pzNum))
+	{
+		rsErrorText = "Invalid half move number: " + tok;
+		return false;
+	}
+	mMoveNum = std::uint16_t(num);
+	return true;
+}
+
+///
+///	Updates the position rights after the specified move is made
+///
+///	@param m
+///		the move
+void CPos::updatePosRights(CMove m)
+{
+	//
+	//	Figure out the castling rights
+	//
+	if (mBoard[m.getFrom().get()].getPieceType().get() == EPieceType::kKing)
+		mPosRights.onKMove(mBoard[m.getFrom().get()].getColor());
+	else if (mBoard[m.getFrom().get()].getPieceType().get()
+		== EPieceType::kRook)
+	{
+		if (mWhoseMove == EColor::kWhite)
+		{
+			if (m.getFrom().getRank().get() == ERank::kRank1)
+				mPosRights.onWqrMove();
+			else if (m.getFrom().getRank().get() == ERank::kRank8)
+				mPosRights.onWkrMove();
+		}
+		else
+		{
+			if (m.getFrom().getRank().get() == ERank::kRank1)
+				mPosRights.onBqrMove();
+			else if (m.getFrom().getRank().get() == ERank::kRank8)
+				mPosRights.onBkrMove();
+		}
+	}
+
+	//
+	//	Figure out the en passant rights.
+	//
+	if (mWhoseMove == EColor::kWhite)
+	{
+		//
+		//	en passant is legal if the following is true
+		//		from square holds a pawn
+		//		from the second rank
+		//		to the fourth rank
+		//
+		if (m.getFrom().getRank().get() == ERank::kRank2
+			&& m.getFrom().getRank().get() == ERank::kRank4
+			&& mBoard[m.getFrom().get()].getPieceType().get()
+				== EPieceType::kPawn )
+		{
+			mPosRights.setEnPassantFile(m.getFrom().getFile());
+		}
+		else
+		{
+			mPosRights.clearEnPassantFile(m.getFrom().getFile());
+		}
+	}
+	else
+	{
+		//
+		//	en passant is legal if the following is true
+		//		from square holds a pawn
+		//		from the 7th rank
+		//		to the fifth rank
+		//
+		if (m.getFrom().getRank().get() == ERank::kRank7
+			&& m.getFrom().getRank().get() == ERank::kRank5
+			&& mBoard[m.getFrom().get()].getPieceType().get()
+				== EPieceType::kPawn)
+		{
+			mPosRights.setEnPassantFile(m.getFrom().getFile());
+		}
+		else
+		{
+			mPosRights.clearEnPassantFile(m.getFrom().getFile());
+		}
+	}
 }
 
 ///

@@ -63,9 +63,19 @@ public:
     std::string asAbbr() const { return asStr(); }
     std::string castlingAsStr() const;
 
-private:
-    friend class CTester;
+	void onWqrMove() { clearWhiteOOO(); }
+	void onWkrMove() { clearWhiteOO(); }
+	void onBqrMove() { clearBlackOOO(); }
+	void onBkrMove() { clearBlackOO(); }
+	void onKMove(CColor c)
+	{
+		if (c.isWhite())
+			mRights &= ~(kWhiteOOMask | kWhiteOOOMask);
+		else
+			mRights &= ~(kBlackOOMask | kBlackOOOMask);
+	};
 
+private:
     static const U8 kEnPassantFileMask  = 0x07;
     static const U8 kEnPassantLegalMask = 0x08;
     static const U8 kWhiteOOMask        = 0x10;
@@ -76,17 +86,6 @@ private:
 
     U8          mRights;
 
-    void onWqrMove() { clearWhiteOOO(); }
-    void onWkrMove() { clearWhiteOO(); }
-    void onBqrMove() { clearBlackOOO(); }
-    void onBkrMove() { clearBlackOO(); }
-    void onKMove( CColor c ) 
-    { 
-        if ( c.isWhite() )
-            mRights &= ~( kWhiteOOMask | kWhiteOOOMask );
-        else
-            mRights &= ~( kBlackOOMask | kBlackOOOMask );
-    };
 };
 
 ///
@@ -180,8 +179,8 @@ public:
     void genBlackMoves( CMoves& rMoves );
     void genBlackLegalMoves( CMoves& rMoves );
     
-    void makeMove( CMove m );                           //TODO: code me
-    void unmakeMove( CMove m );                         //TODO: code me
+    void makeMoveForPerft( CMove m, CUndoContext undoContext );
+    void unmakeMoveForPerft( CMove m, CUndoContext undoContext);                //TODO: code me
 
     ///
     /// @returns the bitmask of unoccupied squares in the specified bitboard
@@ -243,6 +242,7 @@ private:
     void findBlackDiagonalCheckers( CSqix kingSqix );
     void findBlackPawnCheckers( CBitBoard bbKing ); 
     void findBlackKingCheckers( CSqix kingSqix );
+	void updatePosRights( CMove m );
 
     CColor          mWhoseMove;
     U8              mHalfMoveClock;                 // for 50 move rule
@@ -250,8 +250,8 @@ private:
     CPosRights      mPosRights;
     std::uint16_t   mMoveNum;
     CPiece          mBoard[U8( ERank::kNum ) * U8( EFile::kNum )];
-    CBitBoard       mbbPieceType[EPieceType::kNum];
-    CBitBoard       mbbColor[EColor::kNum];
+    CBitBoard       mbbPieceType[U8( EPieceType::kNum )];
+    CBitBoard       mbbColor[U8( EColor::kNum )];
     CBitBoard       mbbCheckers;
 
     static std::string nextFenTok( 

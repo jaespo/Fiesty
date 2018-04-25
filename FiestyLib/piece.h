@@ -64,8 +64,8 @@ public:
 
 private:
     EPieceType                  mPieceType;
-    static const char*          kStrs[EPieceType::kNum];
-    static const char*          kAbbrs[EPieceType::kNum];
+    static const char*          kStrs[U8( EPieceType::kNum )];
+    static const char*          kAbbrs[U8( EPieceType::kNum )];
 };
 
 ///

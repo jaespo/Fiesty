@@ -16,14 +16,15 @@ U64 CSearcher::perftBlack( U16 depthLeft )
     if ( depthLeft == 0 )
         return 1;
 
-    CMoves      moves;
-    U64         nodeCount = 0;
+    CMoves			moves;
+    U64				nodeCount = 0;
+	CUndoContext	undoContext;
 
     mpPos->genBlackMoves( moves );
     for ( U16 moveIx = 0; moveIx = moves.getNumMoves(); moveIx++ )
     {
         CMove move = moves.get( moveIx );
-        mpPos->makeMove( move );
+        mpPos->makeMoveForPerft( move );
 
         //
         //  If the move leaves us in check, it's not legal.  The

@@ -44,7 +44,7 @@ enum class EPieceType : std::uint8_t
 ///
 /// Enum that defines the type of piece, taking into account color
 ///
-typedef enum class EPiece : std::uint8_t
+enum class EPiece : std::uint8_t
 { 
     kWhitePawn,
     kWhiteKnight,
